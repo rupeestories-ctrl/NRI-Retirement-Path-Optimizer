@@ -498,6 +498,68 @@
   .l401::before { color: #4a90e2; } .lroth::before { color: #1b7a3f; } .ltax::before { color: #f59e0b; } .lcash::before { color: #94a3b8; }
   .bar-chart { width: 100%; height: 220px; }
 
+
+
+  .guide-tabs-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 18px;
+    box-shadow: 0 10px 30px rgba(26, 26, 46, .04);
+  }
+  .guide-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+  .guide-head h3 {
+    margin: 0;
+    font-size: 18px;
+    letter-spacing: -.01em;
+  }
+  .guide-head p {
+    margin: 4px 0 0;
+    color: var(--faint);
+    font-size: 13px;
+  }
+  .guide-tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 14px;
+  }
+  .guide-tabs button {
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    font-family: Inter, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 9px 10px 11px;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    margin-bottom: -1px;
+  }
+  .guide-tabs button.active {
+    color: var(--ink);
+    border-bottom-color: var(--accent);
+  }
+  .guide-panel { display: none; }
+  .guide-panel.active { display: block; }
+  .guide-panel h4 {
+    margin: 18px 0 8px;
+    font-size: 15px;
+  }
+  .guide-panel .callout:last-child { margin-bottom: 0; }
+  @media (max-width: 640px) {
+    .guide-head { display: block; }
+    .guide-tabs { gap: 4px; }
+    .guide-tabs button { flex: 1; min-width: 98px; padding: 9px 7px; font-size: 12px; }
+  }
   footer {
     margin-top: 34px;
     padding-top: 20px;
@@ -527,7 +589,7 @@
 </head>
 <body>
   <div class="hero">
-    <div class="kicker">r/rupeeStories <span> rupeestories.substack.com</div>
+    <div class="kicker">RupeeStories</div>
     <h1>NRI Retirement <span>Path Optimizer</span></h1>
     <p>Compare three planning paths before US retirement or India return. This is a planning tool, not a tax calculator.</p>
     <div class="trust-bar" aria-label="Privacy and access notice">
@@ -659,76 +721,6 @@
       </main>
     </div>
 
-
-    <section class="block wiki-block">
-      <h3>How to read this tool</h3>
-
-      <div class="callout">
-        This tool compares three paths. There is no single best answer. Each path works under specific conditions.
-      </div>
-
-      <h4>Path A - Max 401k (Status Quo)</h4>
-      <div class="callout">
-        <strong>When it works</strong><br>
-        &bull; You stay in the US long term<br>
-        &bull; You are in a high tax bracket, around 32-37%<br>
-        &bull; You retire after 65, when Medicare removes most ACA pressure<br>
-        &bull; You do not need early access to funds<br><br>
-        <strong>Why it works</strong><br>
-        You are trading flexibility for tax deferral. This works if your timeline stays stable.
-      </div>
-
-      <div class="callout warn">
-        <strong>Common mistake</strong><br>
-        &quot;I'll deal with taxes later.&quot; Later can mean US and India overlap, which can create a higher combined tax bill.
-      </div>
-
-      <h4>Path B - Match Only + Taxable</h4>
-      <div class="callout">
-        <strong>When it works</strong><br>
-        &bull; You plan to retire before 60<br>
-        &bull; You want ACA subsidies and need lower MAGI<br>
-        &bull; You are unsure about returning to India<br>
-        &bull; Your future tax rate may be similar to today<br><br>
-        <strong>Why it works</strong><br>
-        You are optimizing for flexibility and timing, not just tax deferral.
-      </div>
-
-      <div class="callout warn">
-        <strong>Common mistake</strong><br>
-        &quot;Flexibility is always better.&quot; Too much taxable can reduce long-term tax shelter.
-      </div>
-
-      <h4>Path C - Optimized (RNOR / Income Stacking)</h4>
-      <div class="callout">
-        <strong>When it works</strong><br>
-        &bull; You plan to return to India<br>
-        &bull; You qualify for an RNOR window, usually 2-3 years depending on facts<br>
-        &bull; You have a large 401k balance<br>
-        &bull; You have a gap before 65<br><br>
-        <strong>Why it works</strong><br>
-        You control where and when tax applies. RNOR years can be used to reduce future tax exposure.
-      </div>
-
-      <div class="callout warn">
-        <strong>Common mistake</strong><br>
-        &quot;I'll figure RNOR when I move.&quot; That window needs prep years before return, not after.
-      </div>
-
-      <h4>Simple decision filter</h4>
-      <div class="callout">
-        &bull; Staying in the US and retiring after 65 &rarr; <strong>Path A</strong><br>
-        &bull; Early retirement or uncertain plans &rarr; <strong>Path B</strong><br>
-        &bull; Returning to India with a large 401k &rarr; <strong>Path C</strong>
-      </div>
-
-      <h4>One-line summary</h4>
-      <div class="callout">
-        Path A = Tax deferral bet<br>
-        Path B = Flexibility bet<br>
-        Path C = Timing + geography bet
-      </div>
-    </section>
 
     <footer>
       <p><strong>Important:</strong> This is a simplified planning model. RNOR is estimated from years outside India only and is not a legal residency determination. Real RNOR status depends on actual India presence tests and prior residency history. ACA output is a rough premium stress test, not subsidy modeling and not a quote. It depends on household size, state, MAGI, age, plan choice, and current law. IRMAA is not modeled. Tax-payment 401k pulls may slightly understate current-year tax in rare cash-dry years because recursion is intentionally avoided.</p>
@@ -1174,13 +1166,7 @@ function compute() {
 
   let html = "";
 
-  html += `<section class="risk-summary"><h3>What to pay attention to first</h3><p class="risk-sub">These flags matter more than the winner label. Read this before trusting the model too much.</p><ul class="risk-list">`;
-  riskItems(inp, results).forEach(item => html += `<li><strong>${item.title}</strong>${item.text}</li>`);
-  html += `</ul></section>`;
-
   html += `<section class="decision"><div class="mini">Best path under this scoring method</div><h3>Path ${winner.id} &mdash; ${winner.title}</h3><p class="why-line">${winner.desc}</p><div class="big">${fmt(saved)}</div><p>Modeled tax plus healthcare premium difference vs Path A through the projection period. This is a scoring result, not a tax estimate.</p></section>`;
-
-  html += `<section class="block"><h3>What can break this result</h3><div class="callout warn"><strong>Return assumptions</strong>If returns are lower than expected, Path C advantage shrinks quickly.</div><div class="callout warn"><strong>Timeline changes</strong>Delaying or accelerating retirement changes RNOR and ACA exposure.</div><div class="callout warn"><strong>Tax law changes</strong>US brackets, India treatment of retirement accounts, and ACA rules can change.</div></section>`;
 
   html += `<div class="cards">`;
   paths.forEach(p => {
@@ -1189,6 +1175,53 @@ function compute() {
     html += `<div class="path-card ${p.id === winner.id ? "winner" : ""}">${p.id === winner.id ? `<div class="tag">WINNER</div>` : ""}<div class="path-label">Path ${p.id}</div><h4>${p.title}</h4><div class="stat"><span>US tax</span><span class="v neg">${fmt(p.R.totalUSTax)}</span></div>${inp.goal === "india" ? `<div class="stat"><span>India tax (modeled)</span><span class="v neg">${fmt(p.R.totalIndiaTax)}</span></div>` : `<div class="stat"><span>ACA stress cost</span><span class="v neg">${fmt(Math.max(0, p.R.totalACA - p.R.totalACABase))}</span></div>`}<div class="stat"><span>Wealth at 75</span><span class="v">${fmt(p.R.wealthAt75)}</span></div>${p.R.totalShortfall > 0 ? `<div class="stat"><span>Unmet spending</span><span class="v neg">${fmt(p.R.totalShortfall)}</span></div>` : ""}<div class="stat"><span>${p.id === "A" ? "Baseline modeled cost" : "Modeled saved vs A"}</span><span class="v ${p.id === "A" ? "" : "pos"}">${p.id === "A" ? fmt(c) : "+" + fmt(delta)}</span></div></div>`;
   });
   html += `</div>`;
+
+  html += `<section class="guide-tabs-wrap" id="guideTabsWrap">
+    <div class="guide-head">
+      <div>
+        <h3>Guide</h3>
+        <p>Use these tabs when you want the reasoning behind the numbers.</p>
+      </div>
+    </div>
+    <div class="guide-tabs" id="guideTabs">
+      <button type="button" class="active" data-guide="risk">Pay attention first</button>
+      <button type="button" data-guide="breaks">What can break</button>
+      <button type="button" data-guide="wiki">How to read</button>
+    </div>
+    <div class="guide-panel active" data-guide-panel="risk">
+      <div class="risk-summary" style="margin-bottom:0;">
+        <h3>What to pay attention to first</h3>
+        <p class="risk-sub">These flags matter more than the winner label. Read this before trusting the model too much.</p>
+        <ul class="risk-list">${riskItems(inp, results).map(item => `<li><strong>${item.title}</strong>${item.text}</li>`).join("")}</ul>
+      </div>
+    </div>
+    <div class="guide-panel" data-guide-panel="breaks">
+      <div class="callout warn"><strong>Return assumptions</strong>If returns are lower than expected, Path C advantage shrinks quickly.</div>
+      <div class="callout warn"><strong>Timeline changes</strong>Delaying or accelerating retirement changes RNOR and ACA exposure.</div>
+      <div class="callout warn"><strong>Tax law changes</strong>US brackets, India treatment of retirement accounts, and ACA rules can change.</div>
+    </div>
+    <div class="guide-panel" data-guide-panel="wiki">
+      <div class="callout">This tool compares three paths. There is no single best answer. Each path works under specific conditions.</div>
+
+      <h4>Path A - Max 401k (Status Quo)</h4>
+      <div class="callout"><strong>When it works</strong><br>&bull; You stay in the US long term<br>&bull; You are in a high tax bracket, around 32-37%<br>&bull; You retire after 65, when Medicare removes most ACA pressure<br>&bull; You do not need early access to funds<br><br><strong>Why it works</strong><br>You are trading flexibility for tax deferral. This works if your timeline stays stable.</div>
+      <div class="callout warn"><strong>Common mistake</strong>&quot;I'll deal with taxes later.&quot; Later can mean US and India overlap, which can create a higher combined tax bill.</div>
+
+      <h4>Path B - Match Only + Taxable</h4>
+      <div class="callout"><strong>When it works</strong><br>&bull; You plan to retire before 60<br>&bull; You want ACA subsidies and need lower MAGI<br>&bull; You are unsure about returning to India<br>&bull; Your future tax rate may be similar to today<br><br><strong>Why it works</strong><br>You are optimizing for flexibility and timing, not just tax deferral.</div>
+      <div class="callout warn"><strong>Common mistake</strong>&quot;Flexibility is always better.&quot; Too much taxable can reduce long-term tax shelter.</div>
+
+      <h4>Path C - Optimized (RNOR / Income Stacking)</h4>
+      <div class="callout"><strong>When it works</strong><br>&bull; You plan to return to India<br>&bull; You qualify for an RNOR window, usually 2-3 years depending on facts<br>&bull; You have a large 401k balance<br>&bull; You have a gap before 65<br><br><strong>Why it works</strong><br>You control where and when tax applies. RNOR years can be used to reduce future tax exposure.</div>
+      <div class="callout warn"><strong>Common mistake</strong>&quot;I'll figure RNOR when I move.&quot; That window needs prep years before return, not after.</div>
+
+      <h4>Simple decision filter</h4>
+      <div class="callout">&bull; Staying in the US and retiring after 65 &rarr; <strong>Path A</strong><br>&bull; Early retirement or uncertain plans &rarr; <strong>Path B</strong><br>&bull; Returning to India with a large 401k &rarr; <strong>Path C</strong></div>
+
+      <h4>One-line summary</h4>
+      <div class="callout">Path A = Tax deferral bet<br>Path B = Flexibility bet<br>Path C = Timing + geography bet</div>
+    </div>
+  </section>`;
 
   html += `<section class="block"><h3>What the model is saying</h3>`;
   if (inp.goal === "us") {
@@ -1203,6 +1236,16 @@ function compute() {
   html += `<section class="block"><h3>Account mix at target age ${A.targetAge}</h3><div class="legend"><span class="l401">401k / Traditional IRA</span><span class="lroth">Roth</span><span class="ltax">Taxable</span><span class="lcash">Cash</span></div><svg class="bar-chart" id="barChart" viewBox="0 0 600 220" preserveAspectRatio="xMidYMid meet"></svg></section>`;
 
   document.getElementById("output").innerHTML = html;
+
+  document.querySelectorAll("#guideTabs button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll("#guideTabs button").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".guide-panel").forEach(panel => panel.classList.remove("active"));
+      btn.classList.add("active");
+      const panel = document.querySelector(`[data-guide-panel="${btn.dataset.guide}"]`);
+      if (panel) panel.classList.add("active");
+    });
+  });
 
   function badge(row) {
     if (!row.retired) return "";
