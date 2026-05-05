@@ -1130,7 +1130,7 @@ function riskItems(inp, results) {
   if (rmdHit) items.push({ title: `RMDs begin around age ${rmdHit.age}`, text: `The model forces about ${fmt(rmdHit.rmd)} from 401k/IRA that year. This can change both US and India-return paths.` });
   if (inp.socialSecurity > 0) items.push({ title: "Social Security included simply", text: `Social Security is user-entered and simplified. The model starts income at age ${inp.ssClaimAge || 67} and does not estimate real SSA benefits.` });
   if (rmdHit && rmdHit.age >= 65) items.push({ title: "IRMAA is not modeled", text: "High income after age 65 can trigger Medicare IRMAA surcharges. This tool does not include IRMAA premiums." });
-  if (inp.age + inp.years < 59.5) items.push({ title: "Early withdrawal penalty is simplified", text: "A 10% penalty is applied to all modeled 401k withdrawals before 591/2. Exceptions like Rule of 55, SEPP, and Roth ladders are not modeled." });
+  if (inp.age + inp.years < 59.5) items.push({ title: "Early withdrawal penalty is simplified", text: "A 10% penalty is applied to all modeled 401k withdrawals before 59.5. Exceptions like Rule of 55, SEPP, and Roth ladders are not modeled." });
   return items.slice(0, 6);
 }
 
