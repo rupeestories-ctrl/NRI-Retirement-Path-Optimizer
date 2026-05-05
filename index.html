@@ -1093,7 +1093,7 @@ function compute() {
   riskItems(inp, results).forEach(item => html += `<li><strong>${item.title}</strong>${item.text}</li>`);
   html += `</ul></section>`;
 
-  html += `<section class="decision"><div class="mini">Best path under this scoring method</div><h3>Path ${winner.id} - ${winner.title}</h3><p class="why-line">${winner.desc}</p><div class="big">${fmt(saved)}</div><p>Modeled tax plus healthcare premium difference vs Path A through the projection period. This is a scoring result, not a tax estimate.</p></section>`;
+  html += `<section class="decision"><div class="mini">Best path under this scoring method</div><h3>Path ${winner.id} &mdash; ${winner.title}</h3><p class="why-line">${winner.desc}</p><div class="big">${fmt(saved)}</div><p>Modeled tax plus healthcare premium difference vs Path A through the projection period. This is a scoring result, not a tax estimate.</p></section>`;
 
   html += `<section class="block"><h3>What can break this result</h3><div class="callout warn"><strong>Return assumptions</strong>If returns are lower than expected, Path C advantage shrinks quickly.</div><div class="callout warn"><strong>Timeline changes</strong>Delaying or accelerating retirement changes RNOR and ACA exposure.</div><div class="callout warn"><strong>Tax law changes</strong>US brackets, India treatment of retirement accounts, and ACA rules can change.</div></section>`;
 
