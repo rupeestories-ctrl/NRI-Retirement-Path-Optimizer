@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>NRI Retirement Path Optimizer· RupeeStories</title>
+<title>NRI Retirement Path Optimizer&middot; RupeeStories</title>
 <meta name="description" content="Compare US retirement vs India return paths using simplified retirement, tax, RNOR, Roth, and ACA stress-test assumptions. Free planning tool, not tax advice." />
 <style>
   :root {
@@ -312,6 +312,28 @@
     font-weight: 700;
   }
 
+
+  .ror-start td {
+    border-top: 3px solid #b91c1c !important;
+  }
+  .ror-start td:first-child {
+    position: sticky;
+  }
+  .ror-start td:first-child::before {
+    content: "India tax starts here";
+    position: absolute;
+    top: -18px;
+    left: 6px;
+    background: #b91c1c;
+    color: #fff;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: "Courier New", monospace;
+    white-space: nowrap;
+    z-index: 5;
+  }
+
   .ror-transition-row td {
     background: #fff7ed !important;
     color: #7c2d12;
@@ -426,7 +448,7 @@
   }
 
   .legend { display: flex; flex-wrap: wrap; gap: 14px; color: var(--muted); font-size: 12px; margin-bottom: 10px; }
-  .legend span::before { content: "■ "; margin-right: 5px; }
+  .legend span::before { content: "\25A0 "; margin-right: 5px; }
   .l401::before { color: #4a90e2; } .lroth::before { color: #1b7a3f; } .ltax::before { color: #f59e0b; } .lcash::before { color: #94a3b8; }
   .bar-chart { width: 100%; height: 220px; }
 
@@ -597,56 +619,56 @@
       <h4>Path A - Max 401k (Status Quo)</h4>
       <div class="callout">
         <strong>When it works</strong><br>
-        • You stay in the US long term<br>
-        • You are in a high tax bracket, around 32-37%<br>
-        • You retire after 65, when Medicare removes most ACA pressure<br>
-        • You do not need early access to funds<br><br>
+        &bull; You stay in the US long term<br>
+        &bull; You are in a high tax bracket, around 32-37%<br>
+        &bull; You retire after 65, when Medicare removes most ACA pressure<br>
+        &bull; You do not need early access to funds<br><br>
         <strong>Why it works</strong><br>
         You are trading flexibility for tax deferral. This works if your timeline stays stable.
       </div>
 
       <div class="callout warn">
         <strong>Common mistake</strong><br>
-        “I’ll deal with taxes later.” Later can mean US and India overlap, which can create a higher combined tax bill.
+        &quot;I'll deal with taxes later.&quot; Later can mean US and India overlap, which can create a higher combined tax bill.
       </div>
 
       <h4>Path B - Match Only + Taxable</h4>
       <div class="callout">
         <strong>When it works</strong><br>
-        • You plan to retire before 60<br>
-        • You want ACA subsidies and need lower MAGI<br>
-        • You are unsure about returning to India<br>
-        • Your future tax rate may be similar to today<br><br>
+        &bull; You plan to retire before 60<br>
+        &bull; You want ACA subsidies and need lower MAGI<br>
+        &bull; You are unsure about returning to India<br>
+        &bull; Your future tax rate may be similar to today<br><br>
         <strong>Why it works</strong><br>
         You are optimizing for flexibility and timing, not just tax deferral.
       </div>
 
       <div class="callout warn">
         <strong>Common mistake</strong><br>
-        “Flexibility is always better.” Too much taxable can reduce long-term tax shelter.
+        &quot;Flexibility is always better.&quot; Too much taxable can reduce long-term tax shelter.
       </div>
 
       <h4>Path C - Optimized (RNOR / Income Stacking)</h4>
       <div class="callout">
         <strong>When it works</strong><br>
-        • You plan to return to India<br>
-        • You qualify for an RNOR window, usually 2-3 years depending on facts<br>
-        • You have a large 401k balance<br>
-        • You have a gap before 65<br><br>
+        &bull; You plan to return to India<br>
+        &bull; You qualify for an RNOR window, usually 2-3 years depending on facts<br>
+        &bull; You have a large 401k balance<br>
+        &bull; You have a gap before 65<br><br>
         <strong>Why it works</strong><br>
         You control where and when tax applies. RNOR years can be used to reduce future tax exposure.
       </div>
 
       <div class="callout warn">
         <strong>Common mistake</strong><br>
-        “I’ll figure RNOR when I move.” That window needs prep years before return, not after.
+        &quot;I'll figure RNOR when I move.&quot; That window needs prep years before return, not after.
       </div>
 
       <h4>Simple decision filter</h4>
       <div class="callout">
-        • Staying in the US and retiring after 65 → <strong>Path A</strong><br>
-        • Early retirement or uncertain plans → <strong>Path B</strong><br>
-        • Returning to India with a large 401k → <strong>Path C</strong>
+        &bull; Staying in the US and retiring after 65 &rarr; <strong>Path A</strong><br>
+        &bull; Early retirement or uncertain plans &rarr; <strong>Path B</strong><br>
+        &bull; Returning to India with a large 401k &rarr; <strong>Path C</strong>
       </div>
 
       <h4>One-line summary</h4>
@@ -1065,7 +1087,7 @@ function riskItems(inp, results) {
   if (rmdHit) items.push({ title: `RMDs begin around age ${rmdHit.age}`, text: `The model forces about ${fmt(rmdHit.rmd)} from 401k/IRA that year. This can change both US and India-return paths.` });
   if (inp.socialSecurity > 0) items.push({ title: "Social Security included simply", text: `Social Security is user-entered and simplified. The model starts income at age ${inp.ssClaimAge || 67} and does not estimate real SSA benefits.` });
   if (rmdHit && rmdHit.age >= 65) items.push({ title: "IRMAA is not modeled", text: "High income after age 65 can trigger Medicare IRMAA surcharges. This tool does not include IRMAA premiums." });
-  if (inp.age + inp.years < 59.5) items.push({ title: "Early withdrawal penalty is simplified", text: "A 10% penalty is applied to all modeled 401k withdrawals before 59½. Exceptions like Rule of 55, SEPP, and Roth ladders are not modeled." });
+  if (inp.age + inp.years < 59.5) items.push({ title: "Early withdrawal penalty is simplified", text: "A 10% penalty is applied to all modeled 401k withdrawals before 591/2. Exceptions like Rule of 55, SEPP, and Roth ladders are not modeled." });
   return items.slice(0, 6);
 }
 
@@ -1190,11 +1212,14 @@ function compute() {
     let rorNoteShown = false;
     let t = `<div class="table-wrap"><table class="yr-table"><thead><tr><th>Age</th><th>401k</th><th>Roth</th><th>Taxable</th><th>Cash</th><th>401k wd</th><th>RMD</th><th>SS</th><th>Roth conv</th>${magiHead}<th>US tax</th><th>${dynHead}</th><th>Shortfall</th><th>Total</th></tr></thead><tbody>`;
     rows.forEach(r => {
+      let markRorStart = false;
       if (inp.goal === "india" && r.inROR && !rorNoteShown) {
+        markRorStart = true;
         rorNoteShown = true;
-        t += `<tr class="ror-transition-row"><td colspan="${colCount}">India tax starts here. RNOR window is over, and the model switches to ROR treatment.</td></tr>`;
+        t += `<tr class="ror-transition-row"><td colspan="${colCount}">RNOR ends. India tax phase starts here.</td></tr>`;
       }
-      const cls = r.isWorking ? "working" : (r.inRNOR ? "rnor" : (r.inROR ? "ror" : ""));
+      let cls = r.isWorking ? "working" : (r.inRNOR ? "rnor" : (r.inROR ? "ror" : ""));
+      if (markRorStart) cls += " ror-start";
       const magiCell = inp.goal === "us" ? `<td class="${r.magi > 90000 ? "neg" : ""}">${r.magi ? fmt(r.magi) : "-"}</td>` : "";
       t += `<tr class="${cls}"><td>${r.age}${badge(r)}</td><td>${fmt(r.a401k)}</td><td>${fmt(r.aRoth)}</td><td>${fmt(r.aTax)}</td><td>${fmt(r.aCash)}</td><td>${r.withdraw401k ? fmt(r.withdraw401k) : "-"}</td><td>${r.rmd ? fmt(r.rmd) : "-"}</td><td>${r.ssIncome ? fmt(r.ssIncome) : "-"}</td><td>${r.rothConv ? fmt(r.rothConv) : "-"}</td>${magiCell}<td class="${r.usTaxYr ? "neg" : ""}">${r.usTaxYr ? fmt(r.usTaxYr) : "-"}</td><td class="${(inp.goal === "india" ? r.indiaTaxYr : r.acaYr) ? "neg" : ""}">${inp.goal === "india" ? (r.indiaTaxYr ? fmt(r.indiaTaxYr) : "-") : (r.acaYr ? fmt(r.acaYr) : "-")}</td><td class="${r.shortfall ? "neg" : ""}">${r.shortfall ? fmt(r.shortfall) : "-"}</td><td><strong>${fmt(r.total)}</strong></td></tr>`;
     });
