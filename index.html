@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>NRI Retirement Path Optimizer &middot; r/rupeestories &middot; rupeestories.substack.com</title>
-<meta name="description" content="Compare US retirement vs India return paths using simplified retirement, tax, RNOR, Roth, and ACA stress-test assumptions. Free planning tool, not tax advice." />
+<meta name="description" content="Compare US retirement, India return, and split-life paths using simplified retirement, tax, RNOR, Roth, ACA, and seasonal-living assumptions. Free planning tool, not tax advice." />
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
   :root {
@@ -328,6 +328,9 @@
   .risk-list strong { display: block; color: #7c2d12; margin-bottom: 2px; }
 
   .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 18px; }
+  .split-summary-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 0 0 14px; }
+  @media (max-width: 860px) { .split-summary-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .split-summary-grid { grid-template-columns: 1fr; } }
   @media (max-width: 860px) { .cards { grid-template-columns: 1fr; } }
   .path-card { padding: 16px; position: relative; transition: transform .15s ease, box-shadow .15s ease; min-width: 0; }
   .path-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lift); }
@@ -697,7 +700,7 @@
       <span class="kicker-right">rupeestories.substack.com</span>
     </div>
     <h1>NRI Retirement <span>Path Optimizer</span></h1>
-    <p>Compare three planning paths before US retirement or India return. This is a planning tool, not a tax calculator.</p>
+    <p>Compare US retirement, India return, and split-life paths before you make the move. This is a planning tool, not a tax calculator.</p>
     <div class="trust-bar" aria-label="Privacy and access notice">
       <span class="trust-pill">&#x1F512; No login</span>
       <span class="trust-pill">&#x1F4E1; No data collected</span>
@@ -707,7 +710,7 @@
 
   <div class="wrap">
     <div class="top-note">
-      Uses simplified 2026 US tax constants, RMD overlay, optional state-tax stress, optional Social Security input, India tax assumptions, RNOR estimate, and ACA premium stress testing. Treat the output as a planning prompt, not advice.
+      Uses simplified 2026 US tax constants, RMD overlay, optional state-tax stress, optional Social Security input, India tax stress assumptions, RNOR estimate, ACA premium-pressure testing, and split-life housing/travel assumptions. Split Life assumes US tax residency unless you separately model a full India return. Treat the output as a planning prompt, not advice.
     </div>
 
     <details class="readme-card" id="readmeCard" open>
@@ -726,7 +729,7 @@
         <ul>
           <li><strong>Current age + Years to target</strong> &mdash; defines retirement age. Projection runs from your current age through age 85 minimum.</li>
           <li><strong>Filing status</strong> &mdash; sets US tax brackets and standard deduction. <code>MFJ</code> uses $32,200; <code>Single</code> uses $16,100.</li>
-          <li><strong>Retirement spend / yr</strong> &mdash; in today's dollars. The model inflates it each year. Example: $100k spend at 2.5% inflation becomes ~$128k in year 10.</li>
+          <li><strong>Base retirement spend / yr</strong> &mdash; in today's dollars. For Split Life, enter the recurring base spend <strong>excluding</strong> seasonal housing, storage, local transport, and extra travel costs entered below. The model inflates it each year. Example: $100k spend at 2.5% inflation becomes about $128k in year 10.</li>
           <li><strong>Household income / yr</strong> &mdash; working-years only. Used to size 401k contributions and taxable surplus.</li>
           <li><strong>Savings / yr</strong> &mdash; splits between 401k and taxable based on path. Path A maxes 401k first; Paths B and C cap 401k at the match and route the rest to taxable.</li>
           <li><strong>401k match %</strong> &mdash; employer match. Prefilled at 4% as a generic default. Match dollars are capped at the contribution limit.</li>
@@ -763,10 +766,10 @@
         <h4>Modeling rules baked in</h4>
         <ul>
           <li><strong>RMDs start at age 73</strong> &mdash; forced ordinary income from 401k. Can push you into higher brackets and re-trigger ACA / IRMAA-style pressure.</li>
-          <li><strong>ACA premium stress (US path)</strong> &mdash; runs from retirement through age 65. MAGI-based premium pressure. Not subsidy modeling. Not a quote.</li>
+          <li><strong>ACA premium pressure test (US and Split Life paths)</strong> &mdash; runs from retirement through age 65. MAGI-based premium pressure only. It does not use household size, state, benchmark Silver premiums, or real Premium Tax Credit rules.</li>
           <li><strong>Early-withdrawal penalty</strong> &mdash; 10% on all 401k withdrawals before 59.5. Does not model exceptions like Rule of 55, SEPP, or Roth ladder.</li>
           <li><strong>RNOR window (India path)</strong> &mdash; estimated as 2 or 3 years from "years outside India". Heuristic only. Real RNOR depends on actual presence tests in the prior 7-10 years and prior residency history.</li>
-          <li><strong>ROR phase (India path)</strong> &mdash; after RNOR ends, 401k and IRA distributions are treated as India-taxable with US withholding credit. Roth growth optionally stress-tested at 30%.</li>
+          <li><strong>ROR phase (India path)</strong> &mdash; after RNOR ends, 401k and IRA distributions are treated as India-taxable with US withholding credit. Roth growth optionally stress-tested at 30%. This is an India tax stress estimate, not final tax advice.</li>
         </ul>
 
         <h4>What is not modeled</h4>
@@ -791,7 +794,7 @@
           <li><strong>Withdrawal columns</strong> (401k wd, RMD, Roth wd, Tax wd, Cash wd, Roth conv) show what each path pulled from each account that year. Sum withdrawals + SS to roughly match Spend (with rounding and tax payments).</li>
           <li><strong>RMD</strong> is a subset of <strong>401k wd</strong> &mdash; it shows the forced portion only. The rest is discretionary or covers tax payments.</li>
           <li><strong>Tax columns</strong> show modeled liability based on that year's withdrawals. US tax is federal + state + LTCG + NIIT + early-withdrawal penalty (if any), summed.</li>
-          <li><strong>Total tax</strong> (highlighted column) combines the two preceding columns. India path: <code>US tax + India tax</code>. US path: <code>US tax + ACA premium</code>. ACA premium is not technically tax, but it is a MAGI-driven cash cost during the pre-Medicare window, so it is rolled in for an honest cash-out total.</li>
+          <li><strong>Total tax / premium pressure</strong> (highlighted column) combines the two preceding columns. India path: <code>US tax + India tax stress estimate</code>. US and Split Life paths: <code>US tax + ACA premium pressure</code>. ACA premium is technically a healthcare cost, not a tax, but it is a MAGI-driven cash outflow during the pre-Medicare window.</li>
           <li><strong>Shortfall</strong> is non-zero only if all accounts were exhausted before the year's spend was met.</li>
           <li><strong>Balance columns</strong> (rightmost) show end-of-year values after withdrawals and growth.</li>
         </ul>
@@ -810,6 +813,7 @@
             <div class="seg" id="goalSeg">
               <button type="button" data-goal="us" class="active">Retire in US</button>
               <button type="button" data-goal="india">Return to India</button>
+              <button type="button" data-goal="split">Split life</button>
             </div>
           </div>
           <div class="row full" id="indiaRow" style="display:none;">
@@ -818,6 +822,39 @@
               <input type="number" id="yrsOutside" value="" placeholder="e.g., 22" min="0" max="50" />
               <div class="hint" id="rnorHint">RNOR estimate appears here. Not a legal residency determination.</div>
             </div>
+          </div>
+          <div id="splitRows" style="display:none;">
+            <div class="row full">
+              <div>
+                <label>Split pattern</label>
+                <select id="splitPattern">
+                  <option value="5-2-5" selected>5 India / 2 travel / 5 US</option>
+                  <option value="5-1-5-1">5 India / 1 travel / 5 US / 1 buffer</option>
+                  <option value="custom">Custom months</option>
+                </select>
+                <div class="hint">Use this for seasonal living without fully moving back. This mode assumes US tax residency and adds seasonal living costs.</div>
+              </div>
+            </div>
+            <div class="row">
+              <div><label>India months / yr</label><input type="number" id="indiaMonths" value="5" min="0" max="12" step="0.5" /></div>
+              <div><label>US months / yr</label><input type="number" id="usMonths" value="5" min="0" max="12" step="0.5" /></div>
+            </div>
+            <div class="row">
+              <div><label>Travel months / yr</label><input type="number" id="travelMonths" value="2" min="0" max="12" step="0.5" /></div>
+              <div><label>Buffer months / yr</label><input type="number" id="bufferMonths" value="0" min="0" max="12" step="0.5" /></div>
+            </div>
+            <div class="row">
+              <div><label>India living cost / month</label><input type="number" id="indiaLivingMonthly" value="2500" step="100" min="0" /></div>
+              <div><label>US furnished lease / month</label><input type="number" id="usLeaseMonthly" value="3500" step="100" min="0" /></div>
+            </div>
+            <div class="row">
+              <div><label>Storage / month</label><input type="number" id="storageMonthly" value="200" step="25" min="0" /></div>
+              <div><label>Car / Uber / transit / month in US</label><input type="number" id="transportMonthly" value="800" step="50" min="0" /></div>
+            </div>
+            <div class="row full">
+              <div><label>Extra travel cost / travel month</label><input type="number" id="travelMonthly" value="4000" step="250" min="0" /></div>
+            </div>
+            <div class="hint" id="splitHint">Split-life add-ons will be added to base retirement spending. Do not include these same housing, storage, transport, or travel costs again in base spend.</div>
           </div>
         </div>
 
@@ -835,7 +872,7 @@
                 <option value="single">Single</option>
               </select>
             </div>
-            <div><label>Retirement spend / yr</label><input type="number" id="spend" value="" placeholder="e.g., 100000" step="5000" min="0" /></div>
+            <div><label>Base retirement spend / yr</label><input type="number" id="spend" value="" placeholder="e.g., 100000" step="5000" min="0" /><div class="hint">For Split Life, exclude seasonal housing, storage, US local transport, and extra travel costs entered above.</div></div>
           </div>
         </div>
 
@@ -919,8 +956,8 @@
 
 
     <footer>
-      <p><strong>Important:</strong> This is a simplified planning model. RNOR is estimated from years outside India only and is not a legal residency determination. Real RNOR status depends on actual India presence tests and prior residency history. ACA output is a rough premium stress test, not subsidy modeling and not a quote. It depends on household size, state, MAGI, age, plan choice, and current law. IRMAA is not modeled. Tax-payment 401k pulls may slightly understate current-year tax in rare cash-dry years because recursion is intentionally avoided.</p>
-      <p>Assumptions include 2026 US standard deductions and bracket thresholds, simplified India new-regime tax with rebate handling, simplified capital-gain assumptions, RMD estimates, optional Social Security claiming age, optional state-tax stress input, and constant annual returns. Social Security is user-entered and simplified; it does not estimate real SSA benefits. Foreign tax credit and treaty treatment are simplified. Tax-payment 401k pulls are simplified to avoid recursive tax calculations and can slightly understate year-of-dry-up tax in edge cases. Educational only. Verify with a qualified cross-border CPA or tax advisor before acting.</p>
+      <p><strong>Important:</strong> This is a simplified planning model. RNOR is estimated from years outside India only and is not a legal residency determination. Real RNOR status depends on actual India presence tests and prior residency history. ACA output is a rough premium-pressure test, not subsidy modeling and not a quote. It depends on household size, state, MAGI, age, plan choice, and current law. IRMAA is not modeled. Split Life assumes US tax residency and uses month-based cost and day-count checks only. It does not decide Indian tax residency, FEMA status, DTAA tie-breaker results, or healthcare eligibility. Tax-payment 401k pulls may slightly understate current-year tax in rare cash-dry years because recursion is intentionally avoided.</p>
+      <p>Assumptions include 2026 US standard deductions and bracket thresholds, simplified India new-regime tax stress with rebate handling, simplified capital-gain assumptions, RMD estimates, optional Social Security claiming age, optional state-tax stress input, and constant annual returns. Social Security is user-entered and simplified; it does not estimate real SSA benefits. Foreign tax credit and treaty treatment are simplified. ACA is premium pressure only, not a Premium Tax Credit calculator. Tax-payment 401k pulls are simplified to avoid recursive tax calculations and can slightly understate year-of-dry-up tax in edge cases. Educational only. Verify with a qualified cross-border CPA or tax advisor before acting.</p>
       <p>Built for RupeeStories.</p>
     </footer>
   </div>
@@ -942,10 +979,17 @@ document.querySelectorAll("#goalSeg button").forEach(btn => {
     btn.classList.add("active");
     goal = btn.dataset.goal;
     document.getElementById("indiaRow").style.display = goal === "india" ? "block" : "none";
+    document.getElementById("splitRows").style.display = goal === "split" ? "block" : "none";
     updateRnorHint();
+    updateSplitPattern();
   });
 });
 document.getElementById("yrsOutside").addEventListener("input", updateRnorHint);
+document.getElementById("splitPattern").addEventListener("change", updateSplitPattern);
+["indiaMonths","usMonths","travelMonths","bufferMonths","indiaLivingMonthly","usLeaseMonthly","storageMonthly","transportMonthly","travelMonthly"].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener("input", updateSplitHint);
+});
 
 function estRnorYears(yearsOutside, goal) {
   if (goal !== "india") return 0;
@@ -962,6 +1006,41 @@ function updateRnorHint() {
   } else {
     document.getElementById("rnorHint").textContent = `RNOR estimate: ${r} year${r === 1 ? "" : "s"}. This is not a legal residency determination.`;
   }
+}
+
+function splitAnnualOverhead(inp) {
+  if (inp.goal !== "split") return 0;
+  return ((inp.indiaLivingMonthly || 0) * (inp.indiaMonths || 0)) +
+         ((inp.usLeaseMonthly || 0) * (inp.usMonths || 0)) +
+         ((inp.transportMonthly || 0) * (inp.usMonths || 0)) +
+         ((inp.storageMonthly || 0) * 12) +
+         ((inp.travelMonthly || 0) * (inp.travelMonths || 0));
+}
+function updateSplitPattern() {
+  const pattern = document.getElementById("splitPattern").value;
+  if (pattern === "5-2-5") {
+    document.getElementById("indiaMonths").value = 5;
+    document.getElementById("travelMonths").value = 2;
+    document.getElementById("usMonths").value = 5;
+    document.getElementById("bufferMonths").value = 0;
+  }
+  if (pattern === "5-1-5-1") {
+    document.getElementById("indiaMonths").value = 5;
+    document.getElementById("travelMonths").value = 1;
+    document.getElementById("usMonths").value = 5;
+    document.getElementById("bufferMonths").value = 1;
+  }
+  updateSplitHint();
+}
+function updateSplitHint() {
+  const num = id => +(document.getElementById(id)?.value || 0);
+  const months = num("indiaMonths") + num("usMonths") + num("travelMonths") + num("bufferMonths");
+  const indiaDays = Math.round(num("indiaMonths") * 30.4);
+  const overhead = (num("indiaLivingMonthly") * num("indiaMonths")) + (num("usLeaseMonthly") * num("usMonths")) + (num("transportMonthly") * num("usMonths")) + (num("storageMonthly") * 12) + (num("travelMonthly") * num("travelMonths"));
+  const hint = document.getElementById("splitHint");
+  if (!hint) return;
+  const dayMsg = indiaDays >= 182 ? "India days may cross a common residency trigger. Check with a tax pro." : "India days look below 182 in this rough month-based check.";
+  hint.textContent = `Months total: ${months}. Split-life annual add-on: ${fmt(overhead)}. Approx India days: ${indiaDays}. Assumes US tax residency. ${dayMsg}`;
 }
 
 const STD = { mfj: 32200, single: 16100 };
@@ -1075,6 +1154,16 @@ function readInputs() {
     stateTax: ((num("stateTax") ?? 0)) / 100,
     ssClaimAge: +document.getElementById("ssClaimAge").value,
     socialSecurity: num("socialSecurity") ?? 0,
+    splitPattern: document.getElementById("splitPattern")?.value || "5-2-5",
+    indiaMonths: num("indiaMonths") ?? 0,
+    usMonths: num("usMonths") ?? 0,
+    travelMonths: num("travelMonths") ?? 0,
+    bufferMonths: num("bufferMonths") ?? 0,
+    indiaLivingMonthly: num("indiaLivingMonthly") ?? 0,
+    usLeaseMonthly: num("usLeaseMonthly") ?? 0,
+    storageMonthly: num("storageMonthly") ?? 0,
+    transportMonthly: num("transportMonthly") ?? 0,
+    travelMonthly: num("travelMonthly") ?? 0,
     rothStress: document.getElementById("rothStress").value === "yes"
   };
 }
@@ -1084,6 +1173,7 @@ function project(strategy, inp) {
   const endAge = Math.max(85, targetAge + 20);
   const std = STD[inp.filing];
   const rnorYrs = estRnorYears(inp.yrsOutside || 0, inp.goal);
+  const splitBaseOverhead = splitAnnualOverhead(inp);
   const matchAmt = Math.min((inp.income || 0) * inp.match, inp.cap401k);
   const ssStartAge = inp.ssClaimAge || 67;
 
@@ -1120,7 +1210,8 @@ function project(strategy, inp) {
     const inRNOR = inIndia && yearsRetired < rnorYrs;
     const inROR = inIndia && retired && !inRNOR;
     const beforeMedicare = retired && !inIndia && age < 65;
-    const spendNow = inp.spend * Math.pow(1 + inp.inflation, yr);
+    const splitOverheadNow = retired && inp.goal === "split" ? splitBaseOverhead * Math.pow(1 + inp.inflation, yr) : 0;
+    const spendNow = (inp.spend * Math.pow(1 + inp.inflation, yr)) + splitOverheadNow;
     const ssIncome = retired && age >= ssStartAge ? inp.socialSecurity * Math.pow(1 + inp.inflation, Math.max(0, age - ssStartAge)) : 0;
     const start401kForYear = a401k;
 
@@ -1307,7 +1398,7 @@ function project(strategy, inp) {
     aTax *= (1 + Math.max(0, inp.growth - inp.taxDrag));
     aCash *= 1.04;
 
-    rows.push({ age, isWorking, retired, inIndia, inRNOR, inROR, beforeMedicare, a401k, aRoth, aTax, aCash, total: a401k + aRoth + aTax + aCash, withdraw401k, withdrawRoth, withdrawTax, withdrawCash, rothConv, rmd, ssIncome, magi, usTaxYr, indiaTaxYr, acaYr, acaExtra: acaYr - acaBaseYr, stateTaxYr, earlyPenalty, rothStressTax, shortfall, spendNow });
+    rows.push({ age, isWorking, retired, inIndia, inRNOR, inROR, beforeMedicare, a401k, aRoth, aTax, aCash, total: a401k + aRoth + aTax + aCash, withdraw401k, withdrawRoth, withdrawTax, withdrawCash, rothConv, rmd, ssIncome, magi, usTaxYr, indiaTaxYr, acaYr, acaExtra: acaYr - acaBaseYr, stateTaxYr, earlyPenalty, rothStressTax, shortfall, spendNow, splitOverheadNow });
   }
 
   const row75 = rows.find(r => r.age === 75) || rows[rows.length - 1];
@@ -1330,6 +1421,13 @@ function riskItems(inp, results) {
     if (ror) items.push({ title: "ROR phase starts after RNOR", text: "After RNOR, India-side tax treatment can become the main planning issue, especially for 401k and Roth balances." });
     const rothRow = C.rows.find(r => r.rothStressTax > 0);
     if (rothRow) items.push({ title: "Roth India stress test is on", text: `The first modeled Roth-growth tax drag is about ${fmt(rothRow.rothStressTax)} / year. Treat this as a worst-case pressure test, not a final tax answer.` });
+  }
+  if (inp.goal === "split") {
+    const overhead = splitAnnualOverhead(inp);
+    const indiaDays = Math.round((inp.indiaMonths || 0) * 30.4);
+    items.push({ title: `Split-life overhead: ${fmt(overhead)} / year`, text: "India monthly living cost, furnished US lease, storage, US transport, and travel-month costs are added to base retirement spending." });
+    items.push({ title: `Approx India days: ${indiaDays}`, text: indiaDays >= 182 ? "This may cross a common India residency trigger. Treat the split plan as tax-sensitive." : "This is below 182 days in the rough month-based check, but real day counts matter." });
+    items.push({ title: "Minimal US footprint is modeled", text: "The tool assumes short-term furnished housing, storage, and rented or shared transport instead of a full US household." });
   }
   const rmdHit = C.rows.find(r => r.rmd > 0);
   if (rmdHit) items.push({ title: `RMDs begin around age ${rmdHit.age}`, text: `The model forces about ${fmt(rmdHit.rmd)} from 401k/IRA that year. This can change both US and India-return paths.` });
@@ -1355,10 +1453,14 @@ function validateInputs(inp) {
   const missing = [];
   if (inp.age === null || inp.age < 18 || inp.age > 85) missing.push("Current age (18-85)");
   if (inp.years === null || inp.years < 1 || inp.years > 40) missing.push("Years to target (1-40)");
-  if (inp.spend === null || inp.spend <= 0) missing.push("Retirement spend / yr");
+  if (inp.spend === null || inp.spend <= 0) missing.push("Base retirement spend / yr");
   if (inp.income === null || inp.income < 0) missing.push("Household income / yr");
   if (inp.savings === null || inp.savings < 0) missing.push("Savings / yr");
   if (inp.goal === "india" && (inp.yrsOutside === null || inp.yrsOutside < 0)) missing.push("Years outside India");
+  if (inp.goal === "split") {
+    const months = (inp.indiaMonths || 0) + (inp.usMonths || 0) + (inp.travelMonths || 0) + (inp.bufferMonths || 0);
+    if (Math.abs(months - 12) > 0.01) missing.push("Split months must add up to 12");
+  }
   return missing;
 }
 
@@ -1381,7 +1483,7 @@ function compute() {
   const paths = [
     { id: "A", title: "Status Quo", desc: "Max 401k first. Same plan as today.", R: A },
     { id: "B", title: "Asset Location Pivot", desc: "401k match only. Send the rest to taxable.", R: B },
-    { id: "C", title: "Optimized", desc: inp.goal === "india" ? "Pivot now, then use RNOR years intentionally." : "Pivot now, income-stack, and run Roth conversions.", R: C }
+    { id: "C", title: "Optimized", desc: inp.goal === "india" ? "Pivot now, then use RNOR years intentionally." : (inp.goal === "split" ? "Pivot now, keep MAGI lower, and fund the seasonal plan." : "Pivot now, income-stack, and run Roth conversions."), R: C }
   ];
   const winner = [...paths].sort((x,y) => score(x.R) - score(y.R))[0];
   const baseCost = cost(A);
@@ -1389,13 +1491,13 @@ function compute() {
 
   let html = "";
 
-  html += `<section class="decision"><div class="mini">Best path under this scoring method</div><h3>Path ${winner.id} &mdash; ${winner.title}</h3><p class="why-line">${winner.desc}</p><div class="big">${fmt(saved)}</div><p>Modeled tax plus healthcare premium difference vs Path A through the projection period. This is a scoring result, not a tax estimate.</p></section>`;
+  html += `<section class="decision"><div class="mini">Best under current model scoring</div><h3>Path ${winner.id} &mdash; ${winner.title}</h3><p class="why-line">${winner.desc}</p><div class="big">${fmt(saved)}</div><p>Modeled tax plus healthcare premium-pressure difference vs Path A through the projection period. This is a planning score, not a tax estimate.</p></section>`;
 
   html += `<div class="cards">`;
   paths.forEach(p => {
     const c = cost(p.R);
     const delta = baseCost - c;
-    html += `<div class="path-card ${p.id === winner.id ? "winner" : ""}">${p.id === winner.id ? `<div class="tag">WINNER</div>` : ""}<div class="path-label">Path ${p.id}</div><h4>${p.title}</h4><div class="stat"><span>US tax</span><span class="v neg">${fmt(p.R.totalUSTax)}</span></div>${inp.goal === "india" ? `<div class="stat"><span>India tax (modeled)</span><span class="v neg">${fmt(p.R.totalIndiaTax)}</span></div>` : `<div class="stat"><span>ACA stress cost</span><span class="v neg">${fmt(Math.max(0, p.R.totalACA - p.R.totalACABase))}</span></div>`}<div class="stat"><span>Wealth at 75</span><span class="v">${fmt(p.R.wealthAt75)}</span></div>${p.R.totalShortfall > 0 ? `<div class="stat"><span>Unmet spending</span><span class="v neg">${fmt(p.R.totalShortfall)}</span></div>` : ""}<div class="stat"><span>${p.id === "A" ? "Baseline modeled cost" : "Modeled saved vs A"}</span><span class="v ${p.id === "A" ? "" : "pos"}">${p.id === "A" ? fmt(c) : "+" + fmt(delta)}</span></div></div>`;
+    html += `<div class="path-card ${p.id === winner.id ? "winner" : ""}">${p.id === winner.id ? `<div class="tag">BEST UNDER MODEL</div>` : ""}<div class="path-label">Path ${p.id}</div><h4>${p.title}</h4><div class="stat"><span>US tax</span><span class="v neg">${fmt(p.R.totalUSTax)}</span></div>${inp.goal === "india" ? `<div class="stat"><span>India tax stress estimate</span><span class="v neg">${fmt(p.R.totalIndiaTax)}</span></div>` : `<div class="stat"><span>${inp.goal === "split" ? "ACA premium pressure" : "ACA premium pressure"}</span><span class="v neg">${fmt(Math.max(0, p.R.totalACA - p.R.totalACABase))}</span></div>`}<div class="stat"><span>Wealth at 75</span><span class="v">${fmt(p.R.wealthAt75)}</span></div>${p.R.totalShortfall > 0 ? `<div class="stat"><span>Unmet spending</span><span class="v neg">${fmt(p.R.totalShortfall)}</span></div>` : ""}<div class="stat"><span>${p.id === "A" ? "Baseline model cost" : "Model saved vs A"}</span><span class="v ${p.id === "A" ? "" : "pos"}">${p.id === "A" ? fmt(c) : "+" + fmt(delta)}</span></div></div>`;
   });
   html += `</div>`;
 
@@ -1446,15 +1548,23 @@ function compute() {
     </div>
   </section>`;
 
+  if (inp.goal === "split") {
+    const splitOverhead = splitAnnualOverhead(inp);
+    const indiaDays = Math.round((inp.indiaMonths || 0) * 30.4);
+    html += `<section class="block"><h3>Split-life setup</h3><div class="split-summary-grid"><div class="path-card"><div class="path-label">India</div><h4>${inp.indiaMonths} months</h4><div class="stat"><span>Approx days</span><span class="v">${indiaDays}</span></div><div class="stat"><span>Living cost</span><span class="v neg">${fmt(inp.indiaLivingMonthly * inp.indiaMonths)}</span></div></div><div class="path-card"><div class="path-label">US</div><h4>${inp.usMonths} months</h4><div class="stat"><span>Lease + transport</span><span class="v neg">${fmt((inp.usLeaseMonthly + inp.transportMonthly) * inp.usMonths)}</span></div></div><div class="path-card"><div class="path-label">Travel</div><h4>${inp.travelMonths} months</h4><div class="stat"><span>Extra travel cost</span><span class="v neg">${fmt(inp.travelMonthly * inp.travelMonths)}</span></div></div><div class="path-card"><div class="path-label">Annual add-on</div><h4>${fmt(splitOverhead)}</h4><div class="stat"><span>Storage</span><span class="v neg">${fmt(inp.storageMonthly * 12)}</span></div></div></div><div class="callout warn"><strong>Split Life assumption</strong>This mode assumes US tax residency. It adds seasonal living costs and flags India day-count risk, but it does not model Indian ROR taxation, FEMA status, DTAA tie-breaker results, or healthcare eligibility.</div><div class="callout"><strong>Base spend rule</strong>Your base retirement spend should exclude the India living cost, US lease, storage, US transport, and extra travel costs entered in this Split Life section. Otherwise you may double count.</div></section>`;
+  }
+
   html += `<section class="block"><h3>What the model is saying</h3>`;
   if (inp.goal === "us") {
     html += `<div class="callout"><strong>US retirement branch</strong>Path C tries to reduce MAGI pressure before Medicare by mixing standard-deduction 401k withdrawals, taxable withdrawals, and Roth conversions.</div><div class="callout warn"><strong>ACA warning</strong>This is a rough premium stress test. It is not real subsidy modeling, savings, or a quote.</div>`;
+  } else if (inp.goal === "split") {
+    html += `<div class="callout"><strong>Split-life branch</strong>Path C keeps the same US-tax-resident planning logic, then adds India living cost, furnished US lease, storage, US transport, and travel-month costs to annual spending.</div><div class="callout warn"><strong>Day-count warning</strong>The model uses months as a rough proxy. Real tax residency depends on actual days, facts, current rules, treaty position, and your full fact pattern.</div>`;
   } else {
     html += `<div class="callout"><strong>India return branch</strong>Path C tries to use the estimated RNOR window before the model switches into ROR treatment. The table tags rows as RNOR or ROR so the branch change is visible.</div><div class="callout warn"><strong>RNOR warning</strong>The RNOR period shown here is only an estimate. Real status depends on actual India presence and prior residency history.</div>`;
   }
   html += `</section>`;
 
-  html += `<section class="block"><h3>Year by year</h3><div class="tabs" id="tabs"><button class="active" data-path="C">Path C</button><button data-path="A">Path A</button><button data-path="B">Path B</button></div>${inp.goal === "us" ? `<div class="callout warn"><strong>Why ACA premium jumps</strong>ACA stress cost is tied to MAGI. 401k withdrawals, Roth conversions, Social Security, and capital gains can push MAGI higher, which is why the modeled premium can spike.</div>` : ""}<div class="table-note">Columns are grouped: <strong>cash flow</strong> (Spend, SS), <strong>withdrawals</strong> by source (401k wd, RMD, Roth wd, Tax wd, Cash wd, Roth conv), <strong>taxes</strong> (US tax, India/ACA, <span style="background:#fff8e1;padding:0 4px;border-radius:2px;">Total tax</span>, Shortfall), and <strong>end-of-year balances</strong>. The <strong>Total tax</strong> column (highlighted) sums the two preceding columns so you don't have to add them in your head. On mobile, swipe sideways. The Age column stays fixed.</div>${inp.goal === "india" ? `<div class="phase-legend"><span class="phase-pill"><span class="phase-dot phase-rnor"></span>RNOR: India tax-free window</span><span class="phase-pill"><span class="phase-dot phase-ror"></span>ROR: India taxable phase</span></div><div id="phaseTimelineBox"></div>` : ""}<div id="tableBox"></div><div class="table-foot"><strong>Reading the columns:</strong> Spend = inflated annual spending need. SS = Social Security income that year. <strong>401k wd</strong> includes RMD and any tax-payment pulls; <strong>RMD</strong> is the forced subset (shown separately). Roth wd / Tax wd / Cash wd are direct draws from each account. Roth conv = trad-to-Roth conversion. <strong>US tax</strong> = federal + state + LTCG + NIIT + early-withdrawal penalty (if any), summed. India / ACA shows India tax (India path) or modeled ACA premium (US path, before age 65). <strong>Total tax</strong> (highlighted column) = US tax + India tax for the India path, or US tax + ACA premium for the US path. Note: ACA premium is technically a healthcare cost, not a tax, but it functions as a MAGI-driven cash outflow during the pre-Medicare window. Shortfall is non-zero only if all accounts ran dry.</div></section>`;
+  html += `<section class="block"><h3>Year by year</h3><div class="tabs" id="tabs"><button class="active" data-path="C">Path C</button><button data-path="A">Path A</button><button data-path="B">Path B</button></div>${inp.goal === "us" || inp.goal === "split" ? `<div class="callout warn"><strong>Why ACA premium jumps</strong>ACA premium pressure is tied to MAGI. 401k withdrawals, Roth conversions, Social Security, and capital gains can push MAGI higher, which is why the modeled premium can spike.</div>` : ""}<div class="table-note">Columns are grouped: <strong>cash flow</strong> (Spend, SS), <strong>withdrawals</strong> by source (401k wd, RMD, Roth wd, Tax wd, Cash wd, Roth conv), <strong>taxes</strong> (US tax, India/ACA, <span style="background:#fff8e1;padding:0 4px;border-radius:2px;">Total tax</span>, Shortfall), and <strong>end-of-year balances</strong>. The <strong>Total tax</strong> column (highlighted) sums the two preceding columns so you don't have to add them in your head. On mobile, swipe sideways. The Age column stays fixed.</div>${inp.goal === "india" ? `<div class="phase-legend"><span class="phase-pill"><span class="phase-dot phase-rnor"></span>RNOR: India tax-free window</span><span class="phase-pill"><span class="phase-dot phase-ror"></span>ROR: India taxable phase</span></div><div id="phaseTimelineBox"></div>` : ""}<div id="tableBox"></div><div class="table-foot"><strong>Reading the columns:</strong> Spend = inflated annual spending need. SS = Social Security income that year. <strong>401k wd</strong> includes RMD and any tax-payment pulls; <strong>RMD</strong> is the forced subset (shown separately). Roth wd / Tax wd / Cash wd are direct draws from each account. Roth conv = trad-to-Roth conversion. <strong>US tax</strong> = federal + state + LTCG + NIIT + early-withdrawal penalty (if any), summed. India / ACA shows India tax stress estimate (India path) or modeled ACA premium pressure (US or Split Life path, before age 65). <strong>Total tax / premium pressure</strong> (highlighted column) = US tax + India tax stress estimate for the India path, or US tax + ACA premium pressure for the US/Split Life path. Note: ACA premium is technically a healthcare cost, not a tax, but it functions as a MAGI-driven cash outflow during the pre-Medicare window. Shortfall is non-zero only if all accounts ran dry.</div></section>`;
 
   html += `<section class="block"><h3>Account mix at target age ${A.targetAge}</h3><div class="legend"><span class="l401">401k / Traditional IRA</span><span class="lroth">Roth</span><span class="ltax">Taxable</span><span class="lcash">Cash</span></div><svg class="bar-chart" id="barChart" viewBox="0 0 600 220" preserveAspectRatio="xMidYMid meet"></svg></section>`;
 
@@ -1473,6 +1583,7 @@ function compute() {
   function badge(row) {
     if (!row.retired) return "";
     if (inp.goal === "us") return `<span class="row-badge badge-us">US</span>`;
+    if (inp.goal === "split") return `<span class="row-badge badge-us">SPLIT</span>`;
     if (row.inRNOR) return `<span class="row-badge badge-rnor">RNOR</span>`;
     if (row.inROR) return `<span class="row-badge badge-ror">ROR</span>`;
     return "";
@@ -1535,8 +1646,8 @@ function compute() {
   function renderTable(id) {
     renderPhaseTimeline(id);
     const rows = results[id].rows.filter(r => r.age <= 80);
-    const dynHead = inp.goal === "india" ? "India tax" : "ACA premium";
-    const totalHead = inp.goal === "india" ? "Total tax" : "Total tax + premium";
+    const dynHead = inp.goal === "india" ? "India tax stress" : "ACA premium pressure";
+    const totalHead = inp.goal === "india" ? "Total tax stress" : "Tax + premium pressure";
     const magiHead = inp.goal === "us" ? `<th class="grp-start">MAGI</th>` : "";
     // Column count for transition row colspan:
     // Age, Spend, SS, 401k wd, RMD, Roth wd, Tax wd, Cash wd, Roth conv, [MAGI], US tax, India/ACA, Total tax, Shortfall, 401k, Roth, Tax, Cash, Total
