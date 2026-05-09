@@ -710,7 +710,8 @@
 
   <div class="wrap">
     <div class="top-note">
-      Uses simplified 2026 US tax constants, RMD overlay, optional state-tax stress, optional Social Security input, India tax stress assumptions, RNOR estimate, ACA premium-pressure testing, and split-life housing/travel assumptions. Split Life assumes US tax residency unless you separately model a full India return. Treat the output as a planning prompt, not advice.
+      Uses simplified 2026 US tax constants, RMD overlay, optional state-tax stress, optional Social Security input, India tax stress assumptions, RNOR estimate, ACA premium-pressure testing, and split-life housing/travel assumptions. Split Life assumes US tax residency unless you separately model a full India return. Treat the output as a planning prompt, not advice.<br><br>
+      <strong>Updated with accuracy fixes:</strong> today's-dollar Social Security, marginal relief on India tax, gross-up pull no longer double-counts, and Social Security during working years is now banked into taxable brokerage. Numbers may differ from previous saved scenarios or screenshots from older versions of the tool.
     </div>
 
     <details class="readme-card" id="readmeCard" open>
@@ -723,6 +724,7 @@
 
         <h4>What this tool does</h4>
         <p>Compares three retirement strategies side by side using your numbers. Inputs for your situation are blank by default. Modeling assumptions (growth, inflation, brackets) come prefilled with reasonable starting values that you can override.</p>
+        <p><strong>Recent accuracy update:</strong> today's-dollar Social Security, marginal relief on India tax, gross-up pull no longer double-counts, and Social Security during working years is now banked into taxable brokerage. Numbers may differ from previous saved scenarios or screenshots from older versions of the tool.</p>
 
         <h4>Your personal inputs</h4>
         <p>Blank by default. The model will not run until these are filled in.</p>
@@ -746,7 +748,7 @@
           <li><strong>Roth basis %</strong> (default 60%) &mdash; portion of your Roth that is contributions. Contributions are tax-free even before 59.5. Especially important in RNOR years &mdash; the model pulls Roth basis first.</li>
           <li><strong>State tax %</strong> (default 0%) &mdash; flat rate applied to ordinary income (401k withdrawals, Roth conversions, capital gains, taxable SS) in US retirement years only. Use 0 for TX/FL; try 9.3 for a CA-style stress test.</li>
           <li><strong>Social Security claim age</strong> (default 67) &mdash; year SS income turns on. The model uses your <em>Estimated SS / yr</em> as-is starting at this age, then inflates yearly.</li>
-          <li><strong>Estimated SS / yr</strong> (default $30k) &mdash; annual SS benefit at claim age. Simplified &mdash; not based on a real SSA earnings record. Use SSA's own tools for an accurate estimate.</li>
+          <li><strong>Estimated SS / yr</strong> (default $30k) &mdash; annual Social Security estimate in today's dollars. The model inflates it forward to the claiming age and then keeps inflating it yearly. Simplified &mdash; not based on a real SSA earnings record. Use SSA's own tools for an accurate estimate.</li>
           <li><strong>Roth India stress</strong> (default Yes) &mdash; if on, applies a flat 30% tax on annual Roth balance growth during ROR years. Worst-case stress test, not a definitive tax answer.</li>
         </ul>
 
@@ -758,7 +760,7 @@
             <ul>
               <li><strong>US path</strong>: income-stacks 401k withdrawals up to the standard deduction. Runs small Roth conversions filling the 12% bracket between 59.5 and 67. Drains taxable and cash before 65 to keep ACA MAGI down.</li>
               <li><strong>India path, RNOR years</strong>: pulls Roth basis tax-free, fills US 12% bracket with 401k withdrawals, builds taxable surplus.</li>
-              <li><strong>India path, ROR years</strong>: spends taxable first, then pulls 401k with rough 25% US withholding. India tax computed using simplified new-regime slabs with US withholding credit.</li>
+              <li><strong>India path, ROR years</strong>: spends taxable first, then pulls 401k using the editable US-India pension withholding assumption. India tax stress estimate uses simplified new-regime slabs, marginal relief near the rebate threshold, and US withholding credit.</li>
             </ul>
           </li>
         </ul>
@@ -769,7 +771,7 @@
           <li><strong>ACA premium pressure test (US and Split Life paths)</strong> &mdash; runs from retirement through age 65. MAGI-based premium pressure only. It does not use household size, state, benchmark Silver premiums, or real Premium Tax Credit rules.</li>
           <li><strong>Early-withdrawal penalty</strong> &mdash; 10% on all 401k withdrawals before 59.5. Does not model exceptions like Rule of 55, SEPP, or Roth ladder.</li>
           <li><strong>RNOR window (India path)</strong> &mdash; estimated as 2 or 3 years from "years outside India". Heuristic only. Real RNOR depends on actual presence tests in the prior 7-10 years and prior residency history.</li>
-          <li><strong>ROR phase (India path)</strong> &mdash; after RNOR ends, 401k and IRA distributions are treated as India-taxable with US withholding credit. Roth growth optionally stress-tested at 30%. This is an India tax stress estimate, not final tax advice.</li>
+          <li><strong>ROR phase (India path)</strong> &mdash; after RNOR ends, 401k and IRA distributions are treated as India-taxable with US withholding credit. Roth growth optionally stress-tested at 30%. India tax includes a simple marginal-relief guard near the ₹12L rebate threshold. This is an India tax stress estimate, not final tax advice.</li>
         </ul>
 
         <h4>What is not modeled</h4>
@@ -931,7 +933,7 @@
             <div>
               <label>Estimated Social Security / yr</label>
               <input type="number" id="socialSecurity" value="30000" step="1000" />
-              <div class="hint">Annual estimate at the selected claiming age. Simplified.</div>
+              <div class="hint">Enter in today's dollars. The model inflates this forward to claiming age.</div>
             </div>
           </div>
           <div class="row full">
@@ -942,6 +944,18 @@
                 <option value="no">No, exclude from model</option>
               </select>
               <div class="hint">Worst-case 30% on Roth growth during ROR. Stress test, not a final answer.</div>
+            </div>
+          </div>
+          <div class="row">
+            <div>
+              <label>US-India pension withholding %</label>
+              <input type="number" id="usIndiaWh" value="15" min="0" max="35" step="1" />
+              <div class="hint">Used in ROR years as a rough US withholding credit. Use 25 for stress.</div>
+            </div>
+            <div>
+              <label>Score wealth credit %</label>
+              <input type="number" id="scoreWeight" value="4" min="0" max="10" step="0.5" />
+              <div class="hint">How much wealth at 75 offsets modeled costs when picking “best under model”.</div>
             </div>
           </div>
         </div>
@@ -956,8 +970,8 @@
 
 
     <footer>
-      <p><strong>Important:</strong> This is a simplified planning model. RNOR is estimated from years outside India only and is not a legal residency determination. Real RNOR status depends on actual India presence tests and prior residency history. ACA output is a rough premium-pressure test, not subsidy modeling and not a quote. It depends on household size, state, MAGI, age, plan choice, and current law. IRMAA is not modeled. Split Life assumes US tax residency and uses month-based cost and day-count checks only. It does not decide Indian tax residency, FEMA status, DTAA tie-breaker results, or healthcare eligibility. Tax-payment 401k pulls may slightly understate current-year tax in rare cash-dry years because recursion is intentionally avoided.</p>
-      <p>Assumptions include 2026 US standard deductions and bracket thresholds, simplified India new-regime tax stress with rebate handling, simplified capital-gain assumptions, RMD estimates, optional Social Security claiming age, optional state-tax stress input, and constant annual returns. Social Security is user-entered and simplified; it does not estimate real SSA benefits. Foreign tax credit and treaty treatment are simplified. ACA is premium pressure only, not a Premium Tax Credit calculator. Tax-payment 401k pulls are simplified to avoid recursive tax calculations and can slightly understate year-of-dry-up tax in edge cases. Educational only. Verify with a qualified cross-border CPA or tax advisor before acting.</p>
+      <p><strong>Important:</strong> This is a simplified planning model. RNOR is estimated from years outside India only and is not a legal residency determination. Real RNOR status depends on actual India presence tests and prior residency history. ACA output is a rough premium-pressure test, not subsidy modeling and not a quote. It depends on household size, state, MAGI, age, plan choice, and current law. IRMAA is not modeled. Split Life assumes US tax residency and uses month-based cost and day-count checks only. It does not decide Indian tax residency, FEMA status, DTAA tie-breaker results, or healthcare eligibility. Tax-payment 401k pulls are modeled with a simple buffer to avoid double-counting gross-up tax.</p>
+      <p>Assumptions include 2026 US standard deductions and bracket thresholds, simplified India new-regime tax stress with rebate handling, simplified capital-gain assumptions, RMD estimates, optional Social Security claiming age, optional state-tax stress input, and constant annual returns. Social Security is user-entered in today's dollars and simplified; it does not estimate real SSA benefits. Foreign tax credit and treaty treatment are simplified. ACA is premium pressure only, not a Premium Tax Credit calculator. The path score uses the editable wealth-at-75 credit, which can move close results. Tax-payment 401k pulls are simplified to avoid recursive tax calculations and can slightly understate year-of-dry-up tax in edge cases. Educational only. Verify with a qualified cross-border CPA or tax advisor before acting.</p>
       <p>Built for RupeeStories.</p>
     </footer>
   </div>
@@ -1111,7 +1125,11 @@ function indiaTaxINR(income) {
     const ceil = i + 1 < slabs.length ? slabs[i+1][0] : Infinity;
     if (income > floor) tax += (Math.min(income, ceil) - floor) * rate;
   }
-  return tax * 1.04;
+  tax = tax * 1.04;
+  // Simplified marginal relief around the new-regime rebate threshold.
+  // Prevents a fake cliff where ₹12,00,001 produces a large tax bill.
+  const excessOverRebate = income - 1200000;
+  return Math.min(tax, excessOverRebate * 1.04);
 }
 function acaStressPremium(magi, filing) {
   // Rough premium stress test only, not ACA subsidy modeling.
@@ -1154,6 +1172,8 @@ function readInputs() {
     stateTax: ((num("stateTax") ?? 0)) / 100,
     ssClaimAge: +document.getElementById("ssClaimAge").value,
     socialSecurity: num("socialSecurity") ?? 0,
+    usIndiaWh: ((num("usIndiaWh") ?? 15)) / 100,
+    scoreWeight: ((num("scoreWeight") ?? 4)) / 100,
     splitPattern: document.getElementById("splitPattern")?.value || "5-2-5",
     indiaMonths: num("indiaMonths") ?? 0,
     usMonths: num("usMonths") ?? 0,
@@ -1212,7 +1232,7 @@ function project(strategy, inp) {
     const beforeMedicare = retired && !inIndia && age < 65;
     const splitOverheadNow = retired && inp.goal === "split" ? splitBaseOverhead * Math.pow(1 + inp.inflation, yr) : 0;
     const spendNow = (inp.spend * Math.pow(1 + inp.inflation, yr)) + splitOverheadNow;
-    const ssIncome = retired && age >= ssStartAge ? inp.socialSecurity * Math.pow(1 + inp.inflation, Math.max(0, age - ssStartAge)) : 0;
+    const ssIncome = age >= ssStartAge ? inp.socialSecurity * Math.pow(1 + inp.inflation, Math.max(0, age - inp.age)) : 0;
     const start401kForYear = a401k;
 
     let withdraw401k = 0, withdrawRoth = 0, withdrawTax = 0, withdrawCash = 0, rothConv = 0, rmd = 0;
@@ -1232,6 +1252,13 @@ function project(strategy, inp) {
       a401k += c401;
       aTax += cTax;
       taxBasis += cTax;
+
+      // If Social Security starts before the target retirement age, bank it into taxable brokerage.
+      // This keeps the table display and portfolio math aligned in early-claim / still-working scenarios.
+      if (ssIncome > 0) {
+        aTax += ssIncome;
+        taxBasis += ssIncome;
+      }
     }
 
     if (retired) {
@@ -1248,13 +1275,16 @@ function project(strategy, inp) {
       }
 
       if (strategy === "maxAll") {
-        const cash = pullCash(need); withdrawCash += cash; need -= cash;
+        // Baseline order: taxable first, then cash buffer, then 401k.
         if (need > 0) { const tx = pullTaxable(need); withdrawTax += tx; need -= tx; }
+        if (need > 0) { const cash = pullCash(need); withdrawCash += cash; need -= cash; }
         if (need > 0) {
           const gross = grossUp401k(need, inp.filing, withdraw401k + rothConv + ssIncome * .85, inp.stateTax);
           const ira = gross > 0 ? pull401k(gross) : 0;
           withdraw401k += ira;
-          const covered = gross > 0 ? Math.min(need, need * (ira / gross)) : 0;
+          const covered = gross > 0 ? Math.min(need, need * (ira / gross)) : Math.min(need, ira);
+          const taxBuffer = Math.max(0, ira - covered);
+          if (taxBuffer > 0) aCash += taxBuffer;
           need = Math.max(0, need - covered);
         }
       }
@@ -1282,11 +1312,13 @@ function project(strategy, inp) {
           const gross = grossUp401k(need, inp.filing, withdraw401k + rothConv + ssIncome * .85, inp.stateTax);
           const ira = gross > 0 ? pull401k(gross) : 0;
           withdraw401k += ira;
-          const covered = gross > 0 ? Math.min(need, need * (ira / gross)) : 0;
+          const covered = gross > 0 ? Math.min(need, need * (ira / gross)) : Math.min(need, ira);
+          const taxBuffer = Math.max(0, ira - covered);
+          if (taxBuffer > 0) aCash += taxBuffer;
           need = Math.max(0, need - covered);
         }
 
-        if (strategy === "optimized" && !inIndia && age >= 59.5 && age < 67 && a401k > 50000 && spendNow <= 60000) {
+        if (strategy === "optimized" && !inIndia && age >= 59.5 && age < 67 && a401k > 50000) {
           const top12 = inp.filing === "mfj" ? 100800 : 50400;
           const room = Math.max(0, top12 + std - withdraw401k - rothConv - ssIncome * .85);
           const conv = Math.min(room, start401kForYear * .10, a401k);
@@ -1315,9 +1347,10 @@ function project(strategy, inp) {
         } else {
           const tx = pullTaxable(need); withdrawTax += tx; need -= tx;
           if (need > 0) {
-            const ira = need > 0 ? pull401k(need / .75) : 0; // rough 25% US withholding cash-flow stress.
+            const netAfterWh = Math.max(0.01, 1 - (inp.usIndiaWh ?? .15));
+            const ira = need > 0 ? pull401k(need / netAfterWh) : 0; // rough US pension withholding cash-flow stress.
             withdraw401k += ira;
-            need = Math.max(0, need - ira * .75);
+            need = Math.max(0, need - ira * netAfterWh);
           }
           if (need > 0) { const cash = pullCash(need); withdrawCash += cash; need -= cash; }
         }
@@ -1344,7 +1377,7 @@ function project(strategy, inp) {
         if (inRNOR) {
           indiaTaxYr = 0;
         } else {
-          const usWithholdingCreditINR = withdraw401k * .25 * inp.inr;
+          const usWithholdingCreditINR = withdraw401k * (inp.usIndiaWh ?? .15) * inp.inr;
           const indiaOrdTaxINR = indiaTaxINR((withdraw401k + ssIncome) * inp.inr);
           const indiaLtcgTaxINR = gainPart * inp.inr * .125 * 1.04;
           indiaTaxYr = Math.max(0, indiaOrdTaxINR + indiaLtcgTaxINR - usWithholdingCreditINR) / inp.inr;
@@ -1431,7 +1464,8 @@ function riskItems(inp, results) {
   }
   const rmdHit = C.rows.find(r => r.rmd > 0);
   if (rmdHit) items.push({ title: `RMDs begin around age ${rmdHit.age}`, text: `The model forces about ${fmt(rmdHit.rmd)} from 401k/IRA that year. This can change both US and India-return paths.` });
-  if (inp.socialSecurity > 0) items.push({ title: "Social Security included simply", text: `Social Security is user-entered and simplified. The model starts income at age ${inp.ssClaimAge || 67} and does not estimate real SSA benefits.` });
+  if (inp.socialSecurity > 0) items.push({ title: "Social Security included simply", text: `Social Security is user-entered in today's dollars and simplified. The model inflates it forward and starts income at age ${inp.ssClaimAge || 67}. It does not estimate real SSA benefits.` });
+  items.push({ title: "Scoring assumption", text: `Best-under-model uses modeled costs minus ${(inp.scoreWeight ?? .04) * 100}% of wealth at 75. Close winners can change if you adjust this.` });
   if (rmdHit && rmdHit.age >= 65) items.push({ title: "IRMAA is not modeled", text: "High income after age 65 can trigger Medicare IRMAA surcharges. This tool does not include IRMAA premiums." });
   if (inp.age + inp.years < 59.5) items.push({ title: "Early withdrawal penalty is simplified", text: "A 10% penalty is applied to all modeled 401k withdrawals before 59.5. Exceptions like Rule of 55, SEPP, and Roth ladders are not modeled." });
   return items.slice(0, 6);
@@ -1479,7 +1513,7 @@ function compute() {
   const results = { A, B, C };
 
   const cost = R => R.totalUSTax + R.totalIndiaTax + Math.max(0, R.totalACA - R.totalACABase);
-  const score = R => cost(R) - R.wealthAt75 * .04;
+  const score = R => cost(R) - R.wealthAt75 * (inp.scoreWeight ?? .04);
   const paths = [
     { id: "A", title: "Status Quo", desc: "Max 401k first. Same plan as today.", R: A },
     { id: "B", title: "Asset Location Pivot", desc: "401k match only. Send the rest to taxable.", R: B },
@@ -1491,7 +1525,7 @@ function compute() {
 
   let html = "";
 
-  html += `<section class="decision"><div class="mini">Best under current model scoring</div><h3>Path ${winner.id} &mdash; ${winner.title}</h3><p class="why-line">${winner.desc}</p><div class="big">${fmt(saved)}</div><p>Modeled tax plus healthcare premium-pressure difference vs Path A through the projection period. This is a planning score, not a tax estimate.</p></section>`;
+  html += `<section class="decision"><div class="mini">Best under current model scoring</div><h3>Path ${winner.id} &mdash; ${winner.title}</h3><p class="why-line">${winner.desc}</p><div class="big">${fmt(saved)}</div><p>Modeled tax plus healthcare premium-pressure difference vs Path A through the projection period. This is a planning score, not a tax estimate. Wealth at 75 is credited at ${(inp.scoreWeight ?? .04) * 100}% in the scoring formula.</p></section>`;
 
   html += `<div class="cards">`;
   paths.forEach(p => {
