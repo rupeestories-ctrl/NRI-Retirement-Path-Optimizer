@@ -1,1793 +1,3875 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8" />
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
 <title>NRI Retirement Path Optimizer &middot; r/rupeestories &middot; rupeestories.substack.com</title>
+
 <meta name="description" content="Compare US retirement, India return, and split-life paths using simplified retirement, tax, RNOR, Roth, ACA, and seasonal-living assumptions. Free planning tool, not tax advice." />
+
 <style>
+
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
+
   :root {
+
     --bg: #fbf9f4;
+
     --card: #ffffff;
+
     --soft: #f5f1e8;
+
     --ink: #1a1a2e;
+
     --muted: #4a4a5e;
+
     --faint: #8a8a9e;
+
     --accent: #0066cc;
+
     --accent-soft: #e6f0fa;
+
     --gold: #ffd166;
+
     --good: #1b7a3f;
+
     --good-soft: #e8f5ec;
+
     --warn: #c2410c;
+
     --warn-soft: #fff7ed;
+
     --bad: #b91c1c;
+
     --bad-soft: #fdecec;
+
     --border: #efeee5;
+
     --border-strong: #d8d2c2;
+
     --shadow-soft: 0 10px 30px rgba(0,0,0,0.04);
+
     --shadow-lift: 0 18px 45px rgba(0,0,0,0.10);
+
   }
+
+
 
   * { box-sizing: border-box; }
+
   html { scroll-behavior: smooth; }
+
   body {
+
     margin: 0;
+
     background: var(--bg);
+
     color: var(--ink);
+
     font-family: "Lora", Georgia, serif;
+
     line-height: 1.55;
+
   }
+
+
 
   h1, h2, h3, h4, .kicker, .group-title, .mini, .v, .path-label, .tag, th, input, select, button, .row-badge, .timeline-label, .table-note {
+
     font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
     letter-spacing: -0.01em;
+
   }
+
+
 
   .v, .decision .big, .yr-table, input[type="number"] {
+
     font-variant-numeric: tabular-nums;
+
   }
+
+
 
   .hero {
+
     background: linear-gradient(135deg, #1a1a2e 0%, #2a2a4e 100%);
+
     color: #fff;
+
     padding: 46px 20px 42px;
+
     text-align: center;
+
     position: relative;
+
   }
+
   .kicker {
+
     display: flex;
+
     justify-content: space-between;
+
     align-items: center;
+
     gap: 16px;
+
     font-size: 11px;
+
     letter-spacing: .18em;
+
     text-transform: uppercase;
+
     color: var(--gold);
+
     margin: 0 0 22px;
+
     padding: 0 6px;
+
   }
+
   .kicker .kicker-left,
+
   .kicker .kicker-right {
+
     flex: 0 0 auto;
+
   }
+
+
+
+  .kicker a {
+
+    color: var(--gold);
+
+    text-decoration: none;
+
+    font-weight: 700;
+
+  }
+
+  .kicker a:hover {
+
+    text-decoration: underline;
+
+    opacity: .9;
+
+  }
+
   @media (max-width: 560px) {
+
     .kicker {
+
       flex-direction: column;
+
       gap: 4px;
+
       margin-bottom: 14px;
+
     }
+
   }
+
   .hero h1 {
+
     margin: 0;
+
     font-size: clamp(30px, 5vw, 48px);
+
     line-height: 1.12;
+
     font-weight: 600;
+
   }
+
   .hero h1 span { color: var(--gold); }
+
   .hero p {
+
     max-width: 760px;
+
     margin: 12px auto 0;
+
     opacity: .88;
+
     font-size: 16px;
+
   }
+
+
 
   .trust-bar {
+
     display: flex;
+
     justify-content: center;
+
     gap: 14px;
+
     flex-wrap: wrap;
+
     margin-top: 16px;
+
     font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
     font-size: 13px;
+
     color: #cbd5e1;
+
     opacity: .92;
+
   }
+
   .trust-pill {
+
     display: inline-flex;
+
     align-items: center;
+
     gap: 6px;
+
     padding: 6px 10px;
+
     border: 1px solid rgba(255,255,255,.14);
+
     border-radius: 999px;
+
     background: rgba(255,255,255,.06);
+
     box-shadow: 0 8px 20px rgba(0,0,0,.08);
+
   }
+
+
 
   .wrap { max-width: 1280px; margin: 0 auto; padding: 28px 20px 70px; }
+
   .top-note {
+
     background: var(--card);
+
     border: 1px solid var(--border);
+
     border-left: 4px solid var(--accent);
+
     border-radius: 8px;
+
     padding: 14px 16px;
+
     margin-bottom: 16px;
+
     color: var(--muted);
+
     font-size: 14px;
+
   }
+
+
 
   /* ========== READ ME CARD ========== */
+
   .readme-card {
+
     background: var(--card);
+
     border: 1px solid var(--border);
+
     border-radius: 12px;
+
     margin-bottom: 22px;
+
     box-shadow: var(--shadow-soft);
+
     overflow: hidden;
+
   }
+
   .readme-summary {
+
     cursor: pointer;
+
     padding: 14px 18px;
+
     background: linear-gradient(135deg, rgba(255,209,102,.12), rgba(0,102,204,.04));
+
     font-family: "Inter", sans-serif;
+
     font-weight: 700;
+
     display: flex;
+
     align-items: center;
+
     gap: 12px;
+
     list-style: none;
+
     user-select: none;
+
   }
+
   .readme-summary::-webkit-details-marker { display: none; }
+
   .readme-summary::marker { display: none; content: ""; }
+
   .readme-icon { font-size: 18px; }
+
   .readme-title { flex: 1; font-size: 15px; color: var(--ink); }
+
   .readme-toggle { font-size: 11px; color: var(--faint); font-weight: 500; letter-spacing: .04em; }
+
   .readme-card[open] .readme-toggle::after { content: " \25B4"; }
+
   .readme-card:not([open]) .readme-toggle::after { content: " \25BE"; }
+
   .readme-body {
+
     padding: 18px 22px 24px;
+
     border-top: 1px solid var(--border);
+
     font-size: 14px;
+
     color: var(--muted);
+
     line-height: 1.6;
+
   }
+
   .readme-body h4 {
+
     font-family: Inter, sans-serif;
+
     color: var(--ink);
+
     font-size: 12px;
+
     text-transform: uppercase;
+
     letter-spacing: .12em;
+
     margin: 22px 0 10px;
+
     padding-bottom: 6px;
+
     border-bottom: 1px dashed var(--border);
+
     font-weight: 700;
+
   }
+
   .readme-body h4:first-child { margin-top: 0; }
+
   .readme-body p { margin: 6px 0 12px; }
+
   .readme-body ul { margin: 6px 0; padding-left: 0; list-style: none; }
+
   .readme-body li { margin-bottom: 9px; padding-left: 16px; position: relative; line-height: 1.55; }
+
   .readme-body li::before { content: "\25B8"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+
   .readme-body li ul { margin-top: 6px; }
+
   .readme-body li ul li::before { content: "\2013"; color: var(--faint); }
+
   .readme-body strong { color: var(--ink); font-family: Inter, sans-serif; font-weight: 700; }
+
   .readme-body code { background: #f0f0f0; padding: 1px 6px; border-radius: 3px; font-size: 12.5px; color: #b5432a; font-family: "Courier New", monospace; }
 
+
+
   .layout { display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 24px; align-items: start; }
+
   @media (max-width: 980px) { .layout { grid-template-columns: 1fr; } }
 
+
+
   .panel, .block, .path-card, .risk-summary {
+
     background: var(--card);
+
     border: 1px solid var(--border);
+
     border-radius: 12px;
+
     box-shadow: var(--shadow-soft);
+
   }
+
   .panel { padding: 22px; position: sticky; top: 16px; }
+
   @media (max-width: 980px) { .panel { position: static; } }
 
+
+
   h2, .block h3 {
+
     font-size: 12px;
+
     letter-spacing: .13em;
+
     text-transform: uppercase;
+
     color: var(--muted);
+
     margin: 0 0 14px;
+
     font-weight: 600;
+
   }
+
+
 
   .group { margin-bottom: 18px; }
+
   .group-title {
+
     font-size: 11px;
+
     letter-spacing: .14em;
+
     text-transform: uppercase;
+
     color: var(--faint);
+
     border-bottom: 1px dashed var(--border);
+
     padding-bottom: 6px;
+
     margin-bottom: 10px;
+
   }
+
   .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+
   .row.full { grid-template-columns: 1fr; }
+
   label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+
   input, select {
+
     width: 100%;
+
     padding: 9px 10px;
+
     border: 1px solid var(--border-strong);
+
     border-radius: 5px;
+
     background: #fff;
+
     color: var(--ink);
+
     font: inherit;
+
     font-size: 14px;
+
     transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+
   }
+
   input::placeholder { color: #c2bfb1; font-style: italic; }
+
   input:focus, select:focus {
+
     outline: none;
+
     border-color: var(--accent);
+
     box-shadow: 0 0 0 4px var(--accent-soft);
+
     transform: translateY(-1px);
+
   }
+
   .hint { color: var(--faint); font-size: 12px; line-height: 1.35; margin-top: 4px; }
 
+
+
   .seg { display: flex; border: 1px solid var(--border-strong); border-radius: 5px; overflow: hidden; }
+
   .seg button {
+
     flex: 1;
+
     padding: 9px 8px;
+
     border: 0;
+
     background: #fff;
+
     color: var(--muted);
+
     cursor: pointer;
+
     font: inherit;
+
     font-size: 13px;
+
   }
+
   .seg button + button { border-left: 1px solid var(--border-strong); }
+
   .seg button.active { background: var(--ink); color: var(--bg); }
 
+
+
   .run-btn {
+
     width: 100%;
+
     border: 0;
+
     border-radius: 6px;
+
     background: var(--ink);
+
     color: var(--bg);
+
     padding: 13px 14px;
+
     font: inherit;
+
     font-weight: 700;
+
     cursor: pointer;
+
     margin-top: 4px;
+
     transition: transform .1s ease, background .3s ease, box-shadow .2s ease;
+
     box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+
   }
+
   .run-btn:hover { background: var(--accent); box-shadow: 0 8px 22px rgba(0,102,204,.18); }
+
   .run-btn:active { transform: scale(.98); }
+
   .run-btn.loading { animation: pulseRun 0.9s ease-in-out infinite alternate; }
+
   @keyframes pulseRun { from { box-shadow: 0 4px 14px rgba(0,0,0,.10); } to { box-shadow: 0 8px 26px rgba(0,102,204,.28); } }
 
+
+
   .empty {
+
     text-align: center;
+
     padding: 60px 24px;
+
     color: var(--faint);
+
     background: var(--card);
+
     border: 1px dashed var(--border-strong);
+
     border-radius: 10px;
+
     font-size: 14px;
+
     line-height: 1.6;
+
   }
+
   .empty.error { border-color: var(--bad); background: var(--bad-soft); color: #7f1d1d; text-align: left; }
+
   .empty.error strong { color: var(--bad); display: block; margin-bottom: 8px; }
+
   .empty.error ul { margin: 8px 0 0 16px; padding: 0; }
+
   .empty.error li { margin: 3px 0; }
 
+
+
   .decision {
+
     background:
+
       radial-gradient(circle at 85% 20%, rgba(255,209,102,.22), transparent 28%),
+
       linear-gradient(135deg, #1a1a2e 0%, #2a2a4e 100%);
+
     color: var(--bg);
+
     border: 1px solid rgba(255,255,255,0.12);
+
     border-radius: 16px;
+
     padding: 22px 24px;
+
     margin-bottom: 14px;
+
     box-shadow: 0 20px 40px rgba(0,0,0,0.20);
+
     backdrop-filter: blur(10px);
+
   }
+
   .decision .mini {
+
     font-size: 11px;
+
     letter-spacing: .14em;
+
     text-transform: uppercase;
+
     opacity: .75;
+
     margin-bottom: 6px;
+
   }
+
   .decision h3 { margin: 0 0 8px; font-size: 24px; line-height: 1.2; }
+
   .decision .big { color: var(--gold); font-size: 36px; font-weight: 700; margin: 8px 0; }
+
   .decision p { margin: 6px 0 0; opacity: .88; }
+
   .why-line { color: var(--gold); font-weight: 600; }
 
+
+
   .risk-summary {
+
     background: var(--warn-soft);
+
     border-color: #fed7aa;
+
     border-left: 6px solid var(--warn);
+
     padding: 18px;
+
     margin-bottom: 18px;
+
   }
+
   .risk-summary h3 { margin: 0 0 5px; font-size: 18px; }
+
   .risk-sub { color: #7c2d12; font-size: 13px; margin: 0 0 12px; }
+
   .risk-list { display: grid; gap: 9px; margin: 0; padding: 0; list-style: none; }
+
   .risk-list li {
+
     background: rgba(255,255,255,.65);
+
     border: 1px solid #fed7aa;
+
     border-radius: 6px;
+
     padding: 9px 10px;
+
     font-size: 14px;
+
   }
+
   .risk-list strong { display: block; color: #7c2d12; margin-bottom: 2px; }
 
+
+
   .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 18px; }
+
   .split-summary-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 0 0 14px; }
+
   @media (max-width: 860px) { .split-summary-grid { grid-template-columns: 1fr 1fr; } }
+
   @media (max-width: 520px) { .split-summary-grid { grid-template-columns: 1fr; } }
+
   @media (max-width: 860px) { .cards { grid-template-columns: 1fr; } }
+
   .path-card { padding: 16px; position: relative; transition: transform .15s ease, box-shadow .15s ease; min-width: 0; }
+
   .path-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lift); }
+
   .path-card.winner { background: var(--good-soft); border-color: var(--good); box-shadow: 0 5px 18px rgba(27,122,63,.12); }
+
   .tag {
+
     position: absolute;
+
     top: -10px;
+
     right: 14px;
+
     background: var(--good);
+
     color: #fff;
+
     font-size: 10px;
+
     border-radius: 14px;
+
     padding: 3px 9px;
+
     letter-spacing: .08em;
+
   }
+
   .path-label {
+
     font-size: 10px;
+
     letter-spacing: .14em;
+
     text-transform: uppercase;
+
     color: var(--faint);
+
   }
+
   .path-card h4 { margin: 4px 0 10px; font-size: 17px; line-height: 1.25; }
+
   .stat { display: flex; justify-content: space-between; gap: 10px; border-top: 1px dashed var(--border); padding: 7px 0; font-size: 13.5px; }
+
   .stat span:first-child { color: var(--muted); }
+
   .v { font-variant-numeric: tabular-nums; font-weight: 700; text-align: right; }
+
   .neg { color: var(--bad); }
+
   .pos { color: var(--good); }
 
+
+
   .block { padding: 20px; margin-bottom: 18px; }
+
   .callout {
+
     border-left: 4px solid var(--accent);
+
     background: var(--accent-soft);
+
     padding: 12px 14px;
+
     border-radius: 0 6px 6px 0;
+
     margin: 10px 0;
+
     font-size: 14px;
+
   }
+
   .callout.warn { border-color: var(--warn); background: var(--warn-soft); }
+
   .callout.bad { border-color: var(--bad); background: var(--bad-soft); }
+
   .callout strong { display: block; margin-bottom: 3px; }
 
+
+
   .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 10px; }
+
   .tabs button {
+
     background: none;
+
     border: 0;
+
     padding: 9px 12px;
+
     color: var(--faint);
+
     border-bottom: 2px solid transparent;
+
     cursor: pointer;
+
     font: inherit;
+
     font-size: 13px;
+
     margin-bottom: -1px;
+
   }
+
   .tabs button.active { color: var(--ink); border-bottom-color: var(--accent); font-weight: 700; }
+
   .table-note { color: var(--faint); font-size: 12px; margin-bottom: 8px; }
+
   .table-foot {
+
     margin-top: 8px;
+
     color: var(--faint);
+
     font-size: 11.5px;
+
     font-family: "Inter", sans-serif;
+
     line-height: 1.5;
+
   }
+
   .table-foot strong { color: var(--muted); }
 
+
+
   .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--border); border-radius: 10px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.45); }
+
   .yr-table {
+
     min-width: 1420px;
+
     width: 100%;
+
     border-collapse: collapse;
+
     font-size: 12.5px;
+
     font-variant-numeric: tabular-nums;
+
   }
+
   .yr-table th, .yr-table td {
+
     padding: 9px 9px;
+
     text-align: right;
+
     border-bottom: 1px solid var(--border);
+
     white-space: nowrap;
+
   }
+
   .yr-table th {
+
     background: var(--soft);
+
     color: var(--muted);
+
     font-family: "Courier New", monospace;
+
     font-size: 10.5px;
+
     text-transform: uppercase;
+
     letter-spacing: .04em;
+
   }
+
   /* Column group separators */
+
   .yr-table th.grp-start, .yr-table td.grp-start {
+
     border-left: 2px solid var(--border-strong);
+
   }
+
   .yr-table th.grp-bal, .yr-table td.grp-bal {
+
     border-left: 2px solid var(--border-strong);
+
     background-clip: padding-box;
+
   }
+
   .yr-table th.total-tax-col, .yr-table td.total-tax-col {
+
     background: #fff8e1;
+
   }
+
   .yr-table th.total-tax-col {
+
     color: #7c5a00;
+
   }
+
   tr.working .yr-table td.total-tax-col, .yr-table tr.working td.total-tax-col {
+
     background: #f3f4f6;
+
   }
+
+
 
   .yr-table th:first-child, .yr-table td:first-child {
+
     text-align: left;
+
     position: sticky;
+
     left: 0;
+
     z-index: 2;
+
     background: #fff;
+
     box-shadow: 1px 0 0 var(--border);
+
   }
+
   .yr-table th:first-child { background: var(--soft); z-index: 3; }
+
   .yr-table tr.working td { color: var(--faint); background: rgba(0,0,0,0.02); }
+
   .yr-table tr:not(.working):not(.rnor):not(.ror) td { background: #fff; border-bottom-color: #ded8c8; }
+
   .yr-table tr:not(.working):not(.rnor):not(.ror) td:first-child { box-shadow: inset 5px 0 0 #4a90e2, 1px 0 0 var(--border); }
 
+
+
   /* RNOR = green block, India tax-free window */
+
   .yr-table tr.rnor td {
+
     background: #e8f5ec !important;
+
   }
+
   .yr-table tr.rnor td:first-child {
+
     background: #d1fae5 !important;
+
     font-weight: 700;
+
     box-shadow: inset 5px 0 0 #1b7a3f, 1px 0 0 var(--border);
+
   }
+
+
 
   /* ROR = red block, India taxable phase */
+
   .yr-table tr.ror td {
+
     background: #fdecec !important;
+
   }
+
   .yr-table tr.ror td:first-child {
+
     background: #fecaca !important;
+
     font-weight: 700;
+
     box-shadow: inset 5px 0 0 #b91c1c, 1px 0 0 var(--border);
+
   }
+
+
 
   .ror-start td {
+
     border-top: 3px solid #b91c1c !important;
+
   }
+
   .ror-start td:first-child {
+
     position: sticky;
+
   }
+
   .ror-start td:first-child::before {
+
     content: "India tax starts here";
+
     position: absolute;
+
     top: -18px;
+
     left: 6px;
+
     background: #b91c1c;
+
     color: #fff;
+
     font-size: 10px;
+
     padding: 2px 6px;
+
     border-radius: 4px;
+
     font-family: "Courier New", monospace;
+
     white-space: nowrap;
+
     z-index: 5;
+
   }
+
+
 
   .ror-transition-row td {
+
     background: #fff7ed !important;
+
     color: #7c2d12;
+
     font-size: 12px;
+
     text-align: left !important;
+
     font-weight: 700;
+
     border-top: 2px solid #b91c1c;
+
     border-bottom: 2px solid #b91c1c;
+
   }
+
+
 
   .row-badge {
+
     display: inline-block;
+
     margin-left: 6px;
+
     padding: 1px 5px;
+
     border-radius: 4px;
+
     font-family: "Courier New", monospace;
+
     font-size: 9px;
+
     color: #fff;
+
     vertical-align: middle;
+
   }
+
   .badge-us { background: var(--accent); }
+
   .badge-rnor { background: #1b7a3f; }
+
   .badge-ror { background: #b91c1c; }
 
+
+
   .phase-legend {
+
     display: flex;
+
     flex-wrap: wrap;
+
     gap: 10px;
+
     margin: 8px 0 10px;
+
     font-size: 12px;
+
   }
+
   .phase-pill {
+
     display: inline-flex;
+
     align-items: center;
+
     gap: 6px;
+
     border-radius: 999px;
+
     padding: 4px 9px;
+
     border: 1px solid var(--border);
+
     background: #fff;
+
     color: var(--muted);
+
   }
+
   .phase-dot {
+
     width: 9px;
+
     height: 9px;
+
     border-radius: 50%;
+
     display: inline-block;
+
   }
+
   .phase-rnor { background: #1b7a3f; }
+
   .phase-ror { background: #b91c1c; }
 
+
+
   .phase-timeline-box {
+
     margin: 10px 0 12px;
+
     padding: 12px;
+
     border: 1px solid var(--border);
+
     border-radius: 8px;
+
     background: #fff;
+
   }
+
   .phase-timeline-title {
+
     display: flex;
+
     justify-content: space-between;
+
     gap: 10px;
+
     color: var(--muted);
+
     font-size: 12px;
+
     margin-bottom: 8px;
+
   }
+
   .phase-timeline-title strong { color: var(--ink); }
+
   .phase-timeline {
+
     display: flex;
+
     width: 100%;
+
     min-height: 34px;
+
     border: 1px solid var(--border-strong);
+
     border-radius: 8px;
+
     overflow: hidden;
+
     background: var(--soft);
+
   }
+
   .phase-seg {
+
     position: relative;
+
     display: flex;
+
     align-items: center;
+
     justify-content: center;
+
     min-width: 38px;
+
     padding: 6px 4px;
+
     font-family: "Courier New", monospace;
+
     font-size: 10px;
+
     font-weight: 700;
+
     text-align: center;
+
     white-space: nowrap;
+
   }
+
   .phase-seg-working { background: #f1f5f9; color: #64748b; }
+
   .phase-seg-rnor { background: #d1fae5; color: #065f46; }
+
   .phase-seg-ror { background: #fecaca; color: #7f1d1d; }
+
   .phase-tax-marker {
+
     height: 22px;
+
     border-left: 3px solid #b91c1c;
+
     margin: 0 0 0 2px;
+
   }
+
   .phase-tax-note {
+
     color: #7c2d12;
+
     font-size: 12px;
+
     margin-top: 7px;
+
     font-weight: 700;
+
   }
+
   .phase-age-row {
+
     display: flex;
+
     justify-content: space-between;
+
     color: var(--faint);
+
     font-family: "Courier New", monospace;
+
     font-size: 10px;
+
     margin-top: 5px;
+
   }
+
+
 
   .legend { display: flex; flex-wrap: wrap; gap: 14px; color: var(--muted); font-size: 12px; margin-bottom: 10px; }
+
   .legend span::before { content: "\25A0 "; margin-right: 5px; }
+
   .l401::before { color: #4a90e2; } .lroth::before { color: #1b7a3f; } .ltax::before { color: #f59e0b; } .lcash::before { color: #94a3b8; }
+
   .bar-chart { width: 100%; height: 220px; }
 
+
+
   .guide-tabs-wrap {
+
     background: var(--card);
+
     border: 1px solid var(--border);
+
     border-radius: 14px;
+
     padding: 18px;
+
     margin-bottom: 18px;
+
     box-shadow: 0 10px 30px rgba(26, 26, 46, .04);
+
   }
+
   .guide-head {
+
     display: flex;
+
     justify-content: space-between;
+
     align-items: flex-end;
+
     gap: 14px;
+
     margin-bottom: 12px;
+
   }
+
   .guide-head h3 {
+
     margin: 0;
+
     font-size: 18px;
+
     letter-spacing: -.01em;
+
   }
+
   .guide-head p {
+
     margin: 4px 0 0;
+
     color: var(--faint);
+
     font-size: 13px;
+
   }
+
   .guide-tabs {
+
     display: flex;
+
     gap: 8px;
+
     flex-wrap: wrap;
+
     border-bottom: 1px solid var(--border);
+
     margin-bottom: 14px;
+
   }
+
   .guide-tabs button {
+
     border: 0;
+
     background: transparent;
+
     color: var(--muted);
+
     font-family: Inter, sans-serif;
+
     font-size: 13px;
+
     font-weight: 700;
+
     padding: 9px 10px 11px;
+
     border-bottom: 2px solid transparent;
+
     cursor: pointer;
+
     margin-bottom: -1px;
+
   }
+
   .guide-tabs button.active {
+
     color: var(--ink);
+
     border-bottom-color: var(--accent);
+
   }
+
   .guide-panel { display: none; }
+
   .guide-panel.active { display: block; }
+
   .guide-panel h4 {
+
     margin: 18px 0 8px;
+
     font-size: 15px;
+
   }
+
   .guide-panel .callout:last-child { margin-bottom: 0; }
+
   @media (max-width: 640px) {
+
     .guide-head { display: block; }
+
     .guide-tabs { gap: 4px; }
+
     .guide-tabs button { flex: 1; min-width: 98px; padding: 9px 7px; font-size: 12px; }
+
   }
+
   footer {
+
     margin-top: 34px;
+
     padding-top: 20px;
+
     border-top: 1px solid var(--border);
+
     color: var(--faint);
+
     font-size: 12.5px;
+
   }
+
   footer strong { color: var(--muted); }
+
   footer a { color: var(--accent); text-decoration: none; }
+
   footer a:hover { text-decoration: underline; }
 
+
+
   @media (max-width: 640px) {
+
     .wrap { padding: 20px 14px 52px; }
+
     .panel, .block { padding: 16px; }
+
     .row { grid-template-columns: 1fr; }
+
     .hero { padding: 34px 16px; }
+
     .decision .big { font-size: 30px; }
+
     .yr-table th, .yr-table td { padding: 7px 7px; font-size: 11.5px; }
+
     .readme-body { padding: 14px 16px 18px; font-size: 13.5px; }
+
   }
+
+
 
   @media (max-width: 420px) {
+
     .yr-table th, .yr-table td { padding: 6px 6px; font-size: 11px; }
+
     .row-badge { display: block; margin-left: 0; margin-top: 3px; width: fit-content; }
+
     .tabs button { padding: 8px 9px; font-size: 12px; }
+
   }
+
 </style>
+
 </head>
+
 <body>
+
   <div class="hero">
+
     <div class="kicker">
-      <span class="kicker-left">r/rupeeStories</span>
-      <span class="kicker-right">rupeestories.substack.com</span>
+
+      <a class="kicker-left" href="https://www.reddit.com/r/rupeestories/" target="_blank" rel="noopener noreferrer">r/rupeeStories</a>
+
+      <a class="kicker-right" href="https://rupeestories.substack.com" target="_blank" rel="noopener noreferrer">rupeestories.substack.com</a>
+
     </div>
+
     <h1>NRI Retirement <span>Path Optimizer</span></h1>
+
     <p>Compare US retirement, India return, and split-life paths before you make the move. This is a planning tool, not a tax calculator.</p>
+
     <div class="trust-bar" aria-label="Privacy and access notice">
+
       <span class="trust-pill">&#x1F512; No login</span>
+
       <span class="trust-pill">&#x1F4E1; No data collected</span>
+
       <span class="trust-pill">Runs in your browser</span>
+
     </div>
+
   </div>
 
+
+
   <div class="wrap">
+
     <div class="top-note">
-      Uses simplified 2026 US tax constants, RMD overlay, optional state-tax stress, optional Social Security input, India tax stress assumptions, RNOR estimate, ACA premium-pressure testing, and split-life housing/travel assumptions. Split Life assumes US tax residency unless you separately model a full India return. Treat the output as a planning prompt, not advice.<br><br>
+
+      Uses simplified 2026 US tax constants, RMD overlay, optional state-tax stress, optional Social Security input, IRMAA surcharge overlay, Rule of 55 toggle, NIIT drag overlay, currency stress, India tax stress assumptions, RNOR estimate or override, ACA premium-pressure testing, and split-life housing/travel assumptions. Split Life assumes US tax residency unless you separately model a full India return. Treat the output as a planning prompt, not advice.<br><br>
+
       <strong>Updated with accuracy fixes:</strong> today's-dollar Social Security, marginal relief on India tax, gross-up pull no longer double-counts, and Social Security during working years is now banked into taxable brokerage. Numbers may differ from previous saved scenarios or screenshots from older versions of the tool.
+
     </div>
+
+
 
     <details class="readme-card" id="readmeCard" open>
+
       <summary class="readme-summary">
+
         <span class="readme-icon">&#x1F4D6;</span>
+
         <span class="readme-title">Read me first &mdash; how this model uses your inputs</span>
+
         <span class="readme-toggle">click to toggle</span>
+
       </summary>
+
       <div class="readme-body">
 
+
+
         <h4>What this tool does</h4>
+
         <p>Compares three retirement strategies side by side using your numbers. Inputs for your situation are blank by default. Modeling assumptions (growth, inflation, brackets) come prefilled with reasonable starting values that you can override.</p>
+
         <p><strong>Recent accuracy update:</strong> today's-dollar Social Security, marginal relief on India tax, gross-up pull no longer double-counts, and Social Security during working years is now banked into taxable brokerage. Numbers may differ from previous saved scenarios or screenshots from older versions of the tool.</p>
 
+
+
         <h4>Your personal inputs</h4>
+
         <p>Blank by default. The model will not run until these are filled in.</p>
+
         <ul>
+
           <li><strong>Current age + Years to target</strong> &mdash; defines retirement age. Projection runs from your current age through age 85 minimum.</li>
+
           <li><strong>Filing status</strong> &mdash; sets US tax brackets and standard deduction. <code>MFJ</code> uses $32,200; <code>Single</code> uses $16,100.</li>
+
           <li><strong>Base retirement spend / yr</strong> &mdash; in today's dollars. For Split Life, enter the recurring base spend <strong>excluding</strong> seasonal housing, storage, local transport, and extra travel costs entered below. The model inflates it each year. Example: $100k spend at 2.5% inflation becomes about $128k in year 10.</li>
+
           <li><strong>Household income / yr</strong> &mdash; working-years only. Used to size 401k contributions and taxable surplus.</li>
+
           <li><strong>Savings / yr</strong> &mdash; splits between 401k and taxable based on path. Path A maxes 401k first; Paths B and C cap 401k at the match and route the rest to taxable.</li>
+
           <li><strong>401k match %</strong> &mdash; employer match. Prefilled at 4% as a generic default. Match dollars are capped at the contribution limit.</li>
+
           <li><strong>Account balances</strong> &mdash; starting amounts. Use 0 if you don't have that account yet.</li>
+
         </ul>
+
+
 
         <h4>How each editable assumption is used</h4>
+
         <ul>
-          <li><strong>Growth %</strong> (default 7%) &mdash; applied annually to 401k and Roth balances. Taxable accounts grow at <code>growth &minus; taxDrag</code>. Cash grows at a fixed 4% (HYSA proxy) regardless of this input.</li>
+
+          <li><strong>Accumulation growth %</strong> (default 7%) &mdash; applied annually to 401k and Roth balances before retirement. Taxable accounts grow at <code>growth &minus; taxDrag</code>. Cash grows at a fixed 4% (HYSA proxy) regardless of this input.</li>
+
+          <li><strong>Retirement growth %</strong> (default 5%) &mdash; applied after target retirement age. This lets you model a lower-return retirement portfolio or bond-tent style glide path without changing working-year growth.</li>
+
+          <li><strong>First 2 retirement years crash test</strong> &mdash; if turned on, the model overrides retirement growth to the selected crash return for the first two retirement years only, then returns to your normal retirement growth assumption. This is a simple sequence-of-returns stress test, not Monte Carlo.</li>
+
+          <li><strong>Currency stress</strong> &mdash; if turned on for India return scenarios, the model lets INR weaken each year after retirement and uses the stressed INR/USD rate in India tax-stress math. This is an FX pressure test, not a currency forecast.</li>
+
+          <li><strong>NIIT drag overlay</strong> &mdash; if turned on, taxable account drag is modestly increased when modeled income crosses the NIIT threshold. The model still uses a simple drag assumption, not lot-by-lot dividend and gain math.</li>
+
           <li><strong>Taxable drag %</strong> (default 1%) &mdash; subtracted from growth on taxable accounts only. Simulates dividend and distribution taxes during accumulation.</li>
+
           <li><strong>Inflation %</strong> (default 2.5%) &mdash; inflates retirement spending and Social Security each year. Tax brackets, RMD tables, and the standard deduction are <strong>not</strong> inflated in this model.</li>
+
           <li><strong>INR / USD</strong> (default 90.5) &mdash; used in ROR years to convert 401k withdrawals and Social Security to INR for India tax.</li>
+
           <li><strong>Taxable gain %</strong> (default 50%) &mdash; portion of your taxable balance treated as unrealized gains. Affects withdrawal taxation. Example: pulling $10k from taxable with gain%=50% triggers LTCG on $5k.</li>
+
           <li><strong>Roth basis %</strong> (default 60%) &mdash; portion of your Roth that is contributions. Contributions are tax-free even before 59.5. Especially important in RNOR years &mdash; the model pulls Roth basis first.</li>
+
           <li><strong>State tax %</strong> (default 0%) &mdash; flat rate applied to ordinary income (401k withdrawals, Roth conversions, capital gains, taxable SS) in US retirement years only. Use 0 for TX/FL; try 9.3 for a CA-style stress test.</li>
+
           <li><strong>Social Security claim age</strong> (default 67) &mdash; year SS income turns on. The model uses your <em>Estimated SS / yr</em> as-is starting at this age, then inflates yearly.</li>
+
           <li><strong>Estimated SS / yr</strong> (default $30k) &mdash; annual Social Security estimate in today's dollars. The model inflates it forward to the claiming age and then keeps inflating it yearly. Simplified &mdash; not based on a real SSA earnings record. Use SSA's own tools for an accurate estimate.</li>
+
           <li><strong>Roth India stress</strong> (default Yes) &mdash; if on, applies a flat 30% tax on annual Roth balance growth during ROR years. Worst-case stress test, not a definitive tax answer.</li>
+
         </ul>
+
+
 
         <h4>What the three paths actually do during retirement</h4>
+
         <ul>
+
           <li><strong>Path A &mdash; Status Quo</strong>: maxes 401k contributions during working years. In retirement, withdraws cash, then taxable, then 401k as needed, with iterative gross-up so high withdrawals are not stuck at a flat 22% tax assumption.</li>
+
           <li><strong>Path B &mdash; Asset Location Pivot</strong>: contributes only enough to capture 401k match; routes the rest to taxable. In retirement, drains taxable and cash before 401k when below 59.5, then income-stacks 401k up to the standard deduction in normal years.</li>
+
           <li><strong>Path C &mdash; Optimized</strong>: same working-years pivot as Path B, plus retirement-phase strategies:
+
             <ul>
+
               <li><strong>US path</strong>: income-stacks 401k withdrawals up to the standard deduction. Runs small Roth conversions filling the 12% bracket between 59.5 and 67. Drains taxable and cash before 65 to keep ACA MAGI down.</li>
+
               <li><strong>India path, RNOR years</strong>: pulls Roth basis tax-free, fills US 12% bracket with 401k withdrawals, builds taxable surplus.</li>
+
               <li><strong>India path, ROR years</strong>: spends taxable first, then pulls 401k using the editable US-India pension withholding assumption. India tax stress estimate uses simplified new-regime slabs, marginal relief near the rebate threshold, and US withholding credit.</li>
+
             </ul>
+
           </li>
+
         </ul>
+
+
 
         <h4>Modeling rules baked in</h4>
+
         <ul>
+
           <li><strong>RMDs start at age 73</strong> &mdash; forced ordinary income from 401k. Can push you into higher brackets and re-trigger ACA / IRMAA-style pressure.</li>
+
           <li><strong>ACA premium pressure test (US and Split Life paths)</strong> &mdash; runs from retirement through age 65. MAGI-based premium pressure only. It does not use household size, state, benchmark Silver premiums, or real Premium Tax Credit rules.</li>
-          <li><strong>Early-withdrawal penalty</strong> &mdash; 10% on all 401k withdrawals before 59.5. Does not model exceptions like Rule of 55, SEPP, or Roth ladder.</li>
-          <li><strong>RNOR window (India path)</strong> &mdash; estimated as 2 or 3 years from "years outside India". Heuristic only. Real RNOR depends on actual presence tests in the prior 7-10 years and prior residency history.</li>
+
+          <li><strong>IRMAA overlay</strong> &mdash; if enabled, adds a rough Medicare Part B + Part D surcharge after age 65 when modeled MAGI crosses 2026 IRMAA tiers. Uses current-year MAGI as a proxy even though real IRMAA uses income from two years earlier.</li>
+
+          <li><strong>Early-withdrawal penalty</strong> &mdash; 10% on modeled 401k withdrawals before 59.5 unless the Rule of 55 toggle is enabled and the target retirement age is 55 or later. Does not model SEPP, Roth ladders, or separate IRA vs current-employer 401k balances.</li>
+
+          <li><strong>RNOR window (India path)</strong> &mdash; estimated as 2 or 3 years from "years outside India" unless you enter a manual override. Heuristic only. Real RNOR depends on actual presence tests in the prior 7-10 years and prior residency history.</li>
+
           <li><strong>ROR phase (India path)</strong> &mdash; after RNOR ends, 401k and IRA distributions are treated as India-taxable with US withholding credit. Roth growth optionally stress-tested at 30%. India tax includes a simple marginal-relief guard near the ₹12L rebate threshold. This is an India tax stress estimate, not final tax advice.</li>
+
         </ul>
+
+
 
         <h4>What is not modeled</h4>
+
         <ul>
-          <li>IRMAA Medicare surcharges (high income after 65)</li>
+
           <li>ACA subsidy and Premium Tax Credit calculations</li>
+
           <li>Foreign tax credit details and Form 1116 mechanics</li>
+
           <li>Treaty benefits beyond simple withholding offsets</li>
+
           <li>Real Social Security benefit calculations (use SSA tools)</li>
+
           <li>State-specific retirement income exclusions</li>
+
           <li>HSA, 529, NUA, Rule of 55, SEPP, Roth ladders, backdoor Roth</li>
+
           <li>PFIC treatment of non-US investments</li>
+
           <li>Form 10-EE election or specific Section 89A relief</li>
+
           <li>Tax bracket and standard deduction inflation over time</li>
+
         </ul>
+
+
 
         <h4>How to read the year-by-year table</h4>
+
         <ul>
+
           <li>Working years are dimmed gray. Retirement years are highlighted.</li>
+
           <li>India path: <strong>green rows</strong> = RNOR (India tax-free window). <strong>Red rows</strong> = ROR (India taxable). The "India tax starts here" marker shows the transition.</li>
+
           <li><strong>Cash flow columns</strong> (Spend, SS) show what was needed and what came in.</li>
+
           <li><strong>Withdrawal columns</strong> (401k wd, RMD, Roth wd, Tax wd, Cash wd, Roth conv) show what each path pulled from each account that year. Sum withdrawals + SS to roughly match Spend (with rounding and tax payments).</li>
+
           <li><strong>RMD</strong> is a subset of <strong>401k wd</strong> &mdash; it shows the forced portion only. The rest is discretionary or covers tax payments.</li>
+
           <li><strong>Tax columns</strong> show modeled liability based on that year's withdrawals. US tax is federal + state + LTCG + NIIT + early-withdrawal penalty (if any), summed.</li>
+
           <li><strong>Total tax / premium pressure</strong> (highlighted column) combines the two preceding columns. India path: <code>US tax + India tax stress estimate</code>. US and Split Life paths: <code>US tax + ACA premium pressure</code>. ACA premium is technically a healthcare cost, not a tax, but it is a MAGI-driven cash outflow during the pre-Medicare window.</li>
+
           <li><strong>Shortfall</strong> is non-zero only if all accounts were exhausted before the year's spend was met.</li>
+
           <li><strong>Balance columns</strong> (rightmost) show end-of-year values after withdrawals and growth.</li>
+
         </ul>
 
+
+
       </div>
+
     </details>
 
+
+
     <div class="layout">
+
       <aside class="panel">
+
         <h2>Your inputs</h2>
 
+
+
         <div class="group">
+
           <div class="group-title">Goal</div>
+
           <div class="row full">
+
             <label>Planning path</label>
+
             <div class="seg" id="goalSeg">
+
               <button type="button" data-goal="us" class="active">Retire in US</button>
+
               <button type="button" data-goal="india">Return to India</button>
+
               <button type="button" data-goal="split">Split life</button>
+
             </div>
+
           </div>
+
           <div class="row full" id="indiaRow" style="display:none;">
+
             <div>
+
               <label>Years outside India</label>
+
               <input type="number" id="yrsOutside" value="" placeholder="e.g., 22" min="0" max="50" />
+
               <div class="hint" id="rnorHint">RNOR estimate appears here. Not a legal residency determination.</div>
+
             </div>
+
           </div>
+
+          <div class="row full" id="rnorOverrideRow" style="display:none;">
+
+            <div>
+
+              <label>RNOR years override</label>
+
+              <input type="number" id="rnorOverride" value="" placeholder="optional, e.g., 2" min="0" max="5" step="1" />
+
+              <div class="hint">Leave blank to use the rough estimate. Enter 0, 1, 2, or 3 if you already know your likely RNOR window.</div>
+
+            </div>
+
+          </div>
+
           <div id="splitRows" style="display:none;">
+
             <div class="row full">
+
               <div>
+
                 <label>Split pattern</label>
+
                 <select id="splitPattern">
+
                   <option value="5-2-5" selected>5 India / 2 travel / 5 US</option>
+
                   <option value="5-1-5-1">5 India / 1 travel / 5 US / 1 buffer</option>
+
                   <option value="custom">Custom months</option>
+
                 </select>
+
                 <div class="hint">Use this for seasonal living without fully moving back. This mode assumes US tax residency and adds seasonal living costs.</div>
+
               </div>
+
             </div>
+
             <div class="row">
+
               <div><label>India months / yr</label><input type="number" id="indiaMonths" value="5" min="0" max="12" step="0.5" /></div>
+
               <div><label>US months / yr</label><input type="number" id="usMonths" value="5" min="0" max="12" step="0.5" /></div>
+
             </div>
+
             <div class="row">
+
               <div><label>Travel months / yr</label><input type="number" id="travelMonths" value="2" min="0" max="12" step="0.5" /></div>
+
               <div><label>Buffer months / yr</label><input type="number" id="bufferMonths" value="0" min="0" max="12" step="0.5" /></div>
+
             </div>
+
             <div class="row">
+
               <div><label>India living cost / month</label><input type="number" id="indiaLivingMonthly" value="2500" step="100" min="0" /></div>
+
               <div><label>US furnished lease / month</label><input type="number" id="usLeaseMonthly" value="3500" step="100" min="0" /></div>
+
             </div>
+
             <div class="row">
+
               <div><label>Storage / month</label><input type="number" id="storageMonthly" value="200" step="25" min="0" /></div>
+
               <div><label>Car / Uber / transit / month in US</label><input type="number" id="transportMonthly" value="800" step="50" min="0" /></div>
+
             </div>
+
             <div class="row full">
+
               <div><label>Extra travel cost / travel month</label><input type="number" id="travelMonthly" value="4000" step="250" min="0" /></div>
+
             </div>
+
             <div class="hint" id="splitHint">Split-life add-ons will be added to base retirement spending. Do not include these same housing, storage, transport, or travel costs again in base spend.</div>
+
           </div>
+
         </div>
 
+
+
         <div class="group">
+
           <div class="group-title">You</div>
+
           <div class="row">
+
             <div><label>Current age</label><input type="number" id="age" value="" placeholder="e.g., 50" min="18" max="85" /></div>
+
             <div><label>Years to target</label><input type="number" id="years" value="" placeholder="e.g., 10" min="1" max="40" /></div>
+
           </div>
+
           <div class="row">
+
             <div>
+
               <label>US filing status</label>
+
               <select id="filing">
+
                 <option value="mfj">Married filing jointly</option>
+
                 <option value="single">Single</option>
+
               </select>
+
             </div>
+
             <div><label>Base retirement spend / yr</label><input type="number" id="spend" value="" placeholder="e.g., 100000" step="5000" min="0" /><div class="hint">For Split Life, exclude seasonal housing, storage, US local transport, and extra travel costs entered above.</div></div>
+
           </div>
+
         </div>
 
+
+
         <div class="group">
+
           <div class="group-title">Income while working</div>
+
           <div class="row">
+
             <div><label>Household income / yr</label><input type="number" id="income" value="" placeholder="e.g., 250000" step="5000" min="0" /></div>
+
             <div><label>Savings / yr</label><input type="number" id="savings" value="" placeholder="e.g., 60000" step="2000" min="0" /></div>
+
           </div>
+
           <div class="row">
+
             <div><label>401k match %</label><input type="number" id="match" value="4" min="0" max="20" step="0.5" /></div>
+
             <div><label>401k contribution cap</label><input type="number" id="cap401k" value="31000" step="500" /></div>
+
           </div>
+
         </div>
 
+
+
         <div class="group">
+
           <div class="group-title">Current balances</div>
+
           <div class="row">
+
             <div><label>401k / Traditional IRA</label><input type="number" id="b401k" value="" placeholder="e.g., 900000" step="10000" min="0" /></div>
+
             <div><label>Roth balance</label><input type="number" id="bRoth" value="" placeholder="e.g., 80000" step="5000" min="0" /></div>
+
           </div>
+
           <div class="row">
+
             <div><label>Taxable brokerage</label><input type="number" id="bTax" value="" placeholder="e.g., 120000" step="5000" min="0" /></div>
+
             <div><label>Cash / HYSA</label><input type="number" id="bCash" value="" placeholder="e.g., 50000" step="2000" min="0" /></div>
+
           </div>
+
           <div class="hint">Use 0 for accounts you don't have yet. The readme above explains how each balance is drawn down.</div>
+
         </div>
 
+
+
         <div class="group">
+
           <div class="group-title">Editable assumptions</div>
+
           <div class="row">
-            <div><label>Growth %</label><input type="number" id="growth" value="7" step="0.25" /></div>
+
+            <div><label>Accumulation growth %</label><input type="number" id="growth" value="7" step="0.25" /><div class="hint">Used before target retirement age.</div></div>
+
+            <div><label>Retirement growth %</label><input type="number" id="retGrowth" value="5" step="0.25" /><div class="hint">Used after target retirement age.</div></div>
+
+          </div>
+
+          <div class="row">
+
+            <div>
+
+              <label>First 2 retirement years crash test?</label>
+
+              <select id="stressCrash">
+
+                <option value="no" selected>No, use normal retirement growth</option>
+
+                <option value="yes">Yes, stress first 2 retirement years</option>
+
+              </select>
+
+              <div class="hint">Simple sequence-of-returns test. Not Monte Carlo.</div>
+
+            </div>
+
+            <div>
+
+              <label>Crash return %</label>
+
+              <input type="number" id="stressCrashReturn" value="-15" min="-60" max="20" step="1" />
+
+              <div class="hint">Applied only to retirement years 1 and 2 when stress test is on.</div>
+
+            </div>
+
+          </div>
+
+          <div class="row">
+
             <div><label>Taxable drag %</label><input type="number" id="taxDrag" value="1" step="0.25" /></div>
+
+            <div>
+
+              <label>Rule of 55 applies?</label>
+
+              <select id="rule55">
+
+                <option value="no" selected>No</option>
+
+                <option value="yes">Yes, current-employer 401k</option>
+
+              </select>
+
+              <div class="hint">If retiring at 55+, removes modeled 10% penalty from pre-59.5 401k withdrawals.</div>
+
+            </div>
+
           </div>
+
           <div class="row">
+
             <div><label>Inflation %</label><input type="number" id="inflation" value="2.5" step="0.25" /></div>
+
             <div><label>INR / USD</label><input type="number" id="inr" value="90.5" step="0.5" /></div>
+
           </div>
+
           <div class="row">
+
+            <div>
+
+              <label>Currency stress?</label>
+
+              <select id="fxStress">
+
+                <option value="no" selected>No, keep INR/USD constant</option>
+
+                <option value="yes">Yes, INR weakens annually</option>
+
+              </select>
+
+              <div class="hint">Used for India return tax-stress math. This is not a forecast.</div>
+
+            </div>
+
+            <div>
+
+              <label>INR weakening / yr %</label>
+
+              <input type="number" id="fxDepreciation" value="2" min="0" max="10" step="0.25" />
+
+              <div class="hint">Example: 2 means INR/USD rises 2% per year after retirement.</div>
+
+            </div>
+
+          </div>
+
+          <div class="row full">
+
+            <div>
+
+              <label>NIIT drag overlay?</label>
+
+              <select id="niitDragOn">
+
+                <option value="yes" selected>Yes, add high-MAGI taxable drag pressure</option>
+
+                <option value="no">No, use base taxable drag only</option>
+
+              </select>
+
+              <div class="hint">When income crosses NIIT thresholds, taxable drag is bumped by 19% to reflect the 3.8% NIIT layer on investment income.</div>
+
+            </div>
+
+          </div>
+
+          <div class="row">
+
             <div><label>Taxable gain %</label><input type="number" id="taxGainPct" value="50" min="0" max="100" step="5" /></div>
+
             <div><label>Roth basis %</label><input type="number" id="rothBasisPct" value="60" min="0" max="100" step="5" /></div>
+
           </div>
+
           <div class="row">
+
             <div><label>State tax %</label><input type="number" id="stateTax" value="0" min="0" max="15" step="0.25" /><div class="hint">0 for TX/FL, 9.3 for CA stress.</div></div>
+
             <div>
+
               <label>Social Security claiming age</label>
+
               <select id="ssClaimAge">
+
                 <option value="62">62</option>
+
                 <option value="67" selected>67</option>
+
                 <option value="70">70</option>
+
               </select>
+
               <div class="hint">When SS income starts in the model.</div>
+
             </div>
+
           </div>
+
           <div class="row full">
+
             <div>
+
               <label>Estimated Social Security / yr</label>
+
               <input type="number" id="socialSecurity" value="30000" step="1000" />
+
               <div class="hint">Enter in today's dollars. The model inflates this forward to claiming age.</div>
+
             </div>
+
           </div>
+
           <div class="row full">
+
             <div>
+
               <label>Roth India stress tax after RNOR?</label>
+
               <select id="rothStress">
+
                 <option value="yes">Yes, stress test annual growth</option>
+
                 <option value="no">No, exclude from model</option>
+
               </select>
+
               <div class="hint">Worst-case 30% on Roth growth during ROR. Stress test, not a final answer.</div>
+
             </div>
+
           </div>
+
           <div class="row">
+
             <div>
+
               <label>US-India pension withholding %</label>
+
               <input type="number" id="usIndiaWh" value="15" min="0" max="35" step="1" />
+
               <div class="hint">Used in ROR years as a rough US withholding credit. Use 25 for stress.</div>
+
             </div>
+
             <div>
+
               <label>Score wealth credit %</label>
+
               <input type="number" id="scoreWeight" value="4" min="0" max="10" step="0.5" />
+
               <div class="hint">How much wealth at 75 offsets modeled costs when picking “best under model”.</div>
+
             </div>
+
           </div>
+
+          <div class="row full">
+
+            <div>
+
+              <label>IRMAA surcharge overlay?</label>
+
+              <select id="irmaaOn">
+
+                <option value="yes" selected>Yes, add rough 2026 Medicare IRMAA</option>
+
+                <option value="no">No, exclude IRMAA</option>
+
+              </select>
+
+              <div class="hint">Uses modeled MAGI after age 65. Real IRMAA uses income from two years earlier and can be appealed after life events.</div>
+
+            </div>
+
+          </div>
+
         </div>
+
+
 
         <button class="run-btn" type="button" onclick="runWithFeedback(this)">Run all 3 paths</button>
+
       </aside>
 
+
+
       <main id="output">
+
         <div class="empty">Fill in your details on the left, then click <strong>Run all 3 paths</strong> to compare Path A, Path B, and Path C.</div>
+
       </main>
+
     </div>
+
+
+
 
 
     <footer>
-      <p><strong>Important:</strong> This is a simplified planning model. RNOR is estimated from years outside India only and is not a legal residency determination. Real RNOR status depends on actual India presence tests and prior residency history. ACA output is a rough premium-pressure test, not subsidy modeling and not a quote. It depends on household size, state, MAGI, age, plan choice, and current law. IRMAA is not modeled. Split Life assumes US tax residency and uses month-based cost and day-count checks only. It does not decide Indian tax residency, FEMA status, DTAA tie-breaker results, or healthcare eligibility. Tax-payment 401k pulls are modeled with a simple buffer to avoid double-counting gross-up tax.</p>
+
+      <p><strong>Important:</strong> This is a simplified planning model. RNOR is estimated from years outside India only and is not a legal residency determination. Real RNOR status depends on actual India presence tests and prior residency history. ACA output is a rough premium-pressure test, not subsidy modeling and not a quote. Currency stress is a simple INR/USD pressure test, not an FX forecast. IRMAA output is a rough Medicare surcharge overlay using current-year modeled MAGI as a proxy. It depends on household size, state, MAGI, age, plan choice, and current law. IRMAA is modeled only as a rough overlay. Split Life assumes US tax residency and uses month-based cost and day-count checks only. It does not decide Indian tax residency, FEMA status, DTAA tie-breaker results, or healthcare eligibility. Tax-payment 401k pulls are modeled with a simple buffer to avoid double-counting gross-up tax.</p>
+
       <p>Assumptions include 2026 US standard deductions and bracket thresholds, simplified India new-regime tax stress with rebate handling, simplified capital-gain assumptions, RMD estimates, optional Social Security claiming age, optional state-tax stress input, and constant annual returns. Social Security is user-entered in today's dollars and simplified; it does not estimate real SSA benefits. Foreign tax credit and treaty treatment are simplified. ACA is premium pressure only, not a Premium Tax Credit calculator. The path score uses the editable wealth-at-75 credit, which can move close results. Tax-payment 401k pulls are simplified to avoid recursive tax calculations and can slightly understate year-of-dry-up tax in edge cases. Educational only. Verify with a qualified cross-border CPA or tax advisor before acting.</p>
+
       <p>Built for RupeeStories.</p>
+
     </footer>
+
   </div>
 
+
+
 <script>
+
 const fmt = n => {
+
   if (!isFinite(n)) return "$0";
+
   const sign = n < 0 ? "-" : "";
+
   const abs = Math.abs(n);
+
   if (abs >= 1e6) return sign + "$" + (abs / 1e6).toFixed(2) + "M";
+
   if (abs >= 1e3) return sign + "$" + Math.round(abs / 1e3) + "k";
+
   return sign + "$" + Math.round(abs).toLocaleString();
+
 };
+
+
 
 let goal = "us";
+
 document.querySelectorAll("#goalSeg button").forEach(btn => {
+
   btn.addEventListener("click", () => {
+
     document.querySelectorAll("#goalSeg button").forEach(b => b.classList.remove("active"));
+
     btn.classList.add("active");
+
     goal = btn.dataset.goal;
+
     document.getElementById("indiaRow").style.display = goal === "india" ? "block" : "none";
+
+    document.getElementById("rnorOverrideRow").style.display = goal === "india" ? "block" : "none";
+
     document.getElementById("splitRows").style.display = goal === "split" ? "block" : "none";
+
     updateRnorHint();
+
     updateSplitPattern();
+
   });
+
 });
+
 document.getElementById("yrsOutside").addEventListener("input", updateRnorHint);
+
 document.getElementById("splitPattern").addEventListener("change", updateSplitPattern);
+
 ["indiaMonths","usMonths","travelMonths","bufferMonths","indiaLivingMonthly","usLeaseMonthly","storageMonthly","transportMonthly","travelMonthly"].forEach(id => {
+
   const el = document.getElementById(id);
+
   if (el) el.addEventListener("input", updateSplitHint);
+
 });
+
+
 
 function estRnorYears(yearsOutside, goal) {
+
   if (goal !== "india") return 0;
+
   if (yearsOutside >= 9) return 3;
+
   if (yearsOutside >= 2) return 2;
+
   return 0;
+
 }
+
 function updateRnorHint() {
+
   const yEl = document.getElementById("yrsOutside");
+
   const y = +yEl.value || 0;
+
   const r = estRnorYears(y, goal);
+
   if (!yEl.value) {
+
     document.getElementById("rnorHint").textContent = `RNOR estimate appears here. Not a legal residency determination.`;
+
   } else {
+
     document.getElementById("rnorHint").textContent = `RNOR estimate: ${r} year${r === 1 ? "" : "s"}. This is not a legal residency determination.`;
+
   }
+
 }
+
+
 
 function splitAnnualOverhead(inp) {
+
   if (inp.goal !== "split") return 0;
+
   return ((inp.indiaLivingMonthly || 0) * (inp.indiaMonths || 0)) +
+
          ((inp.usLeaseMonthly || 0) * (inp.usMonths || 0)) +
+
          ((inp.transportMonthly || 0) * (inp.usMonths || 0)) +
+
          ((inp.storageMonthly || 0) * 12) +
+
          ((inp.travelMonthly || 0) * (inp.travelMonths || 0));
+
 }
+
 function updateSplitPattern() {
+
   const pattern = document.getElementById("splitPattern").value;
+
   if (pattern === "5-2-5") {
+
     document.getElementById("indiaMonths").value = 5;
+
     document.getElementById("travelMonths").value = 2;
+
     document.getElementById("usMonths").value = 5;
+
     document.getElementById("bufferMonths").value = 0;
+
   }
+
   if (pattern === "5-1-5-1") {
+
     document.getElementById("indiaMonths").value = 5;
+
     document.getElementById("travelMonths").value = 1;
+
     document.getElementById("usMonths").value = 5;
+
     document.getElementById("bufferMonths").value = 1;
+
   }
+
   updateSplitHint();
+
 }
+
 function updateSplitHint() {
+
   const num = id => +(document.getElementById(id)?.value || 0);
+
   const months = num("indiaMonths") + num("usMonths") + num("travelMonths") + num("bufferMonths");
+
   const indiaDays = Math.round(num("indiaMonths") * 30.4);
+
   const overhead = (num("indiaLivingMonthly") * num("indiaMonths")) + (num("usLeaseMonthly") * num("usMonths")) + (num("transportMonthly") * num("usMonths")) + (num("storageMonthly") * 12) + (num("travelMonthly") * num("travelMonths"));
+
   const hint = document.getElementById("splitHint");
+
   if (!hint) return;
+
   const dayMsg = indiaDays >= 182 ? "India days may cross a common residency trigger. Check with a tax pro." : "India days look below 182 in this rough month-based check.";
+
   hint.textContent = `Months total: ${months}. Split-life annual add-on: ${fmt(overhead)}. Approx India days: ${indiaDays}. Assumes US tax residency. ${dayMsg}`;
+
 }
+
+
 
 const STD = { mfj: 32200, single: 16100 };
+
 const BRK = {
+
   mfj: [[0,.10],[24800,.12],[100800,.22],[211400,.24],[403550,.32],[512450,.35],[768700,.37]],
+
   single: [[0,.10],[12400,.12],[50400,.22],[105700,.24],[201775,.32],[256225,.35],[640600,.37]]
+
 };
+
 function usFedTax(taxable, filing) {
+
   taxable = Math.max(0, taxable);
+
   const br = BRK[filing];
+
   let tax = 0;
+
   for (let i = 0; i < br.length; i++) {
+
     const floor = br[i][0], rate = br[i][1];
+
     const ceil = i + 1 < br.length ? br[i+1][0] : Infinity;
+
     if (taxable > floor) tax += (Math.min(taxable, ceil) - floor) * rate;
+
   }
+
   return tax;
+
 }
+
 function ltcgTax(gain, ordinaryTaxable, filing) {
+
   // Simplified 2026 LTCG stack: 0%, 15%, then 20%.
+
   gain = Math.max(0, gain);
+
   const zeroCap = filing === "mfj" ? 96700 : 48350;
+
   const twentyCap = filing === "mfj" ? 600050 : 533400;
+
   const ordinary = Math.max(0, ordinaryTaxable);
+
   const zeroRoom = Math.max(0, zeroCap - ordinary);
+
   const gainAt0 = Math.min(gain, zeroRoom);
+
   const remAfter0 = gain - gainAt0;
+
   const fifteenRoom = Math.max(0, twentyCap - Math.max(ordinary, zeroCap));
+
   const gainAt15 = Math.min(remAfter0, fifteenRoom);
+
   const gainAt20 = Math.max(0, remAfter0 - gainAt15);
+
   return gainAt15 * .15 + gainAt20 * .20;
+
 }
+
 function niitTax(magi, netInvestmentIncome, filing) {
+
   const threshold = filing === "mfj" ? 250000 : 200000;
+
   const excess = Math.max(0, magi - threshold);
+
   return Math.min(Math.max(0, netInvestmentIncome), excess) * .038;
+
 }
+
 function grossUp401k(netNeed, filing, existingOrdinaryIncome = 0, stateRate = 0) {
+
   // Iterative estimate so high withdrawals are not stuck at a flat 22% assumption.
+
   netNeed = Math.max(0, netNeed);
+
   let gross = netNeed / .80;
+
   const std = STD[filing];
+
   for (let i = 0; i < 8; i++) {
+
     const taxableBefore = Math.max(0, existingOrdinaryIncome - std);
+
     const taxableAfter = Math.max(0, existingOrdinaryIncome + gross - std);
+
     const fedDelta = usFedTax(taxableAfter, filing) - usFedTax(taxableBefore, filing);
+
     const stateDelta = gross * Math.max(0, stateRate);
+
     gross = netNeed + fedDelta + stateDelta;
+
   }
+
   return gross;
+
 }
+
 function rmdFactor(age) {
+
   const table = {
+
     73:26.5,74:25.5,75:24.6,76:23.7,77:22.9,78:22.0,79:21.1,80:20.2,
+
     81:19.4,82:18.5,83:17.7,84:16.8,85:16.0,86:15.2,87:14.4,88:13.7,
+
     89:12.9,90:12.2,91:11.5,92:10.8,93:10.1,94:9.5,95:8.9
+
   };
+
   if (age < 73) return null;
+
   return table[Math.floor(age)] || 8.4;
+
 }
+
 function indiaTaxINR(income) {
+
   income = Math.max(0, income);
+
   if (income <= 1200000) return 0;
+
   const slabs = [[0,0],[300000,.05],[700000,.10],[1000000,.15],[1200000,.20],[1500000,.30]];
+
   let tax = 0;
+
   for (let i = 0; i < slabs.length; i++) {
+
     const floor = slabs[i][0], rate = slabs[i][1];
+
     const ceil = i + 1 < slabs.length ? slabs[i+1][0] : Infinity;
+
     if (income > floor) tax += (Math.min(income, ceil) - floor) * rate;
+
   }
+
   tax = tax * 1.04;
+
   // Simplified marginal relief around the new-regime rebate threshold.
+
   // Prevents a fake cliff where ₹12,00,001 produces a large tax bill.
+
   const excessOverRebate = income - 1200000;
+
   return Math.min(tax, excessOverRebate * 1.04);
+
 }
+
 function acaStressPremium(magi, filing) {
+
   // Rough premium stress test only, not ACA subsidy modeling.
+
   if (filing === "single") {
+
     if (magi < 35000) return 2000;
+
     if (magi < 65000) return 4000 + (magi - 35000) * .10;
+
     return 14000;
+
   }
+
   if (magi < 55000) return 3500;
+
   if (magi < 90000) return 6000 + (magi - 55000) * .18;
+
   return 25000;
+
 }
+
+
+
+function irmaaAnnualSurcharge(magi, filing) {
+
+  // 2026 Medicare IRMAA overlay: Part B + Part D extra monthly amount, annualized.
+
+  // Simplified: uses current-year modeled MAGI as proxy. Real IRMAA generally uses tax return MAGI from two years prior.
+
+  magi = Math.max(0, magi || 0);
+
+  const tiers = filing === "single"
+
+    ? [[109000,0],[137000,95.70],[171000,240.40],[205000,385.00],[500000,529.60],[Infinity,578.00]]
+
+    : [[218000,0],[274000,95.70],[342000,240.40],[410000,385.00],[750000,529.60],[Infinity,578.00]];
+
+  for (const [cap, monthlyExtra] of tiers) {
+
+    if (magi <= cap) return monthlyExtra * 12;
+
+  }
+
+  return 0;
+
+}
+
+
 
 function readInputs() {
+
   const num = id => {
+
     const v = document.getElementById(id).value;
+
     return v === "" || v === null ? null : +v;
+
   };
+
   return {
+
     goal,
+
     age: num("age"),
+
     years: num("years"),
+
     filing: document.getElementById("filing").value,
+
     spend: num("spend"),
+
     yrsOutside: num("yrsOutside"),
+
     income: num("income"),
+
     savings: num("savings"),
+
     match: ((num("match") ?? 0)) / 100,
+
     cap401k: num("cap401k") ?? 31000,
+
     b401k: num("b401k") ?? 0,
+
     bRoth: num("bRoth") ?? 0,
+
     bTax: num("bTax") ?? 0,
+
     bCash: num("bCash") ?? 0,
+
     growth: ((num("growth") ?? 7)) / 100,
+
+    retGrowth: ((num("retGrowth") ?? 5)) / 100,
+
+    stressCrash: document.getElementById("stressCrash")?.value === "yes",
+
+    stressCrashReturn: ((num("stressCrashReturn") ?? -15)) / 100,
+
     taxDrag: ((num("taxDrag") ?? 1)) / 100,
+
     inflation: ((num("inflation") ?? 2.5)) / 100,
+
     inr: num("inr") ?? 90.5,
+
+    fxStress: document.getElementById("fxStress")?.value === "yes",
+
+    fxDepreciation: ((num("fxDepreciation") ?? 2)) / 100,
+
+    niitDragOn: document.getElementById("niitDragOn")?.value !== "no",
+
     taxGainPct: ((num("taxGainPct") ?? 50)) / 100,
+
     rothBasisPct: ((num("rothBasisPct") ?? 60)) / 100,
+
     stateTax: ((num("stateTax") ?? 0)) / 100,
+
     ssClaimAge: +document.getElementById("ssClaimAge").value,
+
     socialSecurity: num("socialSecurity") ?? 0,
+
+    rnorOverride: num("rnorOverride"),
+
+    rule55: document.getElementById("rule55")?.value === "yes",
+
+    irmaaOn: document.getElementById("irmaaOn")?.value !== "no",
+
     usIndiaWh: ((num("usIndiaWh") ?? 15)) / 100,
+
     scoreWeight: ((num("scoreWeight") ?? 4)) / 100,
+
     splitPattern: document.getElementById("splitPattern")?.value || "5-2-5",
+
     indiaMonths: num("indiaMonths") ?? 0,
+
     usMonths: num("usMonths") ?? 0,
+
     travelMonths: num("travelMonths") ?? 0,
+
     bufferMonths: num("bufferMonths") ?? 0,
+
     indiaLivingMonthly: num("indiaLivingMonthly") ?? 0,
+
     usLeaseMonthly: num("usLeaseMonthly") ?? 0,
+
     storageMonthly: num("storageMonthly") ?? 0,
+
     transportMonthly: num("transportMonthly") ?? 0,
+
     travelMonthly: num("travelMonthly") ?? 0,
+
     rothStress: document.getElementById("rothStress").value === "yes"
+
   };
+
 }
+
+
+
+function taxableDragForYear(inp, incomeProxy) {
+
+  const threshold = inp.filing === "mfj" ? 250000 : 200000;
+
+  if (inp.niitDragOn && incomeProxy > threshold) {
+
+    // If the base drag roughly represents LTCG / qualified-dividend tax,
+
+    // NIIT raises the top investment-income rate from 20% to 23.8%, about 19% higher.
+
+    return inp.taxDrag * 1.19;
+
+  }
+
+  return inp.taxDrag;
+
+}
+
+
+
+function inrRateForYear(inp, yearsRetired) {
+
+  if (!inp.fxStress) return inp.inr;
+
+  return inp.inr * Math.pow(1 + Math.max(0, inp.fxDepreciation || 0), Math.max(0, yearsRetired));
+
+}
+
+
 
 function project(strategy, inp) {
+
   const targetAge = inp.age + inp.years;
+
   const endAge = Math.max(85, targetAge + 20);
+
   const std = STD[inp.filing];
-  const rnorYrs = estRnorYears(inp.yrsOutside || 0, inp.goal);
+
+  const rnorYrs = inp.rnorOverride !== null && inp.rnorOverride !== undefined ? Math.max(0, inp.rnorOverride) : estRnorYears(inp.yrsOutside || 0, inp.goal);
+
   const splitBaseOverhead = splitAnnualOverhead(inp);
+
   const matchAmt = Math.min((inp.income || 0) * inp.match, inp.cap401k);
+
   const ssStartAge = inp.ssClaimAge || 67;
 
+  const rule55Exempt = !!inp.rule55 && targetAge >= 55;
+
+
+
   let a401k = inp.b401k, aRoth = inp.bRoth, aTax = inp.bTax, aCash = inp.bCash;
+
   let taxBasis = inp.bTax * (1 - inp.taxGainPct);
+
   let rothBasis = inp.bRoth * inp.rothBasisPct;
 
+
+
   let totalUSTax = 0, totalIndiaTax = 0, totalACA = 0, totalACABase = 0, totalShortfall = 0;
+
   const rows = [];
 
+
+
   function pullTaxable(amount) {
+
     const pulled = Math.min(Math.max(0, amount), aTax);
+
     aTax -= pulled;
+
     taxBasis = Math.max(0, taxBasis - pulled * (1 - inp.taxGainPct));
+
     return pulled;
+
   }
+
   function pullCash(amount) {
+
     const pulled = Math.min(Math.max(0, amount), aCash);
+
     aCash -= pulled;
+
     return pulled;
+
   }
+
   function pull401k(amount) {
+
     const pulled = Math.min(Math.max(0, amount), a401k);
+
     a401k -= pulled;
+
     return pulled;
+
   }
+
+
 
   for (let yr = 0; yr <= endAge - inp.age; yr++) {
+
     const age = inp.age + yr;
+
     const isWorking = age < targetAge;
+
     const retired = age >= targetAge;
+
     const inIndia = inp.goal === "india" && retired;
+
     const yearsRetired = Math.max(0, age - targetAge);
+
+    const inrThisYear = inrRateForYear(inp, yearsRetired);
+
     const inRNOR = inIndia && yearsRetired < rnorYrs;
+
     const inROR = inIndia && retired && !inRNOR;
+
     const beforeMedicare = retired && !inIndia && age < 65;
+
     const splitOverheadNow = retired && inp.goal === "split" ? splitBaseOverhead * Math.pow(1 + inp.inflation, yr) : 0;
+
     const spendNow = (inp.spend * Math.pow(1 + inp.inflation, yr)) + splitOverheadNow;
+
     const ssIncome = age >= ssStartAge ? inp.socialSecurity * Math.pow(1 + inp.inflation, Math.max(0, age - inp.age)) : 0;
+
     const start401kForYear = a401k;
 
+
+
     let withdraw401k = 0, withdrawRoth = 0, withdrawTax = 0, withdrawCash = 0, rothConv = 0, rmd = 0;
+
     let usTaxYr = 0, indiaTaxYr = 0, acaYr = 0, acaBaseYr = 0, stateTaxYr = 0;
+
     let earlyPenalty = 0, rothStressTax = 0, shortfall = 0;
+
     let magi = 0;
 
+
+
     if (isWorking) {
+
       let c401 = 0, cTax = 0;
+
       if (strategy === "maxAll") {
+
         c401 = Math.min(inp.savings, inp.cap401k);
+
         cTax = Math.max(0, inp.savings - c401);
+
       } else {
+
         c401 = Math.min(inp.savings, matchAmt);
+
         cTax = Math.max(0, inp.savings - c401);
+
       }
+
       a401k += c401;
+
       aTax += cTax;
+
       taxBasis += cTax;
 
+
+
       // If Social Security starts before the target retirement age, bank it into taxable brokerage.
+
       // This keeps the table display and portfolio math aligned in early-claim / still-working scenarios.
+
       if (ssIncome > 0) {
+
         aTax += ssIncome;
+
         taxBasis += ssIncome;
+
       }
+
     }
+
+
 
     if (retired) {
+
       let need = Math.max(0, spendNow - ssIncome);
 
+
+
       // RMD overlay: simple forced ordinary income after 73.
+
       const factor = rmdFactor(age);
+
       if (factor && a401k > 0) {
+
         rmd = pull401k(a401k / factor);
+
         withdraw401k += rmd;
+
         const surplusRmd = Math.max(0, rmd - need);
+
         if (surplusRmd > 0) { aTax += surplusRmd; taxBasis += surplusRmd; }
+
         need = Math.max(0, need - rmd);
+
       }
+
+
 
       if (strategy === "maxAll") {
+
         // Baseline order: taxable first, then cash buffer, then 401k.
+
         if (need > 0) { const tx = pullTaxable(need); withdrawTax += tx; need -= tx; }
+
         if (need > 0) { const cash = pullCash(need); withdrawCash += cash; need -= cash; }
+
         if (need > 0) {
+
           const gross = grossUp401k(need, inp.filing, withdraw401k + rothConv + ssIncome * .85, inp.stateTax);
+
           const ira = gross > 0 ? pull401k(gross) : 0;
+
           withdraw401k += ira;
+
           const covered = gross > 0 ? Math.min(need, need * (ira / gross)) : Math.min(need, ira);
+
           const taxBuffer = Math.max(0, ira - covered);
+
           if (taxBuffer > 0) aCash += taxBuffer;
+
           need = Math.max(0, need - covered);
+
         }
+
       }
+
+
 
       if (strategy === "matchOnly" || (strategy === "optimized" && !inIndia)) {
+
         const protectACAWindow = age < 65;
 
+
+
         if (age < 59.5 || (strategy === "optimized" && protectACAWindow && spendNow > 60000)) {
+
           // Bridge years: spend taxable/cash first so Path C does not create avoidable
+
           // MAGI, ACA pressure, or early-withdrawal penalty. If the bridge runs dry,
+
           // then 401k is used as a last resort.
+
           if (need > 0) { const tx = pullTaxable(need); withdrawTax += tx; need -= tx; }
+
           if (need > 0) { const cash = pullCash(need); withdrawCash += cash; need -= cash; }
+
         } else {
+
           // Normal income-stacking years: use 401k up to the standard deduction,
+
           // then top up from taxable/cash.
+
           const iraStdRoom = Math.max(0, std - withdraw401k - rothConv - ssIncome * .85);
+
           const iraStd = pull401k(Math.min(need, iraStdRoom));
+
           withdraw401k += iraStd; need -= iraStd;
+
           if (need > 0) { const tx = pullTaxable(need); withdrawTax += tx; need -= tx; }
+
           if (need > 0) { const cash = pullCash(need); withdrawCash += cash; need -= cash; }
+
         }
+
+
 
         if (need > 0) {
+
           const gross = grossUp401k(need, inp.filing, withdraw401k + rothConv + ssIncome * .85, inp.stateTax);
+
           const ira = gross > 0 ? pull401k(gross) : 0;
+
           withdraw401k += ira;
+
           const covered = gross > 0 ? Math.min(need, need * (ira / gross)) : Math.min(need, ira);
+
           const taxBuffer = Math.max(0, ira - covered);
+
           if (taxBuffer > 0) aCash += taxBuffer;
+
           need = Math.max(0, need - covered);
+
         }
+
+
 
         if (strategy === "optimized" && !inIndia && age >= 59.5 && age < 67 && a401k > 50000) {
+
           const top12 = inp.filing === "mfj" ? 100800 : 50400;
+
           const room = Math.max(0, top12 + std - withdraw401k - rothConv - ssIncome * .85);
+
           const conv = Math.min(room, start401kForYear * .10, a401k);
+
           if (conv > 5000) {
+
             a401k -= conv;
+
             aRoth += conv;
+
             rothBasis += conv;
+
             rothConv += conv;
+
           }
+
         }
+
       }
+
+
 
       if (strategy === "optimized" && inIndia) {
+
         if (inRNOR) {
+
           const rb = Math.min(need, rothBasis); aRoth -= rb; rothBasis -= rb; withdrawRoth += rb; need -= rb;
+
           const top12 = inp.filing === "mfj" ? 100800 : 50400;
+
           const targetWd = Math.max(0, top12 + std - withdraw401k - rothConv);
+
           const grossNeed = Math.max(need, targetWd);
+
           const ira = grossNeed > 0 ? pull401k(grossNeed) : 0;
+
           withdraw401k += ira;
+
           const surplus = Math.max(0, ira - need);
+
           if (surplus > 0) { aTax += surplus; taxBasis += surplus; }
+
           need = Math.max(0, need - ira);
+
           if (need > 0) { const tx = pullTaxable(need); withdrawTax += tx; need -= tx; }
+
           if (need > 0) { const cash = pullCash(need); withdrawCash += cash; need -= cash; }
+
         } else {
+
           const tx = pullTaxable(need); withdrawTax += tx; need -= tx;
+
           if (need > 0) {
+
             const netAfterWh = Math.max(0.01, 1 - (inp.usIndiaWh ?? .15));
+
             const ira = need > 0 ? pull401k(need / netAfterWh) : 0; // rough US pension withholding cash-flow stress.
+
             withdraw401k += ira;
+
             need = Math.max(0, need - ira * netAfterWh);
+
           }
+
           if (need > 0) { const cash = pullCash(need); withdrawCash += cash; need -= cash; }
+
         }
+
       }
+
+
 
       // Last-resort Roth draw so the model does not report a shortfall while Roth assets remain available.
+
       if (need > 0 && aRoth > 0) {
+
         const rt = Math.min(need, aRoth);
+
         aRoth -= rt;
+
         rothBasis = Math.max(0, rothBasis - Math.min(rt, rothBasis));
+
         withdrawRoth += rt;
+
         need -= rt;
+
       }
+
       if (need > 0) { shortfall += need; need = 0; }
 
+
+
       const gainPart = withdrawTax * inp.taxGainPct;
+
       const taxableSS = inIndia ? 0 : ssIncome * .85; // simple federal-tax proxy, not exact SS taxation.
+
       const ordIncome = withdraw401k + rothConv + taxableSS;
+
       magi = withdraw401k + rothConv + gainPart + ssIncome;
 
+
+
       if (inIndia) {
+
         // US-side estimate on US retirement distributions only. Treaty results can vary.
+
         usTaxYr = usFedTax(Math.max(0, withdraw401k + rothConv - std), inp.filing);
+
         if (inRNOR) {
+
           indiaTaxYr = 0;
+
         } else {
-          const usWithholdingCreditINR = withdraw401k * (inp.usIndiaWh ?? .15) * inp.inr;
-          const indiaOrdTaxINR = indiaTaxINR((withdraw401k + ssIncome) * inp.inr);
-          const indiaLtcgTaxINR = gainPart * inp.inr * .125 * 1.04;
-          indiaTaxYr = Math.max(0, indiaOrdTaxINR + indiaLtcgTaxINR - usWithholdingCreditINR) / inp.inr;
+
+          const usWithholdingCreditINR = withdraw401k * (inp.usIndiaWh ?? .15) * inrThisYear;
+
+          const indiaOrdTaxINR = indiaTaxINR((withdraw401k + ssIncome) * inrThisYear);
+
+          const indiaLtcgTaxINR = gainPart * inrThisYear * .125 * 1.04;
+
+          indiaTaxYr = Math.max(0, indiaOrdTaxINR + indiaLtcgTaxINR - usWithholdingCreditINR) / inrThisYear;
+
           if (inp.rothStress && aRoth > 0) {
-            rothStressTax = aRoth * inp.growth * .30;
+
+            rothStressTax = aRoth * (retired ? inp.retGrowth : inp.growth) * .30;
+
             indiaTaxYr += rothStressTax;
+
           }
+
         }
+
       } else {
+
         const ordinaryTaxable = Math.max(0, ordIncome - std);
+
         usTaxYr = usFedTax(ordinaryTaxable, inp.filing) + ltcgTax(gainPart, ordinaryTaxable, inp.filing) + niitTax(magi, gainPart, inp.filing);
+
         stateTaxYr = (withdraw401k + rothConv + gainPart + taxableSS) * Math.max(0, inp.stateTax);
+
         usTaxYr += stateTaxYr;
+
       }
+
+
 
       if (!inIndia && age < 59.5 && withdraw401k > 0) {
-        // Stress estimate. This applies to the full modeled 401k withdrawal, including any tax-payment pull.
-        // Does not model SEPP, rule of 55, Roth ladders, or exceptions.
-        earlyPenalty = withdraw401k * .10;
-        usTaxYr += earlyPenalty;
+
+        // Stress estimate. Rule of 55 toggle removes the 10% penalty if retirement target age is 55+.
+
+        // Does not model SEPP, Roth ladders, or separate current-employer 401k vs IRA balances.
+
+        if (!(rule55Exempt && age >= 55)) {
+
+          earlyPenalty = withdraw401k * .10;
+
+          usTaxYr += earlyPenalty;
+
+        }
+
       }
+
+
 
       if (beforeMedicare) {
+
         acaYr = acaStressPremium(magi, inp.filing);
+
         acaBaseYr = acaStressPremium(0, inp.filing);
+
       }
+
+      if (!inIndia && retired && age >= 65 && inp.irmaaOn) {
+
+        acaYr += irmaaAnnualSurcharge(magi, inp.filing);
+
+      }
+
+
 
       // Pay tax, penalty, and premium from cash, then taxable, then 401k. Any last-resort 401k payment is not recursively taxed.
+
       let due = usTaxYr + indiaTaxYr + acaYr;
+
       const pc = pullCash(due); due -= pc;
+
       if (due > 0) { const pt = pullTaxable(due); due -= pt; }
+
       if (due > 0) { const pi = pull401k(due); withdraw401k += pi; due -= pi; }
+
       if (due > 0 && aRoth > 0) {
+
         const pr = Math.min(due, aRoth);
+
         aRoth -= pr;
+
         rothBasis = Math.max(0, rothBasis - Math.min(pr, rothBasis));
+
         withdrawRoth += pr;
+
         due -= pr;
+
       }
+
       if (due > 0) { shortfall += due; due = 0; }
+
     }
 
+
+
     totalUSTax += usTaxYr;
+
     totalIndiaTax += indiaTaxYr;
+
     totalACA += acaYr;
+
     totalACABase += acaBaseYr;
+
     totalShortfall += shortfall;
 
-    a401k *= (1 + inp.growth);
-    aRoth *= (1 + inp.growth);
-    aTax *= (1 + Math.max(0, inp.growth - inp.taxDrag));
+
+
+    const yrGrowth = retired ? ((inp.stressCrash && yearsRetired < 2) ? inp.stressCrashReturn : inp.retGrowth) : inp.growth;
+
+    const incomeProxy = isWorking ? ((inp.income || 0) + ssIncome) : magi;
+
+    const effectiveTaxDrag = taxableDragForYear(inp, incomeProxy);
+
+    a401k *= (1 + yrGrowth);
+
+    aRoth *= (1 + yrGrowth);
+
+    aTax *= (1 + Math.max(0, yrGrowth - effectiveTaxDrag));
+
     aCash *= 1.04;
 
-    rows.push({ age, isWorking, retired, inIndia, inRNOR, inROR, beforeMedicare, a401k, aRoth, aTax, aCash, total: a401k + aRoth + aTax + aCash, withdraw401k, withdrawRoth, withdrawTax, withdrawCash, rothConv, rmd, ssIncome, magi, usTaxYr, indiaTaxYr, acaYr, acaExtra: acaYr - acaBaseYr, stateTaxYr, earlyPenalty, rothStressTax, shortfall, spendNow, splitOverheadNow });
+
+
+    rows.push({ age, isWorking, retired, inIndia, inRNOR, inROR, beforeMedicare, a401k, aRoth, aTax, aCash, total: a401k + aRoth + aTax + aCash, withdraw401k, withdrawRoth, withdrawTax, withdrawCash, rothConv, rmd, ssIncome, magi, usTaxYr, indiaTaxYr, acaYr, acaExtra: acaYr - acaBaseYr, stateTaxYr, earlyPenalty, rothStressTax, shortfall, spendNow, splitOverheadNow, yrGrowth, inrThisYear, effectiveTaxDrag, stressYear: retired && inp.stressCrash && yearsRetired < 2 });
+
   }
+
+
 
   const row75 = rows.find(r => r.age === 75) || rows[rows.length - 1];
+
   return { rows, totalUSTax, totalIndiaTax, totalACA, totalACABase, wealthAt75: row75.total, finalWealth: rows[rows.length-1].total, totalShortfall, targetAge, rnorYrs };
+
 }
+
+
 
 function riskItems(inp, results) {
+
   const C = results.C;
+
   const items = [];
+
   if (inp.goal === "us") {
+
     const acaHit = C.rows.find(r => r.beforeMedicare && r.acaExtra > 5000);
+
     items.push({ title: "ACA is a premium stress test", text: "This is not subsidy modeling or a quote. State, household size, plan choice, age, and MAGI can change the result." });
+
     if (acaHit) items.push({ title: `Premium spike risk around age ${acaHit.age}`, text: `The model shows higher MAGI creating about ${fmt(acaHit.acaExtra)} extra annual premium pressure in that year.` });
+
     const stateHit = C.rows.find(r => r.stateTaxYr > 1000);
+
     if (stateHit) items.push({ title: "State tax stress is included", text: `At age ${stateHit.age}, the model adds about ${fmt(stateHit.stateTaxYr)} of state-tax pressure.` });
+
   }
+
   if (inp.goal === "india") {
+
     items.push({ title: `RNOR estimate: ${C.rnorYrs} year${C.rnorYrs === 1 ? "" : "s"}`, text: "This is only a heuristic from years outside India. It is not a legal residency determination." });
+
+    if (inp.fxStress) items.push({ title: "Currency stress is on", text: `INR/USD weakens by ${(inp.fxDepreciation * 100).toFixed(2)}% per year after retirement in India tax-stress math. This is not an exchange-rate forecast.` });
+
     const ror = C.rows.find(r => r.inROR);
+
     if (ror) items.push({ title: "ROR phase starts after RNOR", text: "After RNOR, India-side tax treatment can become the main planning issue, especially for 401k and Roth balances." });
+
     const rothRow = C.rows.find(r => r.rothStressTax > 0);
+
     if (rothRow) items.push({ title: "Roth India stress test is on", text: `The first modeled Roth-growth tax drag is about ${fmt(rothRow.rothStressTax)} / year. Treat this as a worst-case pressure test, not a final tax answer.` });
+
   }
+
   if (inp.goal === "split") {
+
     const overhead = splitAnnualOverhead(inp);
+
     const indiaDays = Math.round((inp.indiaMonths || 0) * 30.4);
+
     items.push({ title: `Split-life overhead: ${fmt(overhead)} / year`, text: "India monthly living cost, furnished US lease, storage, US transport, and travel-month costs are added to base retirement spending." });
+
     items.push({ title: `Approx India days: ${indiaDays}`, text: indiaDays >= 182 ? "This may cross a common India residency trigger. Treat the split plan as tax-sensitive." : "This is below 182 days in the rough month-based check, but real day counts matter." });
+
     items.push({ title: "Minimal US footprint is modeled", text: "The tool assumes short-term furnished housing, storage, and rented or shared transport instead of a full US household." });
+
   }
+
   const rmdHit = C.rows.find(r => r.rmd > 0);
+
   if (rmdHit) items.push({ title: `RMDs begin around age ${rmdHit.age}`, text: `The model forces about ${fmt(rmdHit.rmd)} from 401k/IRA that year. This can change both US and India-return paths.` });
+
   if (inp.socialSecurity > 0) items.push({ title: "Social Security included simply", text: `Social Security is user-entered in today's dollars and simplified. The model inflates it forward and starts income at age ${inp.ssClaimAge || 67}. It does not estimate real SSA benefits.` });
+
   items.push({ title: "Scoring assumption", text: `Best-under-model uses modeled costs minus ${(inp.scoreWeight ?? .04) * 100}% of wealth at 75. Close winners can change if you adjust this.` });
-  if (rmdHit && rmdHit.age >= 65) items.push({ title: "IRMAA is not modeled", text: "High income after age 65 can trigger Medicare IRMAA surcharges. This tool does not include IRMAA premiums." });
-  if (inp.age + inp.years < 59.5) items.push({ title: "Early withdrawal penalty is simplified", text: "A 10% penalty is applied to all modeled 401k withdrawals before 59.5. Exceptions like Rule of 55, SEPP, and Roth ladders are not modeled." });
+
+  if (inp.stressCrash) items.push({ title: "Sequence-of-returns stress is on", text: `The first two retirement years use ${(inp.stressCrashReturn * 100).toFixed(0)}% growth, then the model returns to the normal retirement growth assumption.` });
+
+  if (inp.niitDragOn) items.push({ title: "NIIT drag overlay is on", text: "When modeled income is above the NIIT threshold, taxable account drag is modestly increased. This is still a rough account-level shortcut, not tax-lot math." });
+
+  if (inp.irmaaOn) items.push({ title: "IRMAA overlay is approximate", text: "IRMAA uses current-year modeled MAGI as a proxy. Real Medicare IRMAA generally uses income from two years earlier." });
+
+  if (inp.age + inp.years < 59.5) items.push({ title: "Early withdrawal penalty is simplified", text: inp.rule55 ? "Rule of 55 is enabled, so modeled pre-59.5 current-employer 401k withdrawals avoid the 10% penalty. SEPP and Roth ladders are still not modeled." : "A 10% penalty is applied to modeled 401k withdrawals before 59.5. Exceptions like Rule of 55, SEPP, and Roth ladders are simplified or not modeled." });
+
   return items.slice(0, 6);
+
 }
+
+
 
 function runWithFeedback(btn) {
+
   if (!btn) { compute(); return; }
+
   const oldText = btn.textContent;
+
   btn.classList.add("loading");
+
   btn.textContent = "Running paths...";
+
   window.setTimeout(() => {
+
     compute();
+
     btn.classList.remove("loading");
+
     btn.textContent = oldText;
+
   }, 140);
+
 }
+
+
 
 function validateInputs(inp) {
+
   const missing = [];
+
   if (inp.age === null || inp.age < 18 || inp.age > 85) missing.push("Current age (18-85)");
+
   if (inp.years === null || inp.years < 1 || inp.years > 40) missing.push("Years to target (1-40)");
+
   if (inp.spend === null || inp.spend <= 0) missing.push("Base retirement spend / yr");
+
   if (inp.income === null || inp.income < 0) missing.push("Household income / yr");
+
   if (inp.savings === null || inp.savings < 0) missing.push("Savings / yr");
+
   if (inp.goal === "india" && (inp.yrsOutside === null || inp.yrsOutside < 0)) missing.push("Years outside India");
+
   if (inp.goal === "split") {
+
     const months = (inp.indiaMonths || 0) + (inp.usMonths || 0) + (inp.travelMonths || 0) + (inp.bufferMonths || 0);
+
     if (Math.abs(months - 12) > 0.01) missing.push("Split months must add up to 12");
+
   }
+
   return missing;
+
 }
 
+
+
 function compute() {
+
   const inp = readInputs();
 
+
+
   const missing = validateInputs(inp);
+
   if (missing.length > 0) {
+
     document.getElementById("output").innerHTML = `<div class="empty error"><strong>Please complete these fields before running:</strong><ul>${missing.map(m => "<li>" + m + "</li>").join("")}</ul><p style="margin-top:10px;">Account balances can be left blank or set to 0 if you don't have those accounts yet. Editable assumptions are prefilled with reasonable defaults.</p></div>`;
+
     return;
+
   }
 
+
+
   const A = project("maxAll", inp);
+
   const B = project("matchOnly", inp);
+
   const C = project("optimized", inp);
+
   const results = { A, B, C };
 
+
+
   const cost = R => R.totalUSTax + R.totalIndiaTax + Math.max(0, R.totalACA - R.totalACABase);
+
   const score = R => cost(R) - R.wealthAt75 * (inp.scoreWeight ?? .04);
+
   const paths = [
+
     { id: "A", title: "Status Quo", desc: "Max 401k first. Same plan as today.", R: A },
+
     { id: "B", title: "Asset Location Pivot", desc: "401k match only. Send the rest to taxable.", R: B },
+
     { id: "C", title: "Optimized", desc: inp.goal === "india" ? "Pivot now, then use RNOR years intentionally." : (inp.goal === "split" ? "Pivot now, keep MAGI lower, and fund the seasonal plan." : "Pivot now, income-stack, and run Roth conversions."), R: C }
+
   ];
+
   const winner = [...paths].sort((x,y) => score(x.R) - score(y.R))[0];
+
   const baseCost = cost(A);
+
   const saved = baseCost - cost(winner.R);
+
+
 
   let html = "";
 
+
+
   html += `<section class="decision"><div class="mini">Best under current model scoring</div><h3>Path ${winner.id} &mdash; ${winner.title}</h3><p class="why-line">${winner.desc}</p><div class="big">${fmt(saved)}</div><p>Modeled tax plus healthcare premium-pressure difference vs Path A through the projection period. This is a planning score, not a tax estimate. Wealth at 75 is credited at ${(inp.scoreWeight ?? .04) * 100}% in the scoring formula.</p></section>`;
 
+
+
+  if (inp.stressCrash) {
+
+    html += `<div class="callout warn"><strong>Stress test is on</strong>First two retirement years use ${(inp.stressCrashReturn * 100).toFixed(0)}% growth. This is a simple crash scenario, not a probability forecast or Monte Carlo simulation.</div>`;
+
+  }
+
+  if (inp.fxStress && inp.goal === "india") {
+
+    html += `<div class="callout warn"><strong>Currency stress is on</strong>INR/USD weakens by ${(inp.fxDepreciation * 100).toFixed(2)}% per year after retirement in India tax-stress math. This is an FX pressure test, not a forecast.</div>`;
+
+  }
+
+
+
   html += `<div class="cards">`;
+
   paths.forEach(p => {
+
     const c = cost(p.R);
+
     const delta = baseCost - c;
+
     html += `<div class="path-card ${p.id === winner.id ? "winner" : ""}">${p.id === winner.id ? `<div class="tag">BEST UNDER MODEL</div>` : ""}<div class="path-label">Path ${p.id}</div><h4>${p.title}</h4><div class="stat"><span>US tax</span><span class="v neg">${fmt(p.R.totalUSTax)}</span></div>${inp.goal === "india" ? `<div class="stat"><span>India tax stress estimate</span><span class="v neg">${fmt(p.R.totalIndiaTax)}</span></div>` : `<div class="stat"><span>${inp.goal === "split" ? "ACA premium pressure" : "ACA premium pressure"}</span><span class="v neg">${fmt(Math.max(0, p.R.totalACA - p.R.totalACABase))}</span></div>`}<div class="stat"><span>Wealth at 75</span><span class="v">${fmt(p.R.wealthAt75)}</span></div>${p.R.totalShortfall > 0 ? `<div class="stat"><span>Unmet spending</span><span class="v neg">${fmt(p.R.totalShortfall)}</span></div>` : ""}<div class="stat"><span>${p.id === "A" ? "Baseline model cost" : "Model saved vs A"}</span><span class="v ${p.id === "A" ? "" : "pos"}">${p.id === "A" ? fmt(c) : "+" + fmt(delta)}</span></div></div>`;
+
   });
+
   html += `</div>`;
 
+
+
+  if (inp.goal === "us") {
+
+    html += `<div class="callout"><strong>Legacy note for Path A</strong>Under current US rules, appreciated taxable brokerage assets may receive a step-up in basis at death. This model does not value estate outcomes, so Path A can look weaker during life while still having estate-planning advantages for heirs.</div>`;
+
+  }
+
+
+
   html += `<section class="guide-tabs-wrap" id="guideTabsWrap">
+
     <div class="guide-head">
+
       <div>
+
         <h3>Guide</h3>
+
         <p>Use these tabs when you want the reasoning behind the numbers.</p>
+
       </div>
+
     </div>
+
     <div class="guide-tabs" id="guideTabs">
+
       <button type="button" class="active" data-guide="risk">Pay attention first</button>
+
       <button type="button" data-guide="breaks">What can break</button>
+
       <button type="button" data-guide="wiki">How to read</button>
+
     </div>
+
     <div class="guide-panel active" data-guide-panel="risk">
+
       <div class="risk-summary" style="margin-bottom:0;">
+
         <h3>What to pay attention to first</h3>
+
         <p class="risk-sub">These flags matter more than the winner label. Read this before trusting the model too much.</p>
+
         <ul class="risk-list">${riskItems(inp, results).map(item => `<li><strong>${item.title}</strong>${item.text}</li>`).join("")}</ul>
+
       </div>
+
     </div>
+
     <div class="guide-panel" data-guide-panel="breaks">
+
       <div class="callout warn"><strong>Return assumptions</strong>If returns are lower than expected, Path C advantage shrinks quickly.</div>
+
       <div class="callout warn"><strong>Timeline changes</strong>Delaying or accelerating retirement changes RNOR and ACA exposure.</div>
+
       <div class="callout warn"><strong>Tax law changes</strong>US brackets, India treatment of retirement accounts, and ACA rules can change.</div>
+
     </div>
+
     <div class="guide-panel" data-guide-panel="wiki">
+
       <div class="callout">This tool compares three paths. There is no single best answer. Each path works under specific conditions.</div>
 
+
+
       <h4>Path A - Max 401k (Status Quo)</h4>
+
       <div class="callout"><strong>When it works</strong><br>&bull; You stay in the US long term<br>&bull; You are in a high tax bracket, around 32-37%<br>&bull; You retire after 65, when Medicare removes most ACA pressure<br>&bull; You do not need early access to funds<br><br><strong>Why it works</strong><br>You are trading flexibility for tax deferral. This works if your timeline stays stable.</div>
+
       <div class="callout warn"><strong>Common mistake</strong>&quot;I'll deal with taxes later.&quot; Later can mean US and India overlap, which can create a higher combined tax bill.</div>
 
+      <div class="callout"><strong>Legacy angle</strong>For US-only households, appreciated taxable brokerage may receive a step-up in basis at death under current rules. This model does not score that estate benefit.</div>
+
+
+
       <h4>Path B - Match Only + Taxable</h4>
+
       <div class="callout"><strong>When it works</strong><br>&bull; You plan to retire before 60<br>&bull; You want ACA subsidies and need lower MAGI<br>&bull; You are unsure about returning to India<br>&bull; Your future tax rate may be similar to today<br><br><strong>Why it works</strong><br>You are optimizing for flexibility and timing, not just tax deferral.</div>
+
       <div class="callout warn"><strong>Common mistake</strong>&quot;Flexibility is always better.&quot; Too much taxable can reduce long-term tax shelter.</div>
 
+
+
       <h4>Path C - Optimized (RNOR / Income Stacking)</h4>
+
       <div class="callout"><strong>When it works</strong><br>&bull; You plan to return to India<br>&bull; You qualify for an RNOR window, usually 2-3 years depending on facts<br>&bull; You have a large 401k balance<br>&bull; You have a gap before 65<br><br><strong>Why it works</strong><br>You control where and when tax applies. RNOR years can be used to reduce future tax exposure.</div>
+
       <div class="callout warn"><strong>Common mistake</strong>&quot;I'll figure RNOR when I move.&quot; That window needs prep years before return, not after.</div>
 
+
+
       <h4>Simple decision filter</h4>
+
       <div class="callout">&bull; Staying in the US and retiring after 65 &rarr; <strong>Path A</strong><br>&bull; Early retirement or uncertain plans &rarr; <strong>Path B</strong><br>&bull; Returning to India with a large 401k &rarr; <strong>Path C</strong></div>
 
+
+
       <h4>One-line summary</h4>
+
       <div class="callout">Path A = Tax deferral bet<br>Path B = Flexibility bet<br>Path C = Timing + geography bet</div>
+
     </div>
+
   </section>`;
 
+
+
   if (inp.goal === "split") {
+
     const splitOverhead = splitAnnualOverhead(inp);
+
     const indiaDays = Math.round((inp.indiaMonths || 0) * 30.4);
+
     html += `<section class="block"><h3>Split-life setup</h3><div class="split-summary-grid"><div class="path-card"><div class="path-label">India</div><h4>${inp.indiaMonths} months</h4><div class="stat"><span>Approx days</span><span class="v">${indiaDays}</span></div><div class="stat"><span>Living cost</span><span class="v neg">${fmt(inp.indiaLivingMonthly * inp.indiaMonths)}</span></div></div><div class="path-card"><div class="path-label">US</div><h4>${inp.usMonths} months</h4><div class="stat"><span>Lease + transport</span><span class="v neg">${fmt((inp.usLeaseMonthly + inp.transportMonthly) * inp.usMonths)}</span></div></div><div class="path-card"><div class="path-label">Travel</div><h4>${inp.travelMonths} months</h4><div class="stat"><span>Extra travel cost</span><span class="v neg">${fmt(inp.travelMonthly * inp.travelMonths)}</span></div></div><div class="path-card"><div class="path-label">Annual add-on</div><h4>${fmt(splitOverhead)}</h4><div class="stat"><span>Storage</span><span class="v neg">${fmt(inp.storageMonthly * 12)}</span></div></div></div><div class="callout warn"><strong>Split Life assumption</strong>This mode assumes US tax residency. It adds seasonal living costs and flags India day-count risk, but it does not model Indian ROR taxation, FEMA status, DTAA tie-breaker results, or healthcare eligibility.</div><div class="callout"><strong>Base spend rule</strong>Your base retirement spend should exclude the India living cost, US lease, storage, US transport, and extra travel costs entered in this Split Life section. Otherwise you may double count.</div></section>`;
+
   }
 
+
+
   html += `<section class="block"><h3>What the model is saying</h3>`;
+
   if (inp.goal === "us") {
+
     html += `<div class="callout"><strong>US retirement branch</strong>Path C tries to reduce MAGI pressure before Medicare by mixing standard-deduction 401k withdrawals, taxable withdrawals, and Roth conversions.</div><div class="callout warn"><strong>ACA warning</strong>This is a rough premium stress test. It is not real subsidy modeling, savings, or a quote.</div>`;
+
   } else if (inp.goal === "split") {
+
     html += `<div class="callout"><strong>Split-life branch</strong>Path C keeps the same US-tax-resident planning logic, then adds India living cost, furnished US lease, storage, US transport, and travel-month costs to annual spending.</div><div class="callout warn"><strong>Day-count warning</strong>The model uses months as a rough proxy. Real tax residency depends on actual days, facts, current rules, treaty position, and your full fact pattern.</div>`;
+
   } else {
+
     html += `<div class="callout"><strong>India return branch</strong>Path C tries to use the estimated RNOR window before the model switches into ROR treatment. The table tags rows as RNOR or ROR so the branch change is visible.</div><div class="callout warn"><strong>RNOR warning</strong>The RNOR period shown here is only an estimate. Real status depends on actual India presence and prior residency history.</div>`;
+
   }
+
   html += `</section>`;
+
+
 
   html += `<section class="block"><h3>Year by year</h3><div class="tabs" id="tabs"><button class="active" data-path="C">Path C</button><button data-path="A">Path A</button><button data-path="B">Path B</button></div>${inp.goal === "us" || inp.goal === "split" ? `<div class="callout warn"><strong>Why ACA premium jumps</strong>ACA premium pressure is tied to MAGI. 401k withdrawals, Roth conversions, Social Security, and capital gains can push MAGI higher, which is why the modeled premium can spike.</div>` : ""}<div class="table-note">Columns are grouped: <strong>cash flow</strong> (Spend, SS), <strong>withdrawals</strong> by source (401k wd, RMD, Roth wd, Tax wd, Cash wd, Roth conv), <strong>taxes</strong> (US tax, India/ACA, <span style="background:#fff8e1;padding:0 4px;border-radius:2px;">Total tax</span>, Shortfall), and <strong>end-of-year balances</strong>. The <strong>Total tax</strong> column (highlighted) sums the two preceding columns so you don't have to add them in your head. On mobile, swipe sideways. The Age column stays fixed.</div>${inp.goal === "india" ? `<div class="phase-legend"><span class="phase-pill"><span class="phase-dot phase-rnor"></span>RNOR: India tax-free window</span><span class="phase-pill"><span class="phase-dot phase-ror"></span>ROR: India taxable phase</span></div><div id="phaseTimelineBox"></div>` : ""}<div id="tableBox"></div><div class="table-foot"><strong>Reading the columns:</strong> Spend = inflated annual spending need. SS = Social Security income that year. <strong>401k wd</strong> includes RMD and any tax-payment pulls; <strong>RMD</strong> is the forced subset (shown separately). Roth wd / Tax wd / Cash wd are direct draws from each account. Roth conv = trad-to-Roth conversion. <strong>US tax</strong> = federal + state + LTCG + NIIT + early-withdrawal penalty (if any), summed. India / ACA shows India tax stress estimate (India path) or modeled ACA premium pressure (US or Split Life path, before age 65). <strong>Total tax / premium pressure</strong> (highlighted column) = US tax + India tax stress estimate for the India path, or US tax + ACA premium pressure for the US/Split Life path. Note: ACA premium is technically a healthcare cost, not a tax, but it functions as a MAGI-driven cash outflow during the pre-Medicare window. Shortfall is non-zero only if all accounts ran dry.</div></section>`;
 
+
+
   html += `<section class="block"><h3>Account mix at target age ${A.targetAge}</h3><div class="legend"><span class="l401">401k / Traditional IRA</span><span class="lroth">Roth</span><span class="ltax">Taxable</span><span class="lcash">Cash</span></div><svg class="bar-chart" id="barChart" viewBox="0 0 600 220" preserveAspectRatio="xMidYMid meet"></svg></section>`;
+
+
 
   document.getElementById("output").innerHTML = html;
 
+
+
   document.querySelectorAll("#guideTabs button").forEach(btn => {
+
     btn.addEventListener("click", () => {
+
       document.querySelectorAll("#guideTabs button").forEach(b => b.classList.remove("active"));
+
       document.querySelectorAll(".guide-panel").forEach(panel => panel.classList.remove("active"));
+
       btn.classList.add("active");
+
       const panel = document.querySelector(`[data-guide-panel="${btn.dataset.guide}"]`);
+
       if (panel) panel.classList.add("active");
+
     });
+
   });
+
+
 
   function badge(row) {
+
     if (!row.retired) return "";
+
     if (inp.goal === "us") return `<span class="row-badge badge-us">US</span>`;
+
     if (inp.goal === "split") return `<span class="row-badge badge-us">SPLIT</span>`;
+
     if (row.inRNOR) return `<span class="row-badge badge-rnor">RNOR</span>`;
+
     if (row.inROR) return `<span class="row-badge badge-ror">ROR</span>`;
+
     return "";
+
   }
+
   function renderPhaseTimeline(id) {
+
     const box = document.getElementById("phaseTimelineBox");
+
     if (!box || inp.goal !== "india") return;
+
     const rows = results[id].rows.filter(r => r.retired && r.age <= 80);
+
     if (!rows.length) { box.innerHTML = ""; return; }
 
+
+
     const total = rows.length;
+
     const firstAge = rows[0].age;
+
     const lastAge = rows[rows.length - 1].age;
+
     const rnorRows = rows.filter(r => r.inRNOR);
+
     const rorRows = rows.filter(r => r.inROR);
+
     const rnorStart = rnorRows.length ? rnorRows[0].age : null;
+
     const rnorEnd = rnorRows.length ? rnorRows[rnorRows.length - 1].age : null;
+
     const rorStart = rorRows.length ? rorRows[0].age : null;
 
+
+
     const segments = [];
+
     let current = null;
+
     rows.forEach(r => {
+
       const phase = r.inRNOR ? "rnor" : (r.inROR ? "ror" : "working");
+
       if (!current || current.phase !== phase) {
+
         current = { phase, start: r.age, end: r.age, count: 1 };
+
         segments.push(current);
+
       } else {
+
         current.end = r.age;
+
         current.count += 1;
+
       }
+
     });
+
+
 
     const label = seg => {
+
       if (seg.phase === "rnor") return `RNOR ${seg.start}-${seg.end}`;
+
       if (seg.phase === "ror") return `ROR ${seg.start}+`;
+
       return `Before ROR`;
+
     };
+
     const cls = seg => seg.phase === "rnor" ? "phase-seg-rnor" : (seg.phase === "ror" ? "phase-seg-ror" : "phase-seg-working");
 
+
+
     const segHtml = segments.map(seg => {
+
       const width = Math.max(8, (seg.count / total) * 100);
+
       return `<div class="phase-seg ${cls(seg)}" style="width:${width}%">${label(seg)}</div>`;
+
     }).join("");
 
+
+
     const title = rnorRows.length
+
       ? `RNOR window: age ${rnorStart} to ${rnorEnd}`
+
       : `No RNOR window modeled`;
+
     const taxNote = rorStart !== null
+
       ? `<div class="phase-tax-note">Timeline marker: India tax phase starts at age ${rorStart}. This is where the model switches from RNOR to ROR treatment.</div>`
+
       : `<div class="phase-tax-note">No ROR phase appears inside the visible table range.</div>`;
 
+
+
     box.innerHTML = `<div class="phase-timeline-box">
+
       <div class="phase-timeline-title"><strong>${title}</strong><span>Visible table range: age ${firstAge}-${lastAge}</span></div>
+
       <div class="phase-timeline">${segHtml}</div>
+
       <div class="phase-age-row"><span>${firstAge}</span><span>${lastAge}</span></div>
+
       ${taxNote}
+
     </div>`;
+
   }
+
+
 
   function renderTable(id) {
+
     renderPhaseTimeline(id);
+
     const rows = results[id].rows.filter(r => r.age <= 80);
-    const dynHead = inp.goal === "india" ? "India tax stress" : "ACA premium pressure";
+
+    const dynHead = inp.goal === "india" ? "India tax stress" : "ACA / IRMAA pressure";
+
     const totalHead = inp.goal === "india" ? "Total tax stress" : "Tax + premium pressure";
+
     const magiHead = inp.goal === "us" ? `<th class="grp-start">MAGI</th>` : "";
+
     // Column count for transition row colspan:
+
     // Age, Spend, SS, 401k wd, RMD, Roth wd, Tax wd, Cash wd, Roth conv, [MAGI], US tax, India/ACA, Total tax, Shortfall, 401k, Roth, Tax, Cash, Total
+
     const colCount = inp.goal === "us" ? 19 : 18;
+
     let rorNoteShown = false;
+
     let t = `<div class="table-wrap"><table class="yr-table"><thead><tr>
+
       <th>Age</th>
+
       <th class="grp-start">Spend</th>
+
       <th>SS</th>
+
       <th class="grp-start">401k wd</th>
+
       <th>RMD</th>
+
       <th>Roth wd</th>
+
       <th>Tax wd</th>
+
       <th>Cash wd</th>
+
       <th>Roth conv</th>
+
       ${magiHead}
+
       <th class="grp-start">US tax</th>
+
       <th>${dynHead}</th>
+
       <th class="total-tax-col">${totalHead}</th>
+
       <th>Shortfall</th>
+
       <th class="grp-bal">401k</th>
+
       <th>Roth</th>
+
       <th>Taxable</th>
+
       <th>Cash</th>
+
       <th>Total</th>
+
     </tr></thead><tbody>`;
+
     rows.forEach(r => {
+
       let markRorStart = false;
+
       if (inp.goal === "india" && r.inROR && !rorNoteShown) {
+
         markRorStart = true;
+
         rorNoteShown = true;
+
         t += `<tr class="ror-transition-row"><td colspan="${colCount}">RNOR ends. India tax phase starts here.</td></tr>`;
+
       }
+
       let cls = r.isWorking ? "working" : (r.inRNOR ? "rnor" : (r.inROR ? "ror" : ""));
+
       if (markRorStart) cls += " ror-start";
+
       const magiCell = inp.goal === "us" ? `<td class="grp-start ${r.magi > 90000 ? "neg" : ""}">${r.magi ? fmt(r.magi) : "-"}</td>` : "";
+
       const indiaOrAcaVal = inp.goal === "india" ? r.indiaTaxYr : r.acaYr;
+
       const totalTaxYr = (r.usTaxYr || 0) + (indiaOrAcaVal || 0);
+
       t += `<tr class="${cls}">
+
         <td>${r.age}${badge(r)}</td>
+
         <td class="grp-start">${r.retired ? fmt(r.spendNow) : "-"}</td>
+
         <td>${r.ssIncome ? fmt(r.ssIncome) : "-"}</td>
+
         <td class="grp-start">${r.withdraw401k ? fmt(r.withdraw401k) : "-"}</td>
+
         <td>${r.rmd ? fmt(r.rmd) : "-"}</td>
+
         <td>${r.withdrawRoth ? fmt(r.withdrawRoth) : "-"}</td>
+
         <td>${r.withdrawTax ? fmt(r.withdrawTax) : "-"}</td>
+
         <td>${r.withdrawCash ? fmt(r.withdrawCash) : "-"}</td>
+
         <td>${r.rothConv ? fmt(r.rothConv) : "-"}</td>
+
         ${magiCell}
+
         <td class="grp-start ${r.usTaxYr ? "neg" : ""}">${r.usTaxYr ? fmt(r.usTaxYr) : "-"}</td>
+
         <td class="${indiaOrAcaVal ? "neg" : ""}">${indiaOrAcaVal ? fmt(indiaOrAcaVal) : "-"}</td>
+
         <td class="total-tax-col ${totalTaxYr ? "neg" : ""}"><strong>${totalTaxYr ? fmt(totalTaxYr) : "-"}</strong></td>
+
         <td class="${r.shortfall ? "neg" : ""}">${r.shortfall ? fmt(r.shortfall) : "-"}</td>
+
         <td class="grp-bal">${fmt(r.a401k)}</td>
+
         <td>${fmt(r.aRoth)}</td>
+
         <td>${fmt(r.aTax)}</td>
+
         <td>${fmt(r.aCash)}</td>
+
         <td><strong>${fmt(r.total)}</strong></td>
+
       </tr>`;
+
     });
+
     t += `</tbody></table></div>`;
+
     document.getElementById("tableBox").innerHTML = t;
+
   }
+
   renderTable("C");
+
   document.querySelectorAll("#tabs button").forEach(b => b.addEventListener("click", () => {
+
     document.querySelectorAll("#tabs button").forEach(x => x.classList.remove("active"));
+
     b.classList.add("active");
+
     renderTable(b.dataset.path);
+
   }));
 
+
+
   drawChart([A,B,C], inp.years);
+
 }
+
+
 
 function drawChart(results, yearsAhead) {
+
   const svg = document.getElementById("barChart");
+
   if (!svg) return;
+
   const labels = ["Path A", "Path B", "Path C"];
+
   const colors = ["#4a90e2", "#1b7a3f", "#f59e0b", "#94a3b8"];
+
   const W = 600, H = 220, startX = 62;
+
   const idx = Math.max(0, yearsAhead);
+
   const safeRows = results.map(r => r.rows[Math.min(idx, r.rows.length - 1)]);
+
   const maxTotal = Math.max(...safeRows.map(r => r.total), 1) * 1.1;
+
   const available = W - startX - 55;
+
   const slot = available / results.length;
+
   const barW = Math.min(108, slot * .68);
+
   let s = `<line x1="${startX}" y1="20" x2="${startX}" y2="${H-30}" stroke="#d4cdb8"/>`;
+
   for (let i = 0; i <= 4; i++) {
+
     const y = 20 + (H-50) * i / 4;
+
     const val = maxTotal * (1 - i / 4);
+
     s += `<line x1="${startX-4}" y1="${y}" x2="${startX}" y2="${y}" stroke="#8a8a9e"/><text x="${startX-8}" y="${y+4}" text-anchor="end" font-size="10" fill="#8a8a9e" font-family="monospace">${fmt(val)}</text>`;
+
   }
+
   safeRows.forEach((row, i) => {
+
     const vals = [row.a401k, row.aRoth, row.aTax, row.aCash];
+
     const x = startX + 20 + i * slot + (slot - barW) / 2;
+
     let y = H - 30;
+
     vals.forEach((v, j) => {
+
       const h = (Math.max(0, v) / maxTotal) * (H - 50);
+
       y -= h;
+
       s += `<rect x="${x}" y="${y}" width="${barW}" height="${h}" fill="${colors[j]}"/>`;
+
     });
+
     s += `<text x="${x+barW/2}" y="${H-12}" text-anchor="middle" font-size="12" fill="#1a1a2e" font-weight="700">${labels[i]}</text><text x="${x+barW/2}" y="${y-6}" text-anchor="middle" font-size="11" fill="#1a1a2e" font-family="monospace">${fmt(row.total)}</text>`;
+
   });
+
   svg.innerHTML = s;
+
 }
 
+
+
 // No auto-compute on load. Inputs start blank; user clicks Run when ready.
+
 </script>
+
 </body>
+
 </html>
