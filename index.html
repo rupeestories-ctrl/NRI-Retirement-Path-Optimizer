@@ -18,23 +18,23 @@
 
   :root {
 
-    --bg: #fbf9f4;
+    --bg: #f6f3ea;
 
     --card: #ffffff;
 
-    --soft: #f5f1e8;
+    --soft: #f0eadc;
 
-    --ink: #1a1a2e;
+    --ink: #111827;
 
-    --muted: #4a4a5e;
+    --muted: #4b5563;
 
-    --faint: #8a8a9e;
+    --faint: #7c8190;
 
-    --accent: #0066cc;
+    --accent: #0f4c81;
 
-    --accent-soft: #e6f0fa;
+    --accent-soft: #e8f1f8;
 
-    --gold: #ffd166;
+    --gold: #d6a84f;
 
     --good: #1b7a3f;
 
@@ -48,13 +48,15 @@
 
     --bad-soft: #fdecec;
 
-    --border: #efeee5;
+    --border: #e6dfd2;
 
-    --border-strong: #d8d2c2;
+    --border-strong: #cfc6b7;
 
-    --shadow-soft: 0 10px 30px rgba(0,0,0,0.04);
+    --shadow-soft: 0 12px 32px rgba(17,24,39,0.06);
 
-    --shadow-lift: 0 18px 45px rgba(0,0,0,0.10);
+    --shadow-lift: 0 18px 48px rgba(17,24,39,0.13);
+
+    --radius: 16px;
 
   }
 
@@ -72,7 +74,7 @@
 
     color: var(--ink);
 
-    font-family: "Lora", Georgia, serif;
+    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
     line-height: 1.55;
 
@@ -100,11 +102,16 @@
 
   .hero {
 
-    background: linear-gradient(135deg, #1a1a2e 0%, #2a2a4e 100%);
+    background:
+      radial-gradient(circle at 15% 20%, rgba(214,168,79,.28), transparent 28%),
+      radial-gradient(circle at 82% 16%, rgba(15,76,129,.55), transparent 34%),
+      linear-gradient(135deg, #101827 0%, #18243a 55%, #0f172a 100%);
 
     color: #fff;
 
-    padding: 46px 20px 42px;
+    padding: 56px 20px 48px;
+
+    overflow: hidden;
 
     text-align: center;
 
@@ -182,11 +189,11 @@
 
     margin: 0;
 
-    font-size: clamp(30px, 5vw, 48px);
+    font-size: clamp(34px, 5vw, 56px);
 
-    line-height: 1.12;
+    line-height: 1.08;
 
-    font-weight: 600;
+    font-weight: 800;
 
   }
 
@@ -274,6 +281,141 @@
 
 
 
+
+
+  .hero::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(214,168,79,.8), transparent);
+  }
+
+  .top-note {
+    background: transparent;
+    border: 0;
+    border-left: 0;
+    border-radius: 0;
+    padding: 0;
+    margin-bottom: 18px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .top-note-grid {
+    display: grid;
+    grid-template-columns: 1.35fr .85fr .85fr;
+    gap: 12px;
+  }
+
+  .note-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .note-card.primary {
+    border-left: 5px solid var(--accent);
+  }
+
+  .note-label {
+    display: block;
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--faint);
+    margin-bottom: 6px;
+    font-weight: 800;
+  }
+
+  .note-card strong {
+    color: var(--ink);
+  }
+
+  .metric-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin: 12px 0 18px;
+  }
+
+  .mini-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 13px 14px;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .mini-card .label {
+    display: block;
+    color: var(--faint);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    font-weight: 800;
+    margin-bottom: 5px;
+  }
+
+  .mini-card .value {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--ink);
+  }
+
+  .roth-panel {
+    background: linear-gradient(135deg, #ffffff 0%, #fbf8ef 100%);
+    border: 1px solid var(--border);
+    border-left: 6px solid var(--gold);
+    border-radius: var(--radius);
+    padding: 18px;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .roth-panel h3 {
+    margin: 0 0 5px;
+    font-size: 19px;
+  }
+
+  .roth-panel p {
+    margin: 0 0 12px;
+    color: var(--muted);
+    font-size: 13.5px;
+  }
+
+  .roth-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .roth-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+  }
+
+  .roth-card strong {
+    display: block;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+
+  .roth-card span {
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  @media (max-width: 860px) {
+    .top-note-grid, .metric-grid, .roth-grid { grid-template-columns: 1fr; }
+  }
+
+
   /* ========== READ ME CARD ========== */
 
   .readme-card {
@@ -282,7 +424,7 @@
 
     border: 1px solid var(--border);
 
-    border-radius: 12px;
+    border-radius: var(--radius);
 
     margin-bottom: 22px;
 
@@ -398,7 +540,7 @@
 
     border: 1px solid var(--border);
 
-    border-radius: 12px;
+    border-radius: var(--radius);
 
     box-shadow: var(--shadow-soft);
 
@@ -1441,11 +1583,22 @@
   <div class="wrap">
 
     <div class="top-note">
-
-      Uses simplified 2026 US tax constants, RMD overlay, optional state-tax stress, optional Social Security input, IRMAA surcharge overlay, Rule of 55 toggle, NIIT drag overlay, currency stress, India tax stress assumptions, RNOR estimate or override, ACA premium-pressure testing, and split-life housing/travel assumptions. Split Life assumes US tax residency unless you separately model a full India return. Treat the output as a planning prompt, not advice.<br><br>
-
-      <strong>Updated with accuracy fixes:</strong> today's-dollar Social Security, marginal relief on India tax, gross-up pull no longer double-counts, and Social Security during working years is now banked into taxable brokerage. Numbers may differ from previous saved scenarios or screenshots from older versions of the tool.
-
+      <div class="top-note-grid">
+        <div class="note-card primary">
+          <span class="note-label">Planning scope</span>
+          <strong>Use this as a decision map, not a tax answer.</strong><br>
+          Compares US retirement, India return, and split-life paths using simplified 2026 tax constants, RMDs, Social Security, ACA premium pressure, IRMAA, Rule of 55, RNOR, FX, and India tax-stress assumptions.
+        </div>
+        <div class="note-card">
+          <span class="note-label">Privacy</span>
+          <strong>No login. No data collected.</strong><br>
+          Inputs stay in the browser. You can test scenarios without sending personal numbers anywhere.
+        </div>
+        <div class="note-card">
+          <span class="note-label">Accuracy update</span>
+          Today's-dollar Social Security, India marginal relief, cleaner gross-up pulls, and working-year Social Security banking are included.
+        </div>
+      </div>
     </div>
 
 
@@ -1456,7 +1609,7 @@
 
         <span class="readme-icon">&#x1F4D6;</span>
 
-        <span class="readme-title">Read me first &mdash; how this model uses your inputs</span>
+        <span class="readme-title">Read me first: how this model uses your inputs</span>
 
         <span class="readme-toggle">click to toggle</span>
 
@@ -1480,19 +1633,19 @@
 
         <ul>
 
-          <li><strong>Current age + Years to target</strong> &mdash; defines retirement age. Projection runs from your current age through age 85 minimum.</li>
+          <li><strong>Current age + Years to target</strong> - defines retirement age. Projection runs from your current age through age 85 minimum.</li>
 
-          <li><strong>Filing status</strong> &mdash; sets US tax brackets and standard deduction. <code>MFJ</code> uses $32,200; <code>Single</code> uses $16,100.</li>
+          <li><strong>Filing status</strong> - sets US tax brackets and standard deduction. <code>MFJ</code> uses $32,200; <code>Single</code> uses $16,100.</li>
 
-          <li><strong>Base retirement spend / yr</strong> &mdash; in today's dollars. For Split Life, enter the recurring base spend <strong>excluding</strong> seasonal housing, storage, local transport, and extra travel costs entered below. The model inflates it each year. Example: $100k spend at 2.5% inflation becomes about $128k in year 10.</li>
+          <li><strong>Base retirement spend / yr</strong> - in today's dollars. For Split Life, enter the recurring base spend <strong>excluding</strong> seasonal housing, storage, local transport, and extra travel costs entered below. The model inflates it each year. Example: $100k spend at 2.5% inflation becomes about $128k in year 10.</li>
 
-          <li><strong>Household income / yr</strong> &mdash; working-years only. Used to size 401k contributions and taxable surplus.</li>
+          <li><strong>Household income / yr</strong> - working-years only. Used to size 401k contributions and taxable surplus.</li>
 
-          <li><strong>Savings / yr</strong> &mdash; splits between 401k and taxable based on path. Path A maxes 401k first; Paths B and C cap 401k at the match and route the rest to taxable.</li>
+          <li><strong>Savings / yr</strong> - splits between 401k and taxable based on path. Path A maxes 401k first; Paths B and C cap 401k at the match and route the rest to taxable.</li>
 
-          <li><strong>401k match %</strong> &mdash; employer match. Prefilled at 4% as a generic default. Match dollars are capped at the contribution limit.</li>
+          <li><strong>401k match %</strong> - employer match. Prefilled at 4% as a generic default. Match dollars are capped at the contribution limit.</li>
 
-          <li><strong>Account balances</strong> &mdash; starting amounts. Use 0 if you don't have that account yet.</li>
+          <li><strong>Account balances</strong> - starting amounts. Use 0 if you don't have that account yet.</li>
 
         </ul>
 
@@ -1502,33 +1655,33 @@
 
         <ul>
 
-          <li><strong>Accumulation growth %</strong> (default 7%) &mdash; applied annually to 401k and Roth balances before retirement. Taxable accounts grow at <code>growth &minus; taxDrag</code>. Cash grows at a fixed 4% (HYSA proxy) regardless of this input.</li>
+          <li><strong>Accumulation growth %</strong> (default 7%) - applied annually to 401k and Roth balances before retirement. Taxable accounts grow at <code>growth &minus; taxDrag</code>. Cash grows at a fixed 4% (HYSA proxy) regardless of this input.</li>
 
-          <li><strong>Retirement growth %</strong> (default 5%) &mdash; applied after target retirement age. This lets you model a lower-return retirement portfolio or bond-tent style glide path without changing working-year growth.</li>
+          <li><strong>Retirement growth %</strong> (default 5%) - applied after target retirement age. This lets you model a lower-return retirement portfolio or bond-tent style glide path without changing working-year growth.</li>
 
-          <li><strong>First 2 retirement years crash test</strong> &mdash; if turned on, the model overrides retirement growth to the selected crash return for the first two retirement years only, then returns to your normal retirement growth assumption. This is a simple sequence-of-returns stress test, not Monte Carlo.</li>
+          <li><strong>First 2 retirement years crash test</strong> - if turned on, the model overrides retirement growth to the selected crash return for the first two retirement years only, then returns to your normal retirement growth assumption. This is a simple sequence-of-returns stress test, not Monte Carlo.</li>
 
-          <li><strong>Currency stress</strong> &mdash; if turned on for India return scenarios, the model lets INR weaken each year after retirement and uses the stressed INR/USD rate in India tax-stress math. This is an FX pressure test, not a currency forecast.</li>
+          <li><strong>Currency stress</strong> - if turned on for India return scenarios, the model lets INR weaken each year after retirement and uses the stressed INR/USD rate in India tax-stress math. This is an FX pressure test, not a currency forecast.</li>
 
-          <li><strong>NIIT drag overlay</strong> &mdash; if turned on, taxable account drag is modestly increased when modeled income crosses the NIIT threshold. The model still uses a simple drag assumption, not lot-by-lot dividend and gain math.</li>
+          <li><strong>NIIT drag overlay</strong> - if turned on, taxable account drag is modestly increased when modeled income crosses the NIIT threshold. The model still uses a simple drag assumption, not lot-by-lot dividend and gain math.</li>
 
-          <li><strong>Taxable drag %</strong> (default 1%) &mdash; subtracted from growth on taxable accounts only. Simulates dividend and distribution taxes during accumulation.</li>
+          <li><strong>Taxable drag %</strong> (default 1%) - subtracted from growth on taxable accounts only. Simulates dividend and distribution taxes during accumulation.</li>
 
-          <li><strong>Inflation %</strong> (default 2.5%) &mdash; inflates retirement spending and Social Security each year. Tax brackets, RMD tables, and the standard deduction are <strong>not</strong> inflated in this model.</li>
+          <li><strong>Inflation %</strong> (default 2.5%) - inflates retirement spending and Social Security each year. Tax brackets, RMD tables, and the standard deduction are <strong>not</strong> inflated in this model.</li>
 
-          <li><strong>INR / USD</strong> (default 90.5) &mdash; used in ROR years to convert 401k withdrawals and Social Security to INR for India tax.</li>
+          <li><strong>INR / USD</strong> (default 90.5) - used in ROR years to convert 401k withdrawals and Social Security to INR for India tax.</li>
 
-          <li><strong>Taxable gain %</strong> (default 50%) &mdash; portion of your taxable balance treated as unrealized gains. Affects withdrawal taxation. Example: pulling $10k from taxable with gain%=50% triggers LTCG on $5k.</li>
+          <li><strong>Taxable gain %</strong> (default 50%) - portion of your taxable balance treated as unrealized gains. Affects withdrawal taxation. Example: pulling $10k from taxable with gain%=50% triggers LTCG on $5k.</li>
 
-          <li><strong>Roth basis %</strong> (default 60%) &mdash; portion of your Roth that is contributions. Contributions are tax-free even before 59.5. Especially important in RNOR years &mdash; the model pulls Roth basis first.</li>
+          <li><strong>Roth basis %</strong> (default 60%) - portion of your Roth that is contributions. Contributions are tax-free even before 59.5. Especially important in RNOR years - the model pulls Roth basis first.</li>
 
-          <li><strong>State tax %</strong> (default 0%) &mdash; flat rate applied to ordinary income (401k withdrawals, Roth conversions, capital gains, taxable SS) in US retirement years only. Use 0 for TX/FL; try 9.3 for a CA-style stress test.</li>
+          <li><strong>State tax %</strong> (default 0%) - flat rate applied to ordinary income (401k withdrawals, Roth conversions, capital gains, taxable SS) in US retirement years only. Use 0 for TX/FL; try 9.3 for a CA-style stress test.</li>
 
-          <li><strong>Social Security claim age</strong> (default 67) &mdash; year SS income turns on. The model uses your <em>Estimated SS / yr</em> as-is starting at this age, then inflates yearly.</li>
+          <li><strong>Social Security claim age</strong> (default 67) - year SS income turns on. The model uses your <em>Estimated SS / yr</em> as-is starting at this age, then inflates yearly.</li>
 
-          <li><strong>Estimated SS / yr</strong> (default $30k) &mdash; annual Social Security estimate in today's dollars. The model inflates it forward to the claiming age and then keeps inflating it yearly. Simplified &mdash; not based on a real SSA earnings record. Use SSA's own tools for an accurate estimate.</li>
+          <li><strong>Estimated SS / yr</strong> (default $30k) - annual Social Security estimate in today's dollars. The model inflates it forward to the claiming age and then keeps inflating it yearly. Simplified - not based on a real SSA earnings record. Use SSA's own tools for an accurate estimate.</li>
 
-          <li><strong>Roth India stress</strong> (default Yes) &mdash; if on, applies a flat 30% tax on annual Roth balance growth during ROR years. Worst-case stress test, not a definitive tax answer.</li>
+          <li><strong>Roth India stress</strong> (default Yes) - if on, applies a flat 30% tax on annual Roth balance growth during ROR years. Worst-case stress test, not a definitive tax answer.</li>
 
         </ul>
 
@@ -1538,11 +1691,11 @@
 
         <ul>
 
-          <li><strong>Path A &mdash; Status Quo</strong>: maxes 401k contributions during working years. In retirement, withdraws cash, then taxable, then 401k as needed, with iterative gross-up so high withdrawals are not stuck at a flat 22% tax assumption.</li>
+          <li><strong>Path A - Status Quo</strong>: maxes 401k contributions during working years. In retirement, withdraws cash, then taxable, then 401k as needed, with iterative gross-up so high withdrawals are not stuck at a flat 22% tax assumption.</li>
 
-          <li><strong>Path B &mdash; Asset Location Pivot</strong>: contributes only enough to capture 401k match; routes the rest to taxable. In retirement, drains taxable and cash before 401k when below 59.5, then income-stacks 401k up to the standard deduction in normal years.</li>
+          <li><strong>Path B - Asset Location Pivot</strong>: contributes only enough to capture 401k match; routes the rest to taxable. In retirement, drains taxable and cash before 401k when below 59.5, then income-stacks 401k up to the standard deduction in normal years.</li>
 
-          <li><strong>Path C &mdash; Optimized</strong>: same working-years pivot as Path B, plus retirement-phase strategies:
+          <li><strong>Path C - Optimized</strong>: same working-years pivot as Path B, plus retirement-phase strategies:
 
             <ul>
 
@@ -1564,17 +1717,17 @@
 
         <ul>
 
-          <li><strong>RMDs start at age 73</strong> &mdash; forced ordinary income from 401k. Can push you into higher brackets and re-trigger ACA / IRMAA-style pressure.</li>
+          <li><strong>RMDs start at age 73</strong> - forced ordinary income from 401k. Can push you into higher brackets and re-trigger ACA / IRMAA-style pressure.</li>
 
-          <li><strong>ACA premium pressure test (US and Split Life paths)</strong> &mdash; runs from retirement through age 65. MAGI-based premium pressure only. It does not use household size, state, benchmark Silver premiums, or real Premium Tax Credit rules.</li>
+          <li><strong>ACA premium pressure test (US and Split Life paths)</strong> - runs from retirement through age 65. MAGI-based premium pressure only. It does not use household size, state, benchmark Silver premiums, or real Premium Tax Credit rules.</li>
 
-          <li><strong>IRMAA overlay</strong> &mdash; if enabled, adds a rough Medicare Part B + Part D surcharge after age 65 when modeled MAGI crosses 2026 IRMAA tiers. Uses current-year MAGI as a proxy even though real IRMAA uses income from two years earlier.</li>
+          <li><strong>IRMAA overlay</strong> - if enabled, adds a rough Medicare Part B + Part D surcharge after age 65 when modeled MAGI crosses 2026 IRMAA tiers. Uses current-year MAGI as a proxy even though real IRMAA uses income from two years earlier.</li>
 
-          <li><strong>Early-withdrawal penalty</strong> &mdash; 10% on modeled 401k withdrawals before 59.5 unless the Rule of 55 toggle is enabled and the target retirement age is 55 or later. Does not model SEPP, Roth ladders, or separate IRA vs current-employer 401k balances.</li>
+          <li><strong>Early-withdrawal penalty</strong> - 10% on modeled 401k withdrawals before 59.5 unless the Rule of 55 toggle is enabled and the target retirement age is 55 or later. Does not model SEPP, Roth ladders, or separate IRA vs current-employer 401k balances.</li>
 
-          <li><strong>RNOR window (India path)</strong> &mdash; estimated as 2 or 3 years from "years outside India" unless you enter a manual override. Heuristic only. Real RNOR depends on actual presence tests in the prior 7-10 years and prior residency history.</li>
+          <li><strong>RNOR window (India path)</strong> - estimated as 2 or 3 years from "years outside India" unless you enter a manual override. Heuristic only. Real RNOR depends on actual presence tests in the prior 7-10 years and prior residency history.</li>
 
-          <li><strong>ROR phase (India path)</strong> &mdash; after RNOR ends, 401k and IRA distributions are treated as India-taxable with US withholding credit. Roth growth optionally stress-tested at 30%. India tax includes a simple marginal-relief guard near the ₹12L rebate threshold. This is an India tax stress estimate, not final tax advice.</li>
+          <li><strong>ROR phase (India path)</strong> - after RNOR ends, 401k and IRA distributions are treated as India-taxable with US withholding credit. Roth growth optionally stress-tested at 30%. India tax includes a simple marginal-relief guard near the ₹12L rebate threshold. This is an India tax stress estimate, not final tax advice.</li>
 
         </ul>
 
@@ -1618,7 +1771,7 @@
 
           <li><strong>Withdrawal columns</strong> (401k wd, RMD, Roth wd, Tax wd, Cash wd, Roth conv) show what each path pulled from each account that year. Sum withdrawals + SS to roughly match Spend (with rounding and tax payments).</li>
 
-          <li><strong>RMD</strong> is a subset of <strong>401k wd</strong> &mdash; it shows the forced portion only. The rest is discretionary or covers tax payments.</li>
+          <li><strong>RMD</strong> is a subset of <strong>401k wd</strong> - it shows the forced portion only. The rest is discretionary or covers tax payments.</li>
 
           <li><strong>Tax columns</strong> show modeled liability based on that year's withdrawals. US tax is federal + state + LTCG + NIIT + early-withdrawal penalty (if any), summed.</li>
 
@@ -3202,12 +3355,67 @@ function riskItems(inp, results) {
 
   if (inp.irmaaOn) items.push({ title: "IRMAA overlay is approximate", text: "IRMAA uses current-year modeled MAGI as a proxy. Real Medicare IRMAA generally uses income from two years earlier." });
 
+  const conversionRow = C.rows.find(r => r.rothConv > 0);
+  if (conversionRow) items.push({ title: `Roth conversions begin around age ${conversionRow.age}`, text: `The first modeled conversion is about ${fmt(conversionRow.rothConv)}. Check tax brackets, ACA, IRMAA, state tax, and the five-year conversion rules before doing this in real life.` });
+
   if (inp.age + inp.years < 59.5) items.push({ title: "Early withdrawal penalty is simplified", text: inp.rule55 ? "Rule of 55 is enabled, so modeled pre-59.5 current-employer 401k withdrawals avoid the 10% penalty. SEPP and Roth ladders are still not modeled." : "A 10% penalty is applied to modeled 401k withdrawals before 59.5. Exceptions like Rule of 55, SEPP, and Roth ladders are simplified or not modeled." });
 
   return items.slice(0, 6);
 
 }
 
+
+
+function rothConversionPanel(inp, results) {
+  const C = results.C;
+  const firstRetired = C.rows.find(r => r.retired) || C.rows[0];
+  if (!firstRetired) return "";
+
+  const std = STD[inp.filing];
+  const taxableProxy = Math.max(0, (firstRetired.magi || 0) - std);
+  const top12 = inp.filing === "mfj" ? 100800 : 50400;
+  const top22 = inp.filing === "mfj" ? 211400 : 105700;
+  const room12 = Math.max(0, top12 - taxableProxy);
+  const room22 = Math.max(0, top22 - taxableProxy);
+  const beforeMedicare = firstRetired.age < 65;
+  const indiaMode = inp.goal === "india";
+  const earlyRetire = (inp.age + inp.years) < 59.5;
+
+  const cards = [];
+  cards.push({
+    title: `Rough room to top of 12% bracket: ${fmt(room12)}`,
+    text: "This uses Path C first-retirement-year MAGI as a rough proxy. Actual Roth conversion planning needs real taxable income, deductions, LTCG stacking, and state tax."
+  });
+  cards.push({
+    title: `Rough room to top of 22% bracket: ${fmt(room22)}`,
+    text: "Useful as an upper stress line, not a recommendation. A smaller conversion may be better if ACA, IRMAA, or India timing matters."
+  });
+  if (beforeMedicare) {
+    cards.push({
+      title: "ACA warning",
+      text: "Conversions raise MAGI. Before Medicare, that can turn a good tax move into a bad healthcare-cost move."
+    });
+  } else if (inp.irmaaOn) {
+    cards.push({
+      title: "IRMAA warning",
+      text: "Conversions after Medicare age can raise surcharges. This model uses current-year MAGI, while real IRMAA usually looks back two years."
+    });
+  }
+  if (indiaMode) {
+    cards.push({
+      title: "India timing warning",
+      text: "RNOR and ROR years can matter more than the US bracket alone. Treat Roth India tax as a stress test, not a legal conclusion."
+    });
+  }
+  if (earlyRetire) {
+    cards.push({
+      title: "Five-year rule warning",
+      text: "A Roth conversion is not the same as free early access. Conversion ladders, basis, age 59.5, and ordering rules need separate review."
+    });
+  }
+
+  return `<section class="roth-panel"><h3>Roth conversion guardrails</h3><p>Use this to decide whether the conversion question deserves a real tax run. Do not use it as the final conversion amount.</p><div class="roth-grid">${cards.slice(0, 6).map(c => `<div class="roth-card"><strong>${c.title}</strong><span>${c.text}</span></div>`).join("")}</div></section>`;
+}
 
 
 function runWithFeedback(btn) {
@@ -3318,7 +3526,9 @@ function compute() {
 
 
 
-  html += `<section class="decision"><div class="mini">Best under current model scoring</div><h3>Path ${winner.id} &mdash; ${winner.title}</h3><p class="why-line">${winner.desc}</p><div class="big">${fmt(saved)}</div><p>Modeled tax plus healthcare premium-pressure difference vs Path A through the projection period. This is a planning score, not a tax estimate. Wealth at 75 is credited at ${(inp.scoreWeight ?? .04) * 100}% in the scoring formula.</p></section>`;
+  html += `<section class="decision"><div class="mini">Best under current model scoring</div><h3>Path ${winner.id} · ${winner.title}</h3><p class="why-line">${winner.desc}</p><div class="big">${fmt(saved)}</div><p>Modeled tax plus healthcare premium-pressure difference vs Path A through the projection period. This is a planning score, not a tax estimate. Wealth at 75 is credited at ${(inp.scoreWeight ?? .04) * 100}% in the scoring formula.</p></section>`;
+
+  html += `<div class="metric-grid"><div class="mini-card"><span class="label">Target age</span><span class="value">${A.targetAge}</span></div><div class="mini-card"><span class="label">Modeled goal</span><span class="value">${inp.goal === "india" ? "India return" : (inp.goal === "split" ? "Split life" : "US retirement")}</span></div><div class="mini-card"><span class="label">Path C wealth at 75</span><span class="value">${fmt(C.wealthAt75)}</span></div></div>`;
 
 
 
@@ -3455,6 +3665,8 @@ function compute() {
   </section>`;
 
 
+
+  html += rothConversionPanel(inp, results);
 
   if (inp.goal === "split") {
 
