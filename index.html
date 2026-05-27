@@ -2205,11 +2205,14 @@
 
             <div>
 
-              <label>Score wealth credit %</label>
+              <label>Comparison focus</label>
 
-              <input type="number" id="scoreWeight" value="4" min="0" max="10" step="0.5" />
+              <select id="comparisonFocus">
+                <option value="wealth" selected>Highest wealth at 75</option>
+                <option value="cost">Lowest tax / premium drag</option>
+              </select>
 
-              <div class="hint">How much wealth at 75 offsets modeled costs when picking “best under model”.</div>
+              <div class="hint">Use wealth for the main winner label. Use cost only when you want to isolate taxes and ACA-style pressure.</div>
 
             </div>
 
@@ -2711,7 +2714,7 @@ function readInputs() {
 
     usIndiaWh: ((num("usIndiaWh") ?? 15)) / 100,
 
-    scoreWeight: ((num("scoreWeight") ?? 4)) / 100,
+    comparisonFocus: document.getElementById("comparisonFocus")?.value || "wealth",
 
     splitPattern: document.getElementById("splitPattern")?.value || "5-2-5",
 
@@ -3347,7 +3350,7 @@ function riskItems(inp, results) {
 
   if (inp.socialSecurity > 0) items.push({ title: "Social Security included simply", text: `Social Security is user-entered in today's dollars and simplified. The model inflates it forward and starts income at age ${inp.ssClaimAge || 67}. It does not estimate real SSA benefits.` });
 
-  items.push({ title: "Scoring assumption", text: `Best-under-model uses modeled costs minus ${(inp.scoreWeight ?? .04) * 100}% of wealth at 75. Close winners can change if you adjust this.` });
+  items.push({ title: "Winner label", text: inp.comparisonFocus === "cost" ? "Winner is based on the lowest modeled tax plus healthcare premium pressure. This can pick a path with lower ending wealth." : "Winner is based on highest modeled wealth at age 75. Tax and healthcare savings are shown separately." });
 
   if (inp.stressCrash) items.push({ title: "Sequence-of-returns stress is on", text: `The first two retirement years use ${(inp.stressCrashReturn * 100).toFixed(0)}% growth, then the model returns to the normal retirement growth assumption.` });
 
@@ -3502,8 +3505,6 @@ function compute() {
 
   const cost = R => R.totalUSTax + R.totalIndiaTax + Math.max(0, R.totalACA - R.totalACABase);
 
-  const score = R => cost(R) - R.wealthAt75 * (inp.scoreWeight ?? .04);
-
   const paths = [
 
     { id: "A", title: "Status Quo", desc: "Max 401k first. Same plan as today.", R: A },
@@ -3514,11 +3515,17 @@ function compute() {
 
   ];
 
-  const winner = [...paths].sort((x,y) => score(x.R) - score(y.R))[0];
-
   const baseCost = cost(A);
 
-  const saved = baseCost - cost(winner.R);
+  const wealthWinner = [...paths].sort((x,y) => (y.R.wealthAt75 - y.R.totalShortfall) - (x.R.wealthAt75 - x.R.totalShortfall))[0];
+
+  const costWinner = [...paths].sort((x,y) => cost(x.R) - cost(y.R))[0];
+
+  const winner = inp.comparisonFocus === "cost" ? costWinner : wealthWinner;
+
+  const savedByCostWinner = baseCost - cost(costWinner.R);
+
+  const wealthDeltaWinner = winner.R.wealthAt75 - A.wealthAt75;
 
 
 
@@ -3526,9 +3533,9 @@ function compute() {
 
 
 
-  html += `<section class="decision"><div class="mini">Best under current model scoring</div><h3>Path ${winner.id} · ${winner.title}</h3><p class="why-line">${winner.desc}</p><div class="big">${fmt(saved)}</div><p>Modeled tax plus healthcare premium-pressure difference vs Path A through the projection period. This is a planning score, not a tax estimate. Wealth at 75 is credited at ${(inp.scoreWeight ?? .04) * 100}% in the scoring formula.</p></section>`;
+  html += `<section class="decision"><div class="mini">${inp.comparisonFocus === "cost" ? "Lowest modeled tax and premium drag" : "Highest modeled wealth at 75"}</div><h3>Path ${winner.id} · ${winner.title}</h3><p class="why-line">${winner.desc}</p><div class="big">${fmt(inp.comparisonFocus === "cost" ? savedByCostWinner : winner.R.wealthAt75)}</div><p>${inp.comparisonFocus === "cost" ? "This view isolates modeled taxes plus healthcare premium pressure. It may choose a path with lower ending wealth." : "This view ranks paths by ending wealth at age 75 after modeled spending, taxes, premiums, withdrawals, and growth."} Lowest modeled tax / premium drag is Path ${costWinner.id}, saving ${fmt(savedByCostWinner)} vs Path A before considering any ending-wealth difference.</p></section>`;
 
-  html += `<div class="metric-grid"><div class="mini-card"><span class="label">Target age</span><span class="value">${A.targetAge}</span></div><div class="mini-card"><span class="label">Modeled goal</span><span class="value">${inp.goal === "india" ? "India return" : (inp.goal === "split" ? "Split life" : "US retirement")}</span></div><div class="mini-card"><span class="label">Path C wealth at 75</span><span class="value">${fmt(C.wealthAt75)}</span></div></div>`;
+  html += `<div class="metric-grid"><div class="mini-card"><span class="label">Target age</span><span class="value">${A.targetAge}</span></div><div class="mini-card"><span class="label">Modeled goal</span><span class="value">${inp.goal === "india" ? "India return" : (inp.goal === "split" ? "Split life" : "US retirement")}</span></div><div class="mini-card"><span class="label">Highest wealth at 75</span><span class="value">Path ${wealthWinner.id} · ${fmt(wealthWinner.R.wealthAt75)}</span></div></div>`;
 
 
 
@@ -3552,9 +3559,15 @@ function compute() {
 
     const c = cost(p.R);
 
-    const delta = baseCost - c;
+    const taxSavings = baseCost - c;
 
-    html += `<div class="path-card ${p.id === winner.id ? "winner" : ""}">${p.id === winner.id ? `<div class="tag">BEST UNDER MODEL</div>` : ""}<div class="path-label">Path ${p.id}</div><h4>${p.title}</h4><div class="stat"><span>US tax</span><span class="v neg">${fmt(p.R.totalUSTax)}</span></div>${inp.goal === "india" ? `<div class="stat"><span>India tax stress estimate</span><span class="v neg">${fmt(p.R.totalIndiaTax)}</span></div>` : `<div class="stat"><span>${inp.goal === "split" ? "ACA premium pressure" : "ACA premium pressure"}</span><span class="v neg">${fmt(Math.max(0, p.R.totalACA - p.R.totalACABase))}</span></div>`}<div class="stat"><span>Wealth at 75</span><span class="v">${fmt(p.R.wealthAt75)}</span></div>${p.R.totalShortfall > 0 ? `<div class="stat"><span>Unmet spending</span><span class="v neg">${fmt(p.R.totalShortfall)}</span></div>` : ""}<div class="stat"><span>${p.id === "A" ? "Baseline model cost" : "Model saved vs A"}</span><span class="v ${p.id === "A" ? "" : "pos"}">${p.id === "A" ? fmt(c) : "+" + fmt(delta)}</span></div></div>`;
+    const wealthDelta = p.R.wealthAt75 - A.wealthAt75;
+
+    const netVsA = taxSavings + wealthDelta;
+
+    const winnerTag = inp.comparisonFocus === "cost" ? "LOWEST COST" : "HIGHEST WEALTH";
+
+    html += `<div class="path-card ${p.id === winner.id ? "winner" : ""}">${p.id === winner.id ? `<div class="tag">${winnerTag}</div>` : ""}<div class="path-label">Path ${p.id}</div><h4>${p.title}</h4><div class="stat"><span>US tax</span><span class="v neg">${fmt(p.R.totalUSTax)}</span></div>${inp.goal === "india" ? `<div class="stat"><span>India tax stress estimate</span><span class="v neg">${fmt(p.R.totalIndiaTax)}</span></div>` : `<div class="stat"><span>ACA premium pressure</span><span class="v neg">${fmt(Math.max(0, p.R.totalACA - p.R.totalACABase))}</span></div>`}<div class="stat"><span>Wealth at 75</span><span class="v">${fmt(p.R.wealthAt75)}</span></div>${p.R.totalShortfall > 0 ? `<div class="stat"><span>Unmet spending</span><span class="v neg">${fmt(p.R.totalShortfall)}</span></div>` : ""}<div class="stat"><span>${p.id === "A" ? "Baseline tax / premium drag" : "Tax / premium saved vs A"}</span><span class="v ${p.id === "A" ? "" : (taxSavings >= 0 ? "pos" : "neg")}">${p.id === "A" ? fmt(c) : (taxSavings >= 0 ? "+" : "") + fmt(taxSavings)}</span></div>${p.id !== "A" ? `<div class="stat"><span>Wealth difference vs A</span><span class="v ${wealthDelta >= 0 ? "pos" : "neg"}">${wealthDelta >= 0 ? "+" : ""}${fmt(wealthDelta)}</span></div><div class="stat"><span>Tax savings + wealth difference</span><span class="v ${netVsA >= 0 ? "pos" : "neg"}">${netVsA >= 0 ? "+" : ""}${fmt(netVsA)}</span></div>` : ""}</div>`;
 
   });
 
