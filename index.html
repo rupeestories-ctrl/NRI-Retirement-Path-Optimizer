@@ -1605,7 +1605,7 @@
         </div>
         <div class="note-card">
           <span class="note-label">Accuracy update</span>
-          Today's-dollar Social Security, present-value wealth at 75 and 80, India marginal relief, cleaner gross-up pulls, and working-year Social Security banking are included.
+          Today's-dollar Social Security, present-value wealth at 75 and 80 when available, India marginal relief, cleaner gross-up pulls, and working-year Social Security banking are included.
         </div>
       </div>
     </div>
@@ -1632,7 +1632,7 @@
 
         <p>Compares three retirement strategies side by side using your numbers. Inputs for your situation are blank by default. Modeling assumptions (growth, inflation, brackets) come prefilled with reasonable starting values that you can override.</p>
 
-        <p><strong>Recent accuracy update:</strong> today's-dollar Social Security, present-value wealth at 75 and 80, marginal relief on India tax, gross-up pull no longer double-counts, and Social Security during working years is now banked into taxable brokerage. Numbers may differ from previous saved scenarios or screenshots from older versions of the tool.</p>
+        <p><strong>Recent accuracy update:</strong> today's-dollar Social Security, present-value wealth at 75 and 80 when available, marginal relief on India tax, gross-up pull no longer double-counts, and Social Security during working years is now banked into taxable brokerage. Numbers may differ from previous saved scenarios or screenshots from older versions of the tool.</p>
 
 
 
@@ -2088,7 +2088,7 @@
             <div>
               <label>Today's-dollar discount rate %</label>
               <input type="number" id="pvDiscount" value="2.5" min="0" max="10" step="0.25" />
-              <div class="hint">Used only for display. It converts wealth at 75 and 80 back into today's dollars so future balances do not look larger just because of inflation.</div>
+              <div class="hint">Used only for display. It converts wealth at 75 and 80 back into today's dollars when those ages are inside the projection window.</div>
             </div>
           </div>
 
@@ -2225,7 +2225,7 @@
               <label>Comparison focus</label>
 
               <select id="comparisonFocus">
-                <option value="wealth" selected>Highest wealth at 75</option>
+                <option value="wealth" selected>Highest wealth at comparison age</option>
                 <option value="cost">Lowest tax / premium drag</option>
               </select>
 
@@ -2281,7 +2281,7 @@
 
       <p><strong>Important:</strong> This is a simplified planning model. RNOR is estimated from years outside India only and is not a legal residency determination. Real RNOR status depends on actual India presence tests and prior residency history. ACA output is a rough premium-pressure test, not subsidy modeling and not a quote. Currency stress is a simple INR/USD pressure test, not an FX forecast. IRMAA output is a rough Medicare surcharge overlay using current-year modeled MAGI as a proxy. It depends on household size, state, MAGI, age, plan choice, and current law. IRMAA is modeled only as a rough overlay. Split Life assumes US tax residency and uses month-based cost and day-count checks only. It does not decide Indian tax residency, FEMA status, DTAA tie-breaker results, or healthcare eligibility. Tax-payment 401k pulls are modeled with a simple buffer to avoid double-counting gross-up tax.</p>
 
-      <p>Assumptions include 2026 US standard deductions and bracket thresholds, simplified India new-regime tax stress with rebate handling, simplified capital-gain assumptions, RMD estimates, optional Social Security claiming age, optional state-tax stress input, and constant annual returns. Social Security is user-entered in today's dollars and simplified; it does not estimate real SSA benefits. Foreign tax credit and treaty treatment are simplified. ACA is premium pressure only, not a Premium Tax Credit calculator. The winner label uses wealth at 75 unless you choose the cost view. Age-75 and age-80 balances are also shown in today's dollars using your discount-rate input. Tax-payment 401k pulls are simplified to avoid recursive tax calculations and can slightly understate year-of-dry-up tax in edge cases. Educational only. Verify with a qualified cross-border CPA or tax advisor before acting.</p>
+      <p>Assumptions include 2026 US standard deductions and bracket thresholds, simplified India new-regime tax stress with rebate handling, simplified capital-gain assumptions, RMD estimates, optional Social Security claiming age, optional state-tax stress input, and constant annual returns. Social Security is user-entered in today's dollars and simplified; it does not estimate real SSA benefits. Foreign tax credit and treaty treatment are simplified. ACA is premium pressure only, not a Premium Tax Credit calculator. The winner label uses the first valid comparison age, usually 75, then 80 if the user starts after 75, unless you choose the cost view. Age-75 and age-80 balances are also shown in today's dollars when those ages are inside the projection window. Tax-payment 401k pulls are simplified to avoid recursive tax calculations and can slightly understate year-of-dry-up tax in edge cases. Educational only. Verify with a qualified cross-border CPA or tax advisor before acting.</p>
 
       <p>Built for RupeeStories.</p>
 
@@ -2308,6 +2308,8 @@ const fmt = n => {
   return sign + "$" + Math.round(abs).toLocaleString();
 
 };
+
+const fmtMaybe = n => n === null || n === undefined || !isFinite(n) ? "N/A" : fmt(n);
 
 
 
@@ -2577,7 +2579,7 @@ function indiaTaxINR(income) {
 
   if (income <= 1200000) return 0;
 
-  const slabs = [[0,0],[300000,.05],[700000,.10],[1000000,.15],[1200000,.20],[1500000,.30]];
+  const slabs = [[0,0],[400000,.05],[800000,.10],[1200000,.15],[1600000,.20],[2000000,.25],[2400000,.30]];
 
   let tax = 0;
 
@@ -3069,7 +3071,22 @@ function project(strategy, inp) {
 
           const top12 = inp.filing === "mfj" ? 100800 : 50400;
 
-          const room = Math.max(0, top12 + std - withdraw401k - rothConv - ssIncome * .85);
+          let room = Math.max(0, top12 + std - withdraw401k - rothConv - ssIncome * .85);
+
+          // ACA guard: before Medicare, do not let a Roth conversion push MAGI
+          // past the modeled ACA premium cliff. Conversions raise MAGI dollar-for-dollar.
+          // This keeps Path C aligned with its pre-65 MAGI-control goal.
+          if (age < 65) {
+
+            const acaCliff = inp.filing === "mfj" ? 89999 : 64999;
+
+            const gainPartNow = withdrawTax * inp.taxGainPct;
+
+            const magiBeforeConv = withdraw401k + rothConv + gainPartNow + ssIncome;
+
+            room = Math.min(room, Math.max(0, acaCliff - magiBeforeConv));
+
+          }
 
           const conv = Math.min(room, start401kForYear * .10, a401k);
 
@@ -3315,19 +3332,26 @@ function project(strategy, inp) {
 
 
 
-  const row75 = rows.find(r => r.age === 75) || rows[rows.length - 1];
+  const finalRow = rows[rows.length - 1];
 
-  const row80 = rows.find(r => r.age === 80) || rows[rows.length - 1];
+  const row75 = rows.find(r => r.age === 75) || null;
 
-  const yrsTo75 = Math.max(0, row75.age - inp.age);
+  const row80 = rows.find(r => r.age === 80) || null;
 
-  const yrsTo80 = Math.max(0, row80.age - inp.age);
+  const comparisonRow = row75 || row80 || finalRow;
+
+  const yrsTo75 = row75 ? Math.max(0, row75.age - inp.age) : null;
+
+  const yrsTo80 = row80 ? Math.max(0, row80.age - inp.age) : null;
+
+  const yrsToComparison = Math.max(0, comparisonRow.age - inp.age);
 
   return {
     rows, totalUSTax, totalIndiaTax, totalACA, totalACABase, totalIRMAA,
-    wealthAt75: row75.total, wealthAt75PV: presentValue(row75.total, yrsTo75, inp.pvDiscount),
-    wealthAt80: row80.total, wealthAt80PV: presentValue(row80.total, yrsTo80, inp.pvDiscount),
-    finalWealth: rows[rows.length-1].total, totalShortfall, targetAge, rnorYrs
+    wealthAt75: row75 ? row75.total : null, wealthAt75PV: row75 ? presentValue(row75.total, yrsTo75, inp.pvDiscount) : null,
+    wealthAt80: row80 ? row80.total : null, wealthAt80PV: row80 ? presentValue(row80.total, yrsTo80, inp.pvDiscount) : null,
+    comparisonAge: comparisonRow.age, comparisonWealth: comparisonRow.total, comparisonWealthPV: presentValue(comparisonRow.total, yrsToComparison, inp.pvDiscount),
+    finalWealth: finalRow.total, totalShortfall, targetAge, rnorYrs
   };
 
 }
@@ -3557,7 +3581,7 @@ function compute() {
 
   const baseCost = cost(A);
 
-  const wealthWinner = [...paths].sort((x,y) => (y.R.wealthAt75 - y.R.totalShortfall) - (x.R.wealthAt75 - x.R.totalShortfall))[0];
+  const wealthWinner = [...paths].sort((x,y) => (y.R.comparisonWealth - y.R.totalShortfall) - (x.R.comparisonWealth - x.R.totalShortfall))[0];
 
   const costWinner = [...paths].sort((x,y) => cost(x.R) - cost(y.R))[0];
 
@@ -3565,7 +3589,7 @@ function compute() {
 
   const savedByCostWinner = baseCost - cost(costWinner.R);
 
-  const wealthDeltaWinner = winner.R.wealthAt75 - A.wealthAt75;
+  const wealthDeltaWinner = winner.R.comparisonWealth - A.comparisonWealth;
 
 
 
@@ -3573,9 +3597,9 @@ function compute() {
 
 
 
-  html += `<section class="decision"><div class="mini">${inp.comparisonFocus === "cost" ? "Lowest modeled tax and premium drag" : "Highest modeled wealth at 75"}</div><h3>Path ${winner.id} · ${winner.title}</h3><p class="why-line">${winner.desc}</p><div class="big">${fmt(inp.comparisonFocus === "cost" ? savedByCostWinner : winner.R.wealthAt75)}</div><p>${inp.comparisonFocus === "cost" ? "This view isolates modeled taxes plus healthcare premium pressure. It may choose a path with lower ending wealth." : `This view ranks paths by wealth at age 75. For Path ${winner.id}, that is about ${fmt(winner.R.wealthAt75PV)} in today's dollars using your ${(inp.pvDiscount * 100).toFixed(2)}% discount rate.`} Lowest modeled tax / premium drag is Path ${costWinner.id}, saving ${fmt(savedByCostWinner)} vs Path A before considering any ending-wealth difference.</p></section>`;
+  html += `<section class="decision"><div class="mini">${inp.comparisonFocus === "cost" ? "Lowest modeled tax and premium drag" : `Highest modeled wealth at ${A.comparisonAge}` }</div><h3>Path ${winner.id} · ${winner.title}</h3><p class="why-line">${winner.desc}</p><div class="big">${fmt(inp.comparisonFocus === "cost" ? savedByCostWinner : winner.R.comparisonWealth)}</div><p>${inp.comparisonFocus === "cost" ? "This view isolates modeled taxes plus healthcare premium pressure. It may choose a path with lower ending wealth." : `This view ranks paths by wealth at age ${winner.R.comparisonAge}. For Path ${winner.id}, that is about ${fmt(winner.R.comparisonWealthPV)} in today's dollars using your ${(inp.pvDiscount * 100).toFixed(2)}% discount rate.`} Lowest modeled tax / premium drag is Path ${costWinner.id}, saving ${fmt(savedByCostWinner)} vs Path A before considering any ending-wealth difference.</p></section>`;
 
-  html += `<div class="metric-grid"><div class="mini-card"><span class="label">Target age</span><span class="value">${A.targetAge}</span></div><div class="mini-card"><span class="label">Modeled goal</span><span class="value">${inp.goal === "india" ? "India return" : (inp.goal === "split" ? "Split life" : "US retirement")}</span></div><div class="mini-card"><span class="label">Highest wealth at 75</span><span class="value">Path ${wealthWinner.id} · ${fmt(wealthWinner.R.wealthAt75)}</span><span class="subvalue">${fmt(wealthWinner.R.wealthAt75PV)} in today's dollars</span></div></div>`;
+  html += `<div class="metric-grid"><div class="mini-card"><span class="label">Target age</span><span class="value">${A.targetAge}</span></div><div class="mini-card"><span class="label">Modeled goal</span><span class="value">${inp.goal === "india" ? "India return" : (inp.goal === "split" ? "Split life" : "US retirement")}</span></div><div class="mini-card"><span class="label">Highest wealth at ${A.comparisonAge}</span><span class="value">Path ${wealthWinner.id} · ${fmt(wealthWinner.R.comparisonWealth)}</span><span class="subvalue">${fmt(wealthWinner.R.comparisonWealthPV)} in today's dollars</span></div></div>`;
 
 
 
@@ -3601,13 +3625,13 @@ function compute() {
 
     const taxSavings = baseCost - c;
 
-    const wealthDelta = p.R.wealthAt75 - A.wealthAt75;
+    const wealthDelta = p.R.comparisonWealth - A.comparisonWealth;
 
     const netVsA = taxSavings + wealthDelta;
 
     const winnerTag = inp.comparisonFocus === "cost" ? "LOWEST COST" : "HIGHEST WEALTH";
 
-    html += `<div class="path-card ${p.id === winner.id ? "winner" : ""}">${p.id === winner.id ? `<div class="tag">${winnerTag}</div>` : ""}<div class="path-label">Path ${p.id}</div><h4>${p.title}</h4><div class="stat"><span>US tax</span><span class="v neg">${fmt(p.R.totalUSTax)}</span></div>${inp.goal === "india" ? `<div class="stat"><span>India tax stress estimate</span><span class="v neg">${fmt(p.R.totalIndiaTax)}</span></div>` : `<div class="stat"><span>ACA premium pressure</span><span class="v neg">${fmt(Math.max(0, p.R.totalACA - p.R.totalACABase))}</span></div><div class="stat"><span>IRMAA pressure age 65+</span><span class="v neg">${fmt(p.R.totalIRMAA || 0)}</span></div>`}<div class="stat"><span>Wealth at 75</span><span class="v">${fmt(p.R.wealthAt75)}<span class="subvalue">${fmt(p.R.wealthAt75PV)} today</span></span></div><div class="stat"><span>Wealth at 80</span><span class="v">${fmt(p.R.wealthAt80)}<span class="subvalue">${fmt(p.R.wealthAt80PV)} today</span></span></div>${p.R.totalShortfall > 0 ? `<div class="stat"><span>Unmet spending</span><span class="v neg">${fmt(p.R.totalShortfall)}</span></div>` : ""}<div class="stat"><span>${p.id === "A" ? "Baseline tax / premium drag" : "Tax / premium saved vs A"}</span><span class="v ${p.id === "A" ? "" : (taxSavings >= 0 ? "pos" : "neg")}">${p.id === "A" ? fmt(c) : (taxSavings >= 0 ? "+" : "") + fmt(taxSavings)}</span></div>${p.id !== "A" ? `<div class="stat"><span>Wealth difference vs A</span><span class="v ${wealthDelta >= 0 ? "pos" : "neg"}">${wealthDelta >= 0 ? "+" : ""}${fmt(wealthDelta)}</span></div><div class="stat"><span>Tax savings + wealth difference</span><span class="v ${netVsA >= 0 ? "pos" : "neg"}">${netVsA >= 0 ? "+" : ""}${fmt(netVsA)}</span></div>` : ""}</div>`;
+    html += `<div class="path-card ${p.id === winner.id ? "winner" : ""}">${p.id === winner.id ? `<div class="tag">${winnerTag}</div>` : ""}<div class="path-label">Path ${p.id}</div><h4>${p.title}</h4><div class="stat"><span>US tax</span><span class="v neg">${fmt(p.R.totalUSTax)}</span></div>${inp.goal === "india" ? `<div class="stat"><span>India tax stress estimate</span><span class="v neg">${fmt(p.R.totalIndiaTax)}</span></div>` : `<div class="stat"><span>ACA premium pressure</span><span class="v neg">${fmt(Math.max(0, p.R.totalACA - p.R.totalACABase))}</span></div><div class="stat"><span>IRMAA pressure age 65+</span><span class="v neg">${fmt(p.R.totalIRMAA || 0)}</span></div>`}<div class="stat"><span>Wealth at 75</span><span class="v">${fmtMaybe(p.R.wealthAt75)}${p.R.wealthAt75PV === null ? "" : `<span class="subvalue">${fmt(p.R.wealthAt75PV)} today</span>`}</span></div><div class="stat"><span>Wealth at 80</span><span class="v">${fmtMaybe(p.R.wealthAt80)}${p.R.wealthAt80PV === null ? "" : `<span class="subvalue">${fmt(p.R.wealthAt80PV)} today</span>`}</span></div>${p.R.totalShortfall > 0 ? `<div class="stat"><span>Unmet spending</span><span class="v neg">${fmt(p.R.totalShortfall)}</span></div>` : ""}<div class="stat"><span>${p.id === "A" ? "Baseline tax / premium drag" : "Tax / premium saved vs A"}</span><span class="v ${p.id === "A" ? "" : (taxSavings >= 0 ? "pos" : "neg")}">${p.id === "A" ? fmt(c) : (taxSavings >= 0 ? "+" : "") + fmt(taxSavings)}</span></div>${p.id !== "A" ? `<div class="stat"><span>Wealth difference vs A</span><span class="v ${wealthDelta >= 0 ? "pos" : "neg"}">${wealthDelta >= 0 ? "+" : ""}${fmt(wealthDelta)}</span></div><div class="stat"><span>Tax savings + wealth difference</span><span class="v ${netVsA >= 0 ? "pos" : "neg"}">${netVsA >= 0 ? "+" : ""}${fmt(netVsA)}</span></div>` : ""}</div>`;
 
   });
 
